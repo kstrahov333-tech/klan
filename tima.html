@@ -9,64 +9,75 @@
   body {
     margin: 0;
     font-family: 'Press Start 2P', cursive;
-    background: #2e7d32;
+    background: #1b5e20;
     color: #fff;
   }
   h1 {
     text-align: center;
     padding: 20px 0;
     font-size: 20px;
-    color: #f9f871;
+    color: #ffeb3b;
     text-shadow: 2px 2px #000;
   }
   .container {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
   }
+
+  /* Карточка */
   .taskCard {
-    background: #8d6e63;
-    border: 3px solid #5d4037;
-    border-radius: 6px;
+    background: #795548;
+    border-radius: 8px;
+    box-shadow: 0 8px 12px rgba(0,0,0,0.4);
     padding: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    cursor: default;
+    position: relative;
+    min-height: 140px;
+    transition: 0.2s;
   }
-  .taskCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.5);
+  .taskCard:hover { transform: translateY(-3px); }
+
+  .taskHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .taskText {
-    font-size: 12px;
-    margin-bottom: 10px;
-    word-break: break-word;
-  }
-  .taskBtn {
-    background: #c62828;
-    border: 2px solid #8e0000;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
+  .taskTitle { font-size: 12px; word-break: break-word; }
+  .taskDesc { font-size: 10px; margin-top: 5px; }
+  .taskFooter { display: flex; justify-content: space-between; margin-top: 10px; }
+
+  .taskBtn, .takeBtn, .editBtn {
     cursor: pointer;
+    border: none;
+    border-radius: 4px;
     font-size: 10px;
+    padding: 4px 8px;
+    transition: 0.2s;
   }
+  .taskBtn { background: #c62828; color: white; }
   .taskBtn:hover { background: #b71c1c; }
+  .takeBtn { background: #43a047; color: white; }
+  .takeBtn:hover { background: #2e7d32; }
+  .editBtn { background: #f9f871; color: #2e7d32; }
+  .editBtn:hover { background: #fbc02d; }
 
   .urgent { border-left: 5px solid #d50000; }
   .daily { border-left: 5px solid #ff6f00; }
   .normal { border-left: 5px solid #2979ff; }
+  .inprogress { border-left: 5px solid #1976d2; background: #1565c0; }
 
   #addTaskBtn {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: #f9f871;
-    color: #2e7d32;
+    background: #ffeb3b;
+    color: #1b5e20;
     border: 3px solid #000;
     width: 40px;
     height: 40px;
@@ -98,13 +109,45 @@
     border: none;
   }
   #addTaskPanel button {
-    background: #f9f871;
-    color: #2e7d32;
+    background: #ffeb3b;
+    color: #1b5e20;
     border: 2px solid #000;
     cursor: pointer;
     padding: 5px;
     border-radius: 4px;
   }
+
+  /* Модальное окно */
+  #takeModal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none; justify-content: center; align-items: center;
+    z-index: 200;
+  }
+  #modalContent {
+    background: #424242;
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 250px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+
+  /* Таймер */
+  .countdown { font-size: 10px; margin-top: 5px; color: #ffeb3b; }
+
+  /* Три точки */
+  .moreBtn { position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 16px; }
+  .moreMenu {
+    position: absolute;
+    top: 20px; right: 5px;
+    background: #616161;
+    display: none; flex-direction: column;
+    border-radius: 4px; overflow: hidden;
+    z-index: 10;
+  }
+  .moreMenu button { font-size: 10px; padding: 5px; background: #9e9e9e; color: #000; border: none; cursor: pointer; }
+  .moreMenu button:hover { background: #bdbdbd; }
 </style>
 </head>
 <body>
@@ -113,7 +156,9 @@
 <button id="addTaskBtn">+</button>
 
 <div id="addTaskPanel">
-  <input type="text" id="taskText" placeholder="Новое задание">
+  <input type="text" id="taskTitle" placeholder="Название задания">
+  <textarea id="taskDesc" placeholder="Описание (необязательно)" rows="3"></textarea>
+  <input type="datetime-local" id="taskDeadline">
   <select id="taskCategory">
     <option value="urgent">Срочные</option>
     <option value="daily">Ежедневные</option>
@@ -124,9 +169,19 @@
 
 <div class="container" id="tasksBoard"></div>
 
+<!-- Модальное окно -->
+<div id="takeModal">
+  <div id="modalContent">
+    <div id="modalTitle"></div>
+    <input type="text" id="playerName" placeholder="Введите ваш ник">
+    <button id="takeConfirm">Взять задание</button>
+    <button id="takeCancel">Отмена</button>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -138,51 +193,138 @@ const firebaseConfig = {
   messagingSenderId: "252485302766",
   appId: "1:252485302766:web:7f60cca53e9c9b2d38f6ff"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const addBtn = document.getElementById('addTaskBtn');
 const addPanel = document.getElementById('addTaskPanel');
 const submitTask = document.getElementById('submitTask');
-const taskText = document.getElementById('taskText');
+const taskTitle = document.getElementById('taskTitle');
+const taskDesc = document.getElementById('taskDesc');
 const taskCategory = document.getElementById('taskCategory');
+const taskDeadline = document.getElementById('taskDeadline');
 const tasksBoard = document.getElementById('tasksBoard');
 
-// Открытие/закрытие панели добавления
-addBtn.onclick = () => {
-  addPanel.style.display = addPanel.style.display === 'flex' ? 'none' : 'flex';
-};
+// Модалка
+const takeModal = document.getElementById('takeModal');
+const modalTitle = document.getElementById('modalTitle');
+const playerName = document.getElementById('playerName');
+const takeConfirm = document.getElementById('takeConfirm');
+const takeCancel = document.getElementById('takeCancel');
+let currentTaskId = null;
+
+// Открытие панели добавления
+addBtn.onclick = () => addPanel.style.display = addPanel.style.display === 'flex' ? 'none' : 'flex';
 
 // Добавление задачи
 submitTask.onclick = () => {
-  const text = taskText.value.trim();
-  if(!text) return;
-  push(ref(db, 'tasks'), { text, category: taskCategory.value });
-  taskText.value = '';
+  const title = taskTitle.value.trim();
+  if(!title) return;
+  push(ref(db,'tasks'),{
+    title,
+    desc: taskDesc.value.trim(),
+    category: taskCategory.value,
+    deadline: taskDeadline.value || null,
+    status: "new",
+    player: null
+  });
+  taskTitle.value = taskDesc.value = taskDeadline.value = '';
   addPanel.style.display = 'none';
 };
+
+// Функция форматирования таймера
+function getTimeRemaining(deadline){
+  const end = new Date(deadline).getTime();
+  const now = Date.now();
+  const diff = end - now;
+  if(diff<=0) return "Время вышло!";
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff/(1000*60*60))%24);
+  const m = Math.floor((diff/(1000*60))%60);
+  const s = Math.floor((diff/1000)%60);
+  return `${d}д ${h}ч ${m}м ${s}с`;
+}
 
 // Отображение задач
 const tasksRef = ref(db, 'tasks');
 onValue(tasksRef, snapshot => {
   const data = snapshot.val() || {};
   tasksBoard.innerHTML = '';
-  Object.entries(data).forEach(([id, task]) => {
+
+  // Сортировка по приоритету
+  const sorted = Object.entries(data).sort(([id1,t1],[id2,t2])=>{
+    const order = {"urgent":0,"daily":1,"normal":2};
+    return (order[t1.category]||3) - (order[t2.category]||3);
+  });
+
+  sorted.forEach(([id, task]) => {
     const card = document.createElement('div');
-    card.className = `taskCard ${task.category}`;
-    const textDiv = document.createElement('div');
-    textDiv.className = 'taskText';
-    textDiv.textContent = task.text;
-    const btn = document.createElement('button');
-    btn.className = 'taskBtn';
-    btn.textContent = 'Выполнил';
-    btn.onclick = () => remove(ref(db, 'tasks/' + id));
-    card.appendChild(textDiv);
-    card.appendChild(btn);
+    let className = task.status==="inprogress"?"inprogress":task.category;
+    card.className = `taskCard ${className}`;
+
+    const header = document.createElement('div'); header.className="taskHeader";
+    const titleDiv = document.createElement('div'); titleDiv.className="taskTitle"; titleDiv.textContent = task.title;
+    const moreBtn = document.createElement('div'); moreBtn.textContent="⋮"; moreBtn.className="moreBtn";
+    const moreMenu = document.createElement('div'); moreMenu.className="moreMenu";
+    const editBtn = document.createElement('button'); editBtn.textContent="Редактировать";
+    const delBtn = document.createElement('button'); delBtn.textContent="Удалить";
+    moreMenu.appendChild(editBtn); moreMenu.appendChild(delBtn);
+    moreBtn.onclick=()=>{ moreMenu.style.display=moreMenu.style.display==='flex'?'none':'flex'; }
+
+    header.appendChild(titleDiv); header.appendChild(moreBtn); header.appendChild(moreMenu);
+    card.appendChild(header);
+
+    if(task.desc) {
+      const descDiv = document.createElement('div'); descDiv.className="taskDesc"; descDiv.textContent=task.desc;
+      card.appendChild(descDiv);
+    }
+
+    // Таймер
+    if(task.deadline){
+      const timerDiv = document.createElement('div'); timerDiv.className="countdown";
+      card.appendChild(timerDiv);
+      setInterval(()=>{ timerDiv.textContent=getTimeRemaining(task.deadline); },1000);
+    }
+
+    const footer = document.createElement('div'); footer.className="taskFooter";
+
+    if(task.status==="new"){
+      const takeBtn = document.createElement('button'); takeBtn.className="takeBtn"; takeBtn.textContent="Взять задание";
+      takeBtn.onclick = ()=>{
+        takeModal.style.display="flex";
+        modalTitle.textContent = task.title;
+        currentTaskId = id;
+      };
+      footer.appendChild(takeBtn);
+    } else {
+      footer.textContent = `В процессе: ${task.player}`;
+    }
+
+    card.appendChild(footer);
+
+    // Удаление
+    delBtn.onclick = ()=>remove(ref(db,'tasks/'+id));
+    // Редактирование
+    editBtn.onclick = ()=>{
+      const newTitle = prompt("Новое название",task.title);
+      if(newTitle) update(ref(db,'tasks/'+id),{title:newTitle});
+      const newDesc = prompt("Новое описание",task.desc||"");
+      update(ref(db,'tasks/'+id),{desc:newDesc});
+    }
+
     tasksBoard.appendChild(card);
   });
 });
+
+// Модалка
+takeConfirm.onclick = ()=>{
+  const name = playerName.value.trim();
+  if(!name) return;
+  update(ref(db,'tasks/'+currentTaskId),{status:"inprogress",player:name});
+  takeModal.style.display="none";
+  playerName.value="";
+};
+takeCancel.onclick = ()=>{ takeModal.style.display="none"; playerName.value=""; };
 </script>
 </body>
 </html>
