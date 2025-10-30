@@ -6,184 +6,188 @@
 <title>Доска заданий Клана Minecraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-  @keyframes lines {
-    0% { background-position: 0 0, 0 0; }
-    100% { background-position: 1000px 0, 0 1000px; }
-  }
+@keyframes lines {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 1000px 0, 0 1000px; }
+}
 
-  body {
-    margin: 0;
-    font-family: 'Press Start 2P', cursive;
-    background: linear-gradient(135deg, #0b0c10, #1f2833, #45a29e);
-    color: #fff;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-  }
+body {
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #fff;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
 
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: repeating-linear-gradient(
-      45deg,
-      rgba(0,255,255,0.05) 0 1px,
-      transparent 1px 10px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(255,0,255,0.05) 0 1px,
-      transparent 1px 10px
-    );
-    animation: lines 30s linear infinite;
-    z-index: 0;
-    pointer-events: none;
-  }
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0,255,255,0.05) 0 1px,
+    transparent 1px 12px
+  ),
+  repeating-linear-gradient(
+    -45deg,
+    rgba(255,0,255,0.05) 0 1px,
+    transparent 1px 12px
+  );
+  animation: lines 40s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
 
-  h1 {
-    text-align: center;
-    padding: 20px 0;
-    font-size: 20px;
-    color: #00fff7;
-    text-shadow: 0 0 8px #00fff7, 0 0 16px #00fff7;
-    position: relative;
-    z-index: 1;
-  }
+h1 {
+  text-align: center;
+  padding: 20px 0;
+  font-size: 22px;
+  color: #00e5ff;
+  text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff;
+  position: relative;
+  z-index: 1;
+}
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    position: relative;
-    z-index: 1;
-  }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
 
-  .taskCard {
-    background: #1b1b1b;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,255,255,0.4);
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 150px;
-    height: 180px;
-    width: 250px;
-    position: relative;
-    transition: transform 0.2s, box-shadow 0.2s;
-    overflow: hidden;
-  }
-  .taskCard:hover { transform: translateY(-5px); box-shadow: 0 0 25px rgba(0,255,255,0.6); }
+.taskCard {
+  background: #1b1b1b;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,255,255,0.2);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+  width: 250px;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+  overflow: hidden;
+}
+.taskCard:hover { 
+  transform: translateY(-5px); 
+  box-shadow: 0 0 25px rgba(0,255,255,0.5), 0 0 40px rgba(255,0,255,0.2); 
+}
 
-  .taskHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .taskTitle { font-size: 12px; word-break: break-word; color: #00fff7; }
-  .taskDesc { font-size: 10px; margin-top: 5px; color: #a0fff0; }
-  .taskFooter { display: flex; justify-content: space-between; margin-top: 10px; font-size: 10px; }
+.taskHeader { display: flex; justify-content: space-between; align-items: center; }
+.taskTitle { font-size: 12px; word-break: break-word; color: #00e5ff; text-shadow: 0 0 5px #00e5ff; }
+.taskDesc { font-size: 10px; margin-top: 5px; color: #a0fff0; }
+.taskFooter { display: flex; justify-content: space-between; margin-top: 10px; font-size: 10px; }
 
-  .taskBtn, .takeBtn, .editBtn {
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    font-size: 10px;
-    padding: 4px 8px;
-    transition: 0.2s;
-  }
-  .taskBtn { background: #ff1744; color: white; }
-  .taskBtn:hover { background: #d5002c; }
-  .takeBtn { background: #2979ff; color: white; }
-  .takeBtn:hover { background: #1565c0; }
-  .editBtn { background: #00ffea; color: #000; }
-  .editBtn:hover { background: #00bcd4; }
+.taskBtn, .takeBtn, .editBtn {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  font-size: 10px;
+  padding: 4px 8px;
+  transition: 0.2s;
+}
+.taskBtn { background: #ff1744; color: white; }
+.taskBtn:hover { background: #d5002c; }
+.takeBtn { background: #2979ff; color: white; }
+.takeBtn:hover { background: #1565c0; }
+.editBtn { background: #00ffea; color: #000; }
+.editBtn:hover { background: #00bcd4; }
 
-  .urgent { border-left: 5px solid #ff1744; }
-  .daily { border-left: 5px solid #ff9100; }
-  .normal { border-left: 5px solid #00e676; }
-  .inprogress { border-left: 5px solid #2979ff; background: #0d47a1; }
+.urgent { border-left: 5px solid #ff1744; }
+.daily { border-left: 5px solid #ff9100; }
+.normal { border-left: 5px solid #00e676; }
+.inprogress { border-left: 5px solid #2979ff; background: #0d47a1; }
 
-  .priorityLabel { font-size: 10px; font-weight: bold; margin-top: 3px; color: #fff; }
+.priorityLabel { font-size: 10px; font-weight: bold; margin-top: 3px; }
 
-  #addTaskBtn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #00fff7;
-    color: #000;
-    border: 3px solid #00fff7;
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    z-index: 100;
-  }
+#addTaskBtn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #00fff7;
+  color: #000;
+  border: 3px solid #00fff7;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 100;
+}
 
-  #addTaskPanel {
-    position: fixed;
-    top: 20px;
-    right: 70px;
-    background: rgba(0,0,0,0.85);
-    padding: 15px;
-    border-radius: 6px;
-    display: none;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 99;
-  }
-  #addTaskPanel input, #addTaskPanel select, #addTaskPanel textarea, #addTaskPanel button {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 10px;
-  }
-  #addTaskPanel input, #addTaskPanel select, #addTaskPanel textarea {
-    padding: 5px;
-    border-radius: 4px;
-    border: none;
-    background: #121212;
-    color: #00fff7;
-  }
-  #addTaskPanel button {
-    background: #00fff7;
-    color: #000;
-    border: 2px solid #00fff7;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 4px;
-  }
+#addTaskPanel {
+  position: fixed;
+  top: 20px;
+  right: 70px;
+  background: rgba(0,0,0,0.9);
+  padding: 15px;
+  border-radius: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 99;
+}
+#addTaskPanel input, #addTaskPanel select, #addTaskPanel textarea, #addTaskPanel button {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+}
+#addTaskPanel input, #addTaskPanel select, #addTaskPanel textarea {
+  padding: 5px;
+  border-radius: 4px;
+  border: none;
+  background: #121212;
+  color: #00fff7;
+}
+#addTaskPanel button {
+  background: #00fff7;
+  color: #000;
+  border: 2px solid #00fff7;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+}
 
-  #takeModal {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: none; justify-content: center; align-items: center;
-    z-index: 200;
-  }
-  #modalContent {
-    background: #212121;
-    padding: 20px;
-    border-radius: 8px;
-    min-width: 250px;
-    display: flex; flex-direction: column; gap: 10px;
-  }
+#takeModal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: none; justify-content: center; align-items: center;
+  z-index: 200;
+}
+#modalContent {
+  background: #212121;
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 250px;
+  display: flex; flex-direction: column; gap: 10px;
+}
 
-  .countdown { font-size: 10px; margin-top: 5px; color: #00fff7; }
+.countdown { font-size: 10px; margin-top: 5px; color: #00fff7; text-shadow: 0 0 3px #00fff7; }
 
-  .moreBtn { position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 16px; }
-  .moreMenu {
-    position: absolute;
-    top: 20px; right: 5px;
-    background: #424242;
-    display: none; flex-direction: column;
-    border-radius: 4px; overflow: hidden;
-    z-index: 10;
-  }
-  .moreMenu button { font-size: 10px; padding: 5px; background: #616161; color: #fff; border: none; cursor: pointer; }
-  .moreMenu button:hover { background: #757575; }
+.moreBtn { position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 16px; }
+.moreMenu {
+  position: absolute;
+  top: 20px; right: 5px;
+  background: #424242;
+  display: none; flex-direction: column;
+  border-radius: 4px; overflow: hidden;
+  z-index: 10;
+}
+.moreMenu button { font-size: 10px; padding: 5px; background: #616161; color: #fff; border: none; cursor: pointer; }
+.moreMenu button:hover { background: #757575; }
+
+.urgent .priorityLabel { color: #ff1744; text-shadow: 0 0 5px #ff1744; }
+.daily .priorityLabel { color: #ff9100; text-shadow: 0 0 5px #ff9100; }
+.normal .priorityLabel { color: #00e676; text-shadow: 0 0 5px #00e676; }
+.inprogress .priorityLabel { color: #2979ff; text-shadow: 0 0 5px #2979ff; }
+
 </style>
 </head>
 <body>
@@ -241,121 +245,99 @@ const tasksBoard = document.getElementById('tasksBoard');
 
 const takeModal = document.getElementById('takeModal');
 const modalTitle = document.getElementById('modalTitle');
-const playerName = document.getElementById('playerName');
+const playerNameInput = document.getElementById('playerName');
 const takeConfirm = document.getElementById('takeConfirm');
 const takeCancel = document.getElementById('takeCancel');
+
 let currentTaskId = null;
 
 addBtn.onclick = () => addPanel.style.display = addPanel.style.display === 'flex' ? 'none' : 'flex';
 
 submitTask.onclick = () => {
   const title = taskTitle.value.trim();
-  if(!title) return;
-  push(ref(db,'tasks'),{
-    title,
-    desc: taskDesc.value.trim(),
-    category: taskCategory.value,
-    deadline: taskDeadline.value || null,
-    status: "new",
-    player: null
-  });
-  taskTitle.value = taskDesc.value = taskDeadline.value = '';
-  addPanel.style.display = 'none';
+  if (!title) return alert('Название задания обязательно!');
+  const desc = taskDesc.value.trim();
+  const category = taskCategory.value;
+  const deadline = taskDeadline.value ? new Date(taskDeadline.value).getTime() : null;
+  push(ref(db, 'tasks'), { title, desc, category, deadline, status: 'new' });
+  taskTitle.value = ''; taskDesc.value = ''; taskDeadline.value = '';
 };
 
-function getTimeRemaining(deadline){
-  const end = new Date(deadline).getTime();
-  const now = Date.now();
-  const diff = end - now;
-  if(diff<=0) return "Время вышло!";
-  const d = Math.floor(diff/(1000*60*60*24));
-  const h = Math.floor((diff/(1000*60*60))%24);
-  const m = Math.floor((diff/(1000*60))%60);
-  const s = Math.floor((diff/1000)%60);
-  return `${d}д ${h}ч ${m}м ${s}с`;
+function createTaskCard(id, data) {
+  const card = document.createElement('div');
+  card.className = `taskCard ${data.status === 'inprogress' ? 'inprogress' : data.category}`;
+
+  const header = document.createElement('div'); header.className='taskHeader';
+  const titleEl = document.createElement('div'); titleEl.className='taskTitle'; titleEl.textContent = data.title;
+  const moreBtn = document.createElement('div'); moreBtn.className='moreBtn'; moreBtn.textContent='⋮';
+  const moreMenu = document.createElement('div'); moreMenu.className='moreMenu';
+  const editBtn = document.createElement('button'); editBtn.textContent='Редактировать';
+  const delBtn = document.createElement('button'); delBtn.textContent='Удалить';
+  moreMenu.append(editBtn, delBtn);
+  moreBtn.onclick = ()=> moreMenu.style.display = moreMenu.style.display==='flex'?'none':'flex';
+  editBtn.onclick = ()=> { const newTitle = prompt('Новое название', data.title); if(newTitle) update(ref(db,'tasks/'+id),{title:newTitle}); };
+  delBtn.onclick = ()=> remove(ref(db,'tasks/'+id));
+  header.append(titleEl, moreBtn, moreMenu);
+
+  const descEl = document.createElement('div'); descEl.className='taskDesc'; descEl.textContent=data.desc || '';
+  const footer = document.createElement('div'); footer.className='taskFooter';
+  const priorityLabel = document.createElement('div'); priorityLabel.className='priorityLabel';
+  priorityLabel.textContent = data.category==='urgent'?'Срочное':data.category==='daily'?'Ежедневное':'Не срочное';
+  
+  footer.append(priorityLabel);
+
+  const takeBtn = document.createElement('button'); takeBtn.className='takeBtn'; takeBtn.textContent='Взять задание';
+  takeBtn.onclick = ()=> {
+    currentTaskId = id;
+    modalTitle.textContent = data.title;
+    playerNameInput.value='';
+    takeModal.style.display='flex';
+  };
+  
+  card.append(header, descEl, footer, takeBtn);
+
+  if(data.deadline){
+    const countdown = document.createElement('div'); countdown.className='countdown';
+    countdown.id='cd_'+id;
+    card.append(countdown);
+    setInterval(()=>{
+      const now=Date.now();
+      const diff=Math.max(0, data.deadline-now);
+      const d=Math.floor(diff/86400000);
+      const h=Math.floor((diff%86400000)/3600000);
+      const m=Math.floor((diff%3600000)/60000);
+      const s=Math.floor((diff%60000)/1000);
+      countdown.textContent=`Осталось: ${d}д ${h}ч ${m}м ${s}с`;
+    },1000);
+  }
+
+  return card;
 }
 
-const tasksRef = ref(db,'tasks');
-onValue(tasksRef, snapshot => {
-  const data = snapshot.val() || {};
-  tasksBoard.innerHTML = '';
-
-  // Правильная сортировка: срочные -> ежедневные -> не срочные
-  const sorted = Object.entries(data).sort(([id1,t1],[id2,t2])=>{
-    const order = {"urgent":0,"daily":1,"normal":2};
-    return (order[t1.category]||3) - (order[t2.category]||3);
+function renderTasks(snapshot){
+  tasksBoard.innerHTML='';
+  const tasks = [];
+  snapshot.forEach(s=>{
+    tasks.push({id:s.key, data:s.val()});
   });
-
-  sorted.forEach(([id, task]) => {
-    const card = document.createElement('div');
-    let className = task.status==="inprogress"?"inprogress":task.category;
-    card.className = `taskCard ${className}`;
-
-    const header = document.createElement('div'); header.className="taskHeader";
-    const titleDiv = document.createElement('div'); titleDiv.className="taskTitle"; titleDiv.textContent = task.title;
-    const moreBtn = document.createElement('div'); moreBtn.textContent="⋮"; moreBtn.className="moreBtn";
-    const moreMenu = document.createElement('div'); moreMenu.className="moreMenu";
-    const editBtn = document.createElement('button'); editBtn.textContent="Редактировать";
-    const delBtn = document.createElement('button'); delBtn.textContent="Удалить";
-    moreMenu.appendChild(editBtn); moreMenu.appendChild(delBtn);
-    moreBtn.onclick=()=>{ moreMenu.style.display=moreMenu.style.display==='flex'?'none':'flex'; }
-
-    header.appendChild(titleDiv); header.appendChild(moreBtn); header.appendChild(moreMenu);
-    card.appendChild(header);
-
-    // Подпись приоритета
-    const priorityLabel = document.createElement('div'); priorityLabel.className="priorityLabel";
-    let labelText = task.category==="urgent"?"Срочное":task.category==="daily"?"Ежедневное":"Не срочное";
-    priorityLabel.textContent = labelText;
-    card.appendChild(priorityLabel);
-
-    if(task.desc) {
-      const descDiv = document.createElement('div'); descDiv.className="taskDesc"; descDiv.textContent=task.desc;
-      card.appendChild(descDiv);
-    }
-
-    if(task.deadline){
-      const timerDiv = document.createElement('div'); timerDiv.className="countdown";
-      card.appendChild(timerDiv);
-      setInterval(()=>{ timerDiv.textContent=getTimeRemaining(task.deadline); },1000);
-    }
-
-    const footer = document.createElement('div'); footer.className="taskFooter";
-
-    if(task.status==="new"){
-      const takeBtn = document.createElement('button'); takeBtn.className="takeBtn"; takeBtn.textContent="Взять задание";
-      takeBtn.onclick = ()=>{
-        takeModal.style.display="flex";
-        modalTitle.textContent = task.title;
-        currentTaskId = id;
-      };
-      footer.appendChild(takeBtn);
-    } else {
-      footer.textContent = `В процессе: ${task.player}`;
-    }
-
-    card.appendChild(footer);
-
-    delBtn.onclick = ()=>remove(ref(db,'tasks/'+id));
-    editBtn.onclick = ()=>{
-      const newTitle = prompt("Новое название",task.title);
-      if(newTitle) update(ref(db,'tasks/'+id),{title:newTitle});
-      const newDesc = prompt("Новое описание",task.desc||"");
-      update(ref(db,'tasks/'+id),{desc:newDesc});
-    }
-
-    tasksBoard.appendChild(card);
+  // сортировка по приоритету: urgent > daily > normal
+  tasks.sort((a,b)=>{
+    const prio={'urgent':3,'daily':2,'normal':1};
+    return (prio[b.data.category]||0)-(prio[a.data.category]||0);
   });
-});
+  tasks.forEach(t=>tasksBoard.append(createTaskCard(t.id,t.data)));
+}
+
+onValue(ref(db,'tasks'), renderTasks);
 
 takeConfirm.onclick = ()=>{
-  const name = playerName.value.trim();
-  if(!name) return;
-  update(ref(db,'tasks/'+currentTaskId),{status:"inprogress",player:name});
-  takeModal.style.display="none";
-  playerName.value="";
+  const name = playerNameInput.value.trim();
+  if(!name) return alert('Введите ник!');
+  update(ref(db,'tasks/'+currentTaskId),{status:'inprogress',player:name});
+  takeModal.style.display='none';
 };
-takeCancel.onclick = ()=>{ takeModal.style.display="none"; playerName.value=""; };
+takeCancel.onclick = ()=>takeModal.style.display='none';
+
 </script>
 </body>
 </html>
