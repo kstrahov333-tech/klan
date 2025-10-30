@@ -4,169 +4,191 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Доска заданий Клана Minecraft</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   body {
-    font-family: 'Roboto', sans-serif;
     margin: 0;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #333;
+    font-family: 'Press Start 2P', cursive;
+    background: #2e7d32; /* зелёный фон Minecraft */
+    color: #fff;
   }
 
   h1 {
     text-align: center;
-    color: white;
-    padding: 30px 0 10px;
-    font-size: 2rem;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    padding: 20px 0;
+    font-size: 20px;
+    color: #f9f871; /* золотой заголовок */
+    text-shadow: 2px 2px #000;
   }
 
   .container {
     max-width: 1000px;
-    margin: 0 auto 50px;
+    margin: 0 auto;
     padding: 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
   }
 
-  #addTaskForm {
-    grid-column: 1/-1;
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  }
-
-  #addTaskForm input, #addTaskForm select {
-    flex: 1;
-    padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: 0.2s;
-  }
-
-  #addTaskForm input:focus, #addTaskForm select:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 5px rgba(102,126,234,0.5);
-  }
-
-  #addTaskForm button {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  #addTaskForm button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-  }
-
+  /* Карточки заданий */
   .taskCard {
-    background: white;
-    border-radius: 12px;
+    background: #8d6e63; /* коричневый блок */
+    border: 3px solid #5d4037;
+    border-radius: 6px;
     padding: 15px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: 0.2s;
+    cursor: default;
   }
 
   .taskCard:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.5);
   }
 
   .taskText {
-    font-size: 16px;
+    font-size: 12px;
     margin-bottom: 10px;
     word-break: break-word;
   }
 
   .taskBtn {
-    background: #38a169;
-    border: none;
+    background: #c62828; /* красная кнопка */
+    border: 2px solid #8e0000;
     color: white;
-    padding: 6px 12px;
-    border-radius: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: 0.3s;
-    align-self: flex-end;
+    font-size: 10px;
   }
 
   .taskBtn:hover {
-    background: #2f855a;
+    background: #b71c1c;
   }
 
-  /* Цветовая подсветка по категории */
-  .urgent { border-left: 5px solid #e53e3e; }
-  .daily { border-left: 5px solid #dd6b20; }
-  .normal { border-left: 5px solid #3182ce; }
+  /* Цвет по категории */
+  .urgent { border-left: 5px solid #d50000; }
+  .daily { border-left: 5px solid #ff6f00; }
+  .normal { border-left: 5px solid #2979ff; }
+
+  /* Кнопка добавления */
+  #addTaskBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #f9f871;
+    color: #2e7d32;
+    border: 3px solid #000;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 100;
+  }
+
+  /* Панель добавления */
+  #addTaskPanel {
+    position: fixed;
+    top: 20px;
+    right: 70px;
+    background: rgba(0,0,0,0.8);
+    padding: 15px;
+    border-radius: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 99;
+  }
+
+  #addTaskPanel input, #addTaskPanel select, #addTaskPanel button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+  }
+
+  #addTaskPanel input, #addTaskPanel select {
+    padding: 5px;
+    border-radius: 4px;
+    border: none;
+  }
+
+  #addTaskPanel button {
+    background: #f9f871;
+    color: #2e7d32;
+    border: 2px solid #000;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+  }
+
+  #tasksBoard {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
 
 </style>
 </head>
 <body>
 <h1>Доска заданий Клана Minecraft</h1>
 
-<div class="container">
+<button id="addTaskBtn">+</button>
 
-<form id="addTaskForm">
-  <input type="text" id="taskText" placeholder="Новое задание" required>
+<div id="addTaskPanel">
+  <input type="text" id="taskText" placeholder="Новое задание">
   <select id="taskCategory">
     <option value="urgent">Срочные</option>
     <option value="daily">Ежедневные</option>
     <option value="normal">Не срочные</option>
   </select>
-  <button type="submit">Добавить</button>
-</form>
-
-<div id="tasksBoard"></div>
-
+  <button id="submitTask">Добавить</button>
 </div>
+
+<div class="container" id="tasksBoard"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
-// Вставь свои ключи Firebase
+// Настройки Firebase
 const firebaseConfig = {
-  apiKey: "ТВОЙ_API_KEY",
-  authDomain: "ТВОЙ_PROJECT.firebaseapp.com",
-  databaseURL: "https://ТВОЙ_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "ТВОЙ_PROJECT",
-  storageBucket: "ТВОЙ_PROJECT.appspot.com",
-  messagingSenderId: "XXXXXX",
-  appId: "1:XXXXXX:web:XXXXXX"
+  apiKey: "AIzaSyAb1xT6mIHlxcZNt1TBS7jrrDp5re3qMOU",
+  authDomain: "klan-d9201.firebaseapp.com",
+  databaseURL: "https://klan-d9201-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "klan-d9201",
+  storageBucket: "klan-d9201.appspot.com",
+  messagingSenderId: "252485302766",
+  appId: "1:252485302766:web:7f60cca53e9c9b2d38f6ff"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const taskForm = document.getElementById('addTaskForm');
+const addBtn = document.getElementById('addTaskBtn');
+const addPanel = document.getElementById('addTaskPanel');
+const submitTask = document.getElementById('submitTask');
 const taskText = document.getElementById('taskText');
 const taskCategory = document.getElementById('taskCategory');
 const tasksBoard = document.getElementById('tasksBoard');
 
-// Добавление задания
-taskForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const newTask = { text: taskText.value, category: taskCategory.value };
-  push(ref(db, 'tasks'), newTask);
-  taskText.value = '';
-});
+// Открытие/закрытие панели добавления
+addBtn.onclick = () => {
+  addPanel.style.display = addPanel.style.display === 'flex' ? 'none' : 'flex';
+};
 
-// Отображение карточек
+// Добавление задачи
+submitTask.onclick = () => {
+  const text = taskText.value.trim();
+  if(!text) return;
+  push(ref(db, 'tasks'), { text, category: taskCategory.value });
+  taskText.value = '';
+  addPanel.style.display = 'none';
+};
+
+// Отображение задач
 const tasksRef = ref(db, 'tasks');
 onValue(tasksRef, snapshot => {
   const data = snapshot.val() || {};
