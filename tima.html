@@ -367,6 +367,7 @@ h1 {
   align-items: center;
   justify-content: center;
   animation: pulse 2s infinite;
+  pointer-events: auto;
 }
 
 #addTaskBtn:hover {
@@ -432,6 +433,42 @@ h1 {
 #addTaskPanel button:hover {
   background: linear-gradient(90deg, #00ffcc, #00e5ff);
   box-shadow: 0 0 15px rgba(0,255,255,0.7);
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  color: #a0fff0;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.datetime-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.datetime-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.datetime-row input {
+  flex: 1;
+}
+
+.datetime-row span {
+  font-size: 10px;
+  color: #a0fff0;
+  white-space: nowrap;
 }
 
 #takeModal {
@@ -552,6 +589,104 @@ h1 {
   font-size: 9px;
 }
 
+.edit-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: none; 
+  justify-content: center; 
+  align-items: center;
+  z-index: 200;
+  backdrop-filter: blur(5px);
+}
+
+.edit-modal-content {
+  background: rgba(33, 33, 33, 0.95);
+  padding: 30px;
+  border-radius: 16px;
+  width: 400px;
+  max-width: 90%;
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px;
+  box-shadow: 0 0 40px rgba(0,255,255,0.3);
+  border: 1px solid rgba(0,255,255,0.2);
+  backdrop-filter: blur(10px);
+}
+
+.edit-modal-content h3 {
+  margin: 0 0 15px 0;
+  color: #00e5ff;
+  font-size: 14px;
+  text-align: center;
+}
+
+.edit-modal-content input, 
+.edit-modal-content select, 
+.edit-modal-content textarea, 
+.edit-modal-content button {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+}
+
+.edit-modal-content input, 
+.edit-modal-content select, 
+.edit-modal-content textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,255,255,0.3);
+  background: rgba(18, 18, 18, 0.8);
+  color: #00fff7;
+  transition: border 0.3s;
+}
+
+.edit-modal-content input:focus, 
+.edit-modal-content select:focus, 
+.edit-modal-content textarea:focus {
+  outline: none;
+  border: 1px solid #00fff7;
+  box-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
+.edit-modal-content button {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.edit-modal-save {
+  background: linear-gradient(90deg, #00e5ff, #00ffcc);
+  color: #000;
+}
+
+.edit-modal-save:hover {
+  background: linear-gradient(90deg, #00ffcc, #00e5ff);
+  box-shadow: 0 0 15px rgba(0,255,255,0.7);
+}
+
+.edit-modal-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.edit-modal-cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.edit-modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-modal-buttons button {
+  flex: 1;
+}
+
 @media (max-width: 768px) {
   .container {
     grid-template-columns: 1fr;
@@ -577,6 +712,10 @@ h1 {
   .tab-btn {
     width: 80%;
   }
+  
+  .edit-modal-content {
+    width: 90%;
+  }
 }
 </style>
 </head>
@@ -600,6 +739,7 @@ h1 {
   </div>
 
   <div class="container" id="tasksBoard">
+    <!-- Активные задания будут добавлены с помощью JavaScript -->
   </div>
 </div>
 
@@ -607,10 +747,12 @@ h1 {
   <div class="player-filter">
     <select id="playerFilter">
       <option value="all">Все игроки</option>
+      <!-- Список игроков будет заполнен динамически -->
     </select>
   </div>
 
   <div class="container" id="completedTasksBoard">
+    <!-- Выполненные задания будут добавлены с помощью JavaScript -->
   </div>
 </div>
 
@@ -622,12 +764,26 @@ h1 {
   <h3>Добавить новое задание</h3>
   <input type="text" id="taskTitle" placeholder="Название задания">
   <textarea id="taskDesc" placeholder="Описание (необязательно)" rows="3"></textarea>
-  <input type="datetime-local" id="taskDeadline">
+  
+  <div class="datetime-inputs">
+    <div class="datetime-row">
+      <input type="date" id="taskDate">
+      <span>в</span>
+      <input type="time" id="taskTime">
+    </div>
+  </div>
+  
   <select id="taskCategory">
     <option value="urgent">Срочные</option>
     <option value="daily">Ежедневные</option>
     <option value="normal">Не срочные</option>
   </select>
+  
+  <div class="checkbox-container">
+    <input type="checkbox" id="autoReset">
+    <label for="autoReset">Обновлять автоматически в 0:00</label>
+  </div>
+  
   <button id="submitTask">Добавить задание</button>
 </div>
 
@@ -637,6 +793,38 @@ h1 {
     <input type="text" id="playerName" placeholder="Введите ваш ник">
     <button id="takeConfirm">Взять задание</button>
     <button id="takeCancel">Отмена</button>
+  </div>
+</div>
+
+<div class="edit-modal">
+  <div class="edit-modal-content">
+    <h3>Редактировать задание</h3>
+    <input type="text" id="editTaskTitle" placeholder="Название задания">
+    <textarea id="editTaskDesc" placeholder="Описание (необязательно)" rows="3"></textarea>
+    
+    <div class="datetime-inputs">
+      <div class="datetime-row">
+        <input type="date" id="editTaskDate">
+        <span>в</span>
+        <input type="time" id="editTaskTime">
+      </div>
+    </div>
+    
+    <select id="editTaskCategory">
+      <option value="urgent">Срочные</option>
+      <option value="daily">Ежедневные</option>
+      <option value="normal">Не срочные</option>
+    </select>
+    
+    <div class="checkbox-container">
+      <input type="checkbox" id="editAutoReset">
+      <label for="editAutoReset">Обновлять автоматически в 0:00</label>
+    </div>
+    
+    <div class="edit-modal-buttons">
+      <button class="edit-modal-save" id="saveEditTask">Сохранить</button>
+      <button class="edit-modal-cancel" id="cancelEditTask">Отмена</button>
+    </div>
   </div>
 </div>
 
@@ -662,7 +850,9 @@ const submitTask = document.getElementById('submitTask');
 const taskTitle = document.getElementById('taskTitle');
 const taskDesc = document.getElementById('taskDesc');
 const taskCategory = document.getElementById('taskCategory');
-const taskDeadline = document.getElementById('taskDeadline');
+const taskDate = document.getElementById('taskDate');
+const taskTime = document.getElementById('taskTime');
+const autoReset = document.getElementById('autoReset');
 const tasksBoard = document.getElementById('tasksBoard');
 const completedTasksBoard = document.getElementById('completedTasksBoard');
 const filterBtns = document.querySelectorAll('.filter-btn');
@@ -676,10 +866,28 @@ const modalTitle = document.getElementById('modalTitle');
 const playerNameInput = document.getElementById('playerName');
 const takeConfirm = document.getElementById('takeConfirm');
 const takeCancel = document.getElementById('takeCancel');
+
+const editModal = document.querySelector('.edit-modal');
+const editTaskTitle = document.getElementById('editTaskTitle');
+const editTaskDesc = document.getElementById('editTaskDesc');
+const editTaskCategory = document.getElementById('editTaskCategory');
+const editTaskDate = document.getElementById('editTaskDate');
+const editTaskTime = document.getElementById('editTaskTime');
+const editAutoReset = document.getElementById('editAutoReset');
+const saveEditTask = document.getElementById('saveEditTask');
+const cancelEditTask = document.getElementById('cancelEditTask');
+
 let currentTaskId = null;
 let currentFilter = 'all';
 let currentTab = 'active';
+let editingTaskId = null;
 
+// Устанавливаем минимальную дату как сегодня
+const today = new Date().toISOString().split('T')[0];
+taskDate.min = today;
+editTaskDate.min = today;
+
+// Переключение между вкладками
 tabBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     tabBtns.forEach(b => b.classList.remove('active'));
@@ -697,7 +905,11 @@ tabBtns.forEach(btn => {
   });
 });
 
-addBtn.onclick = () => addPanel.style.display = addPanel.style.display === 'flex' ? 'none' : 'flex';
+// Исправление кнопки "+" - добавляем обработчик для всей кнопки
+addBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  addPanel.style.display = addPanel.style.display === 'flex' ? 'none' : 'flex';
+});
 
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -713,11 +925,58 @@ submitTask.onclick = () => {
   if (!title) return alert('Название задания обязательно!');
   const desc = taskDesc.value.trim();
   const category = taskCategory.value;
-  const deadline = taskDeadline.value ? new Date(taskDeadline.value).getTime() : null;
-  push(ref(db, 'tasks'), { title, desc, category, deadline, status: 'new' });
-  taskTitle.value = ''; taskDesc.value = ''; taskDeadline.value = '';
+  
+  // Собираем дату и время
+  let deadline = null;
+  if (taskDate.value && taskTime.value) {
+    const dateTimeString = `${taskDate.value}T${taskTime.value}`;
+    deadline = new Date(dateTimeString).getTime();
+  }
+  
+  const resetAtMidnight = autoReset.checked;
+  
+  push(ref(db, 'tasks'), { 
+    title, 
+    desc, 
+    category, 
+    deadline, 
+    status: 'new',
+    resetAtMidnight,
+    lastResetDate: resetAtMidnight ? getTodayDate() : null
+  });
+  
+  // Сброс формы
+  taskTitle.value = ''; 
+  taskDesc.value = ''; 
+  taskDate.value = '';
+  taskTime.value = '';
+  autoReset.checked = false;
   addPanel.style.display = 'none';
 };
+
+// Функция для получения сегодняшней даты в формате YYYY-MM-DD
+function getTodayDate() {
+  const today = new Date();
+  return today.toISOString().split('T')[0];
+}
+
+// Функция для проверки и сброса ежедневных заданий
+function checkAndResetDailyTasks(tasks) {
+  const today = getTodayDate();
+  
+  tasks.forEach(task => {
+    const taskData = task.data;
+    if (taskData.resetAtMidnight && taskData.status === 'completed' && taskData.lastResetDate !== today) {
+      // Сбрасываем задание
+      update(ref(db, 'tasks/' + task.id), {
+        status: 'new',
+        player: null,
+        completedAt: null,
+        lastResetDate: today
+      });
+    }
+  });
+}
 
 function createTaskCard(id, data) {
   const card = document.createElement('div');
@@ -749,8 +1008,23 @@ function createTaskCard(id, data) {
   };
   
   editBtn.onclick = ()=> {
-    const newTitle = prompt('Новое название', data.title);
-    if(newTitle) update(ref(db,'tasks/'+id),{title:newTitle});
+    editingTaskId = id;
+    editTaskTitle.value = data.title;
+    editTaskDesc.value = data.desc || '';
+    editTaskCategory.value = data.category;
+    editAutoReset.checked = data.resetAtMidnight || false;
+    
+    // Заполняем дату и время
+    if (data.deadline) {
+      const deadlineDate = new Date(data.deadline);
+      editTaskDate.value = deadlineDate.toISOString().split('T')[0];
+      editTaskTime.value = deadlineDate.toTimeString().slice(0, 5);
+    } else {
+      editTaskDate.value = '';
+      editTaskTime.value = '';
+    }
+    
+    editModal.style.display = 'flex';
     moreMenu.style.display = 'none';
   };
   
@@ -761,6 +1035,7 @@ function createTaskCard(id, data) {
     moreMenu.style.display = 'none';
   };
   
+  // Закрытие меню при клике вне его
   document.addEventListener('click', (e) => {
     if (!moreMenu.contains(e.target) && !moreBtn.contains(e.target)) {
       moreMenu.style.display = 'none';
@@ -799,6 +1074,15 @@ function createTaskCard(id, data) {
     footer.append(priorityLabel);
   }
 
+  // Добавляем иконку автосброса если задание имеет автосброс
+  if (data.resetAtMidnight) {
+    const autoResetIcon = document.createElement('div');
+    autoResetIcon.innerHTML = '<i class="fas fa-sync-alt" title="Автосброс в 0:00"></i>';
+    autoResetIcon.style.color = '#00e5ff';
+    autoResetIcon.style.marginLeft = '5px';
+    footer.appendChild(autoResetIcon);
+  }
+
   card.append(header, descEl);
 
   if(data.deadline && data.status !== 'completed'){
@@ -819,6 +1103,7 @@ function createTaskCard(id, data) {
     updateCountdown();
     const countdownInterval = setInterval(updateCountdown, 1000);
     
+    // Очистка интервала при удалении карточки
     card.dataset.countdownInterval = countdownInterval;
   }
 
@@ -838,8 +1123,10 @@ function createTaskCard(id, data) {
     completeBtn.className='completeBtn';
     completeBtn.innerHTML='<i class="fas fa-check"></i> Задание выполнено';
     completeBtn.onclick = () => {
+      // Анимация "улетания" карточки
       card.style.animation = 'flyAway 1s forwards';
       
+      // После завершения анимации обновляем статус задания
       setTimeout(() => {
         update(ref(db, 'tasks/' + id), {
           status: 'completed',
@@ -863,11 +1150,16 @@ function renderTasksFromSnapshot(snapshot){
   const tasks = [];
   snapshot.forEach(s=>{
     const taskData = s.val();
+    // Показываем только активные задания (не выполненные)
     if (taskData.status !== 'completed') {
       tasks.push({id:s.key, data:taskData});
     }
   });
   
+  // Проверяем и сбрасываем ежедневные задания
+  checkAndResetDailyTasks(tasks);
+  
+  // Фильтрация задач
   const filteredTasks = tasks.filter(task => {
     if (currentFilter === 'all') return true;
     if (currentFilter === 'inprogress') return task.data.status === 'inprogress';
@@ -886,6 +1178,7 @@ function renderTasksFromSnapshot(snapshot){
     return;
   }
   
+  // Сортировка задач
   const prio={'urgent':4,'daily':3,'normal':2,'inprogress':1};
   filteredTasks.sort((a,b)=> (prio[b.data.category]||0)-(prio[a.data.category]||0));
   filteredTasks.forEach(t=>tasksBoard.append(createTaskCard(t.id,t.data)));
@@ -900,6 +1193,7 @@ function renderCompletedTasksFromSnapshot(snapshot) {
   
   snapshot.forEach(s=>{
     const taskData = s.val();
+    // Показываем только выполненные задания
     if (taskData.status === 'completed') {
       tasks.push({id:s.key, data:taskData});
       if (taskData.player) {
@@ -908,8 +1202,10 @@ function renderCompletedTasksFromSnapshot(snapshot) {
     }
   });
   
+  // Обновляем фильтр игроков
   updatePlayerFilter(players);
   
+  // Фильтрация по игроку
   const selectedPlayer = playerFilter.value;
   const filteredTasks = selectedPlayer === 'all' 
     ? tasks 
@@ -927,15 +1223,19 @@ function renderCompletedTasksFromSnapshot(snapshot) {
     return;
   }
   
+  // Сортировка по дате выполнения (новые сверху)
   filteredTasks.sort((a, b) => (b.data.completedAt || 0) - (a.data.completedAt || 0));
   filteredTasks.forEach(t => completedTasksBoard.append(createTaskCard(t.id, t.data)));
 }
 
 function updatePlayerFilter(players) {
+  // Сохраняем текущее значение
   const currentValue = playerFilter.value;
   
+  // Очищаем список, оставляя только "Все игроки"
   playerFilter.innerHTML = '<option value="all">Все игроки</option>';
   
+  // Добавляем игроков в алфавитном порядке
   const sortedPlayers = Array.from(players).sort();
   sortedPlayers.forEach(player => {
     const option = document.createElement('option');
@@ -944,6 +1244,7 @@ function updatePlayerFilter(players) {
     playerFilter.appendChild(option);
   });
   
+  // Восстанавливаем предыдущее значение, если оно все еще существует
   if (sortedPlayers.includes(currentValue)) {
     playerFilter.value = currentValue;
   }
@@ -961,9 +1262,44 @@ function renderTasks(snapshot){
 
 onValue(ref(db,'tasks'), renderTasks);
 
+// Обработчик изменения фильтра игроков
 playerFilter.addEventListener('change', () => {
   renderCompletedTasksFromSnapshot(lastSnapshot);
 });
+
+// Обработчики для модального окна редактирования
+saveEditTask.onclick = () => {
+  const title = editTaskTitle.value.trim();
+  if (!title) return alert('Название задания обязательно!');
+  const desc = editTaskDesc.value.trim();
+  const category = editTaskCategory.value;
+  
+  // Собираем дату и время
+  let deadline = null;
+  if (editTaskDate.value && editTaskTime.value) {
+    const dateTimeString = `${editTaskDate.value}T${editTaskTime.value}`;
+    deadline = new Date(dateTimeString).getTime();
+  }
+  
+  const resetAtMidnight = editAutoReset.checked;
+  
+  update(ref(db, 'tasks/' + editingTaskId), { 
+    title, 
+    desc, 
+    category, 
+    deadline,
+    resetAtMidnight,
+    lastResetDate: resetAtMidnight ? getTodayDate() : null
+  });
+  
+  editModal.style.display = 'none';
+  editingTaskId = null;
+};
+
+cancelEditTask.onclick = () => {
+  editModal.style.display = 'none';
+  editingTaskId = null;
+};
 
 takeConfirm.onclick = ()=>{
   const name = playerNameInput.value.trim();
@@ -974,12 +1310,21 @@ takeConfirm.onclick = ()=>{
 
 takeCancel.onclick = ()=>takeModal.style.display='none';
 
+// Закрытие модальных окон при клике вне их
 takeModal.addEventListener('click', (e) => {
   if (e.target === takeModal) {
     takeModal.style.display = 'none';
   }
 });
 
+editModal.addEventListener('click', (e) => {
+  if (e.target === editModal) {
+    editModal.style.display = 'none';
+    editingTaskId = null;
+  }
+});
+
+// Закрытие панели добавления задания при клике вне ее
 document.addEventListener('click', (e) => {
   if (!addPanel.contains(e.target) && e.target !== addBtn) {
     addPanel.style.display = 'none';
