@@ -9,18 +9,16 @@
   body {
     margin: 0;
     font-family: 'Press Start 2P', cursive;
-    background: #2e7d32; /* зелёный фон Minecraft */
+    background: #2e7d32;
     color: #fff;
   }
-
   h1 {
     text-align: center;
     padding: 20px 0;
     font-size: 20px;
-    color: #f9f871; /* золотой заголовок */
+    color: #f9f871;
     text-shadow: 2px 2px #000;
   }
-
   .container {
     max-width: 1000px;
     margin: 0 auto;
@@ -29,33 +27,27 @@
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
   }
-
-  /* Карточки заданий */
   .taskCard {
-    background: #8d6e63; /* коричневый блок */
+    background: #8d6e63;
     border: 3px solid #5d4037;
     border-radius: 6px;
     padding: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: 0.2s;
     cursor: default;
   }
-
   .taskCard:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0,0,0,0.5);
   }
-
   .taskText {
     font-size: 12px;
     margin-bottom: 10px;
     word-break: break-word;
   }
-
   .taskBtn {
-    background: #c62828; /* красная кнопка */
+    background: #c62828;
     border: 2px solid #8e0000;
     color: white;
     padding: 4px 8px;
@@ -63,17 +55,12 @@
     cursor: pointer;
     font-size: 10px;
   }
+  .taskBtn:hover { background: #b71c1c; }
 
-  .taskBtn:hover {
-    background: #b71c1c;
-  }
-
-  /* Цвет по категории */
   .urgent { border-left: 5px solid #d50000; }
   .daily { border-left: 5px solid #ff6f00; }
   .normal { border-left: 5px solid #2979ff; }
 
-  /* Кнопка добавления */
   #addTaskBtn {
     position: fixed;
     top: 20px;
@@ -89,12 +76,11 @@
     z-index: 100;
   }
 
-  /* Панель добавления */
   #addTaskPanel {
     position: fixed;
     top: 20px;
     right: 70px;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.85);
     padding: 15px;
     border-radius: 6px;
     display: none;
@@ -102,18 +88,15 @@
     gap: 10px;
     z-index: 99;
   }
-
   #addTaskPanel input, #addTaskPanel select, #addTaskPanel button {
     font-family: 'Press Start 2P', cursive;
     font-size: 10px;
   }
-
   #addTaskPanel input, #addTaskPanel select {
     padding: 5px;
     border-radius: 4px;
     border: none;
   }
-
   #addTaskPanel button {
     background: #f9f871;
     color: #2e7d32;
@@ -122,14 +105,6 @@
     padding: 5px;
     border-radius: 4px;
   }
-
-  #tasksBoard {
-    grid-column: 1/-1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-  }
-
 </style>
 </head>
 <body>
@@ -153,7 +128,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
-// Настройки Firebase
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAb1xT6mIHlxcZNt1TBS7jrrDp5re3qMOU",
   authDomain: "klan-d9201.firebaseapp.com",
