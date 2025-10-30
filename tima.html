@@ -5,10 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Доска заданий Клана Minecraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 @keyframes lines {
   0% { background-position: 0 0, 0 0; }
   100% { background-position: 1000px 0, 0 1000px; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(0,255,255,0.3); }
+  50% { box-shadow: 0 0 25px rgba(0,255,255,0.7); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 body {
@@ -17,7 +33,6 @@ body {
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
   color: #fff;
   min-height: 100vh;
-  position: relative;
   overflow-x: hidden;
 }
 
@@ -25,29 +40,33 @@ body::before {
   content: "";
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(0,255,255,0.05) 0 1px,
-    transparent 1px 12px
-  ),
-  repeating-linear-gradient(
-    -45deg,
-    rgba(255,0,255,0.05) 0 1px,
-    transparent 1px 12px
-  );
+  background: repeating-linear-gradient(45deg, rgba(0,255,255,0.05) 0 1px, transparent 1px 12px),
+              repeating-linear-gradient(-45deg, rgba(255,0,255,0.05) 0 1px, transparent 1px 12px);
   animation: lines 40s linear infinite;
   z-index: 0;
   pointer-events: none;
 }
 
-h1 {
+header {
   text-align: center;
   padding: 20px 0;
-  font-size: 22px;
-  color: #00e5ff;
-  text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff;
   position: relative;
   z-index: 1;
+}
+
+h1 {
+  font-size: 24px;
+  color: #00e5ff;
+  text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff;
+  margin-bottom: 10px;
+  animation: float 5s ease-in-out infinite;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #a0fff0;
+  text-shadow: 0 0 5px #a0fff0;
+  margin-bottom: 20px;
 }
 
 .container {
@@ -55,163 +74,474 @@ h1 {
   margin: 0 auto;
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  position: relative;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
   z-index: 1;
+  position: relative;
 }
 
 .taskCard {
-  background: #1b1b1b;
-  border-radius: 12px;
+  background: rgba(27, 27, 27, 0.85);
+  border-radius: 16px;
   box-shadow: 0 0 15px rgba(0,255,255,0.2);
-  padding: 15px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 180px;
-  width: 250px;
+  min-height: 200px;
   position: relative;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
   overflow: hidden;
-}
-.taskCard:hover { 
-  transform: translateY(-5px); 
-  box-shadow: 0 0 25px rgba(0,255,255,0.5), 0 0 40px rgba(255,0,255,0.2); 
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 255, 255, 0.1);
 }
 
-.taskHeader { display: flex; justify-content: space-between; align-items: center; }
-.taskTitle { font-size: 12px; word-break: break-word; color: #00e5ff; text-shadow: 0 0 5px #00e5ff; }
-.taskDesc { font-size: 10px; margin-top: 5px; color: #a0fff0; }
-.taskFooter { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 10px; }
+.taskCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00e5ff, #ff00ff, #00e5ff);
+  background-size: 200% 100%;
+  animation: gradient-shift 3s linear infinite;
+}
 
-.taskBtn, .takeBtn, .editBtn {
-  cursor: pointer;
-  border: none;
-  border-radius: 4px;
-  font-size: 10px;
+@keyframes gradient-shift {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.taskCard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 0 25px rgba(0,255,255,0.4), 0 0 50px rgba(255,0,255,0.1);
+  animation: glow 2s ease-in-out infinite;
+}
+
+.taskHeader { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.taskTitle { 
+  font-size: 14px; 
+  color: #00e5ff; 
+  text-shadow: 0 0 6px #00e5ff;
+  line-height: 1.4;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.taskDesc { 
+  font-size: 10px; 
+  margin-top: 10px; 
+  color: #a0fff0; 
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.taskFooter { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-top: 15px; 
+  font-size: 10px; 
+}
+
+.priorityLabel { 
+  font-size: 9px; 
+  font-weight: bold; 
+  text-transform: uppercase;
   padding: 4px 8px;
-  transition: 0.2s;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.3);
 }
-
-/* Кнопка взять задание — неоновая */
-.takeBtn {
-  background: linear-gradient(90deg, #00f0ff, #00bcd4);
-  color: #000;
-  border: 2px solid #00e5ff;
-  box-shadow: 0 0 10px #00e5ff;
-  font-weight: bold;
-}
-.takeBtn:hover {
-  background: linear-gradient(90deg, #00e676, #00bcd4);
-  box-shadow: 0 0 20px #00ffc3;
-}
-
-.editBtn { background: #00ffea; color: #000; }
-.editBtn:hover { background: #00bcd4; }
 
 .urgent { border-left: 5px solid #ff1744; }
 .daily { border-left: 5px solid #ff9100; }
 .normal { border-left: 5px solid #00e676; }
-.inprogress { border-left: 5px solid #2979ff; background: #102040; }
+.inprogress { border-left: 5px solid #2979ff; background: rgba(13, 71, 161, 0.7); }
 
-.priorityLabel {
-  font-size: 10px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 3px;
+.urgent .priorityLabel { 
+  color: #ff5252; 
+  text-shadow: 0 0 6px #ff1744;
+  background: rgba(255, 23, 68, 0.2);
+}
+.daily .priorityLabel { 
+  color: #ffb74d; 
+  text-shadow: 0 0 6px #ff9100;
+  background: rgba(255, 145, 0, 0.2);
+}
+.normal .priorityLabel { 
+  color: #00e676; 
+  text-shadow: 0 0 6px #00e676;
+  background: rgba(0, 230, 118, 0.2);
+}
+.inprogress .priorityLabel { 
+  color: #82b1ff; 
+  text-shadow: 0 0 6px #2979ff;
+  background: rgba(41, 121, 255, 0.2);
 }
 
-.urgent .priorityLabel { color: #ff1744; text-shadow: 0 0 6px #ff1744, 0 0 10px #ff5252; }
-.daily .priorityLabel { color: #ff9100; text-shadow: 0 0 6px #ff9100, 0 0 10px #ffb74d; }
-.normal .priorityLabel { color: #00e676; text-shadow: 0 0 6px #00e676, 0 0 10px #69f0ae; }
-.inprogress .priorityLabel { color: #2979ff; text-shadow: 0 0 6px #2979ff, 0 0 10px #82b1ff; }
+.playerNameTag {
+  font-size: 9px;
+  color: #fff;
+  background: rgba(0,0,0,0.3);
+  padding: 4px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,255,255,0.4);
+  text-shadow: 0 0 3px #00e5ff;
+}
+
+.countdown { 
+  font-size: 10px; 
+  margin-top: 10px; 
+  color: #00fff7; 
+  text-shadow: 0 0 3px #00fff7;
+  background: rgba(0,0,0,0.3);
+  padding: 5px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.takeBtn {
+  background: linear-gradient(90deg, #00e5ff, #00ffcc);
+  color: #000;
+  font-size: 10px;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #00e5ff, 0 0 20px #00ffcc;
+  font-weight: bold;
+  margin-top: 10px;
+  align-self: flex-start;
+}
+
+.takeBtn:hover {
+  background: linear-gradient(90deg, #00ffcc, #00e5ff);
+  box-shadow: 0 0 25px #00fff7, 0 0 50px #00e5ff;
+  animation: pulse 0.5s ease-in-out;
+}
+
+.moreBtn { 
+  position: relative;
+  cursor: pointer; 
+  font-size: 16px;
+  color: #a0fff0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.moreBtn:hover {
+  background: rgba(160, 255, 240, 0.1);
+}
+
+.moreMenu {
+  position: absolute;
+  top: 30px; 
+  right: 0;
+  background: rgba(66, 66, 66, 0.95);
+  display: none; 
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  z-index: 10;
+  min-width: 150px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.moreMenu button {
+  font-size: 10px; 
+  padding: 8px 12px; 
+  background: transparent; 
+  color: #fff;
+  border: none; 
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.moreMenu button:hover { 
+  background: rgba(0, 255, 255, 0.2); 
+}
+
+.moreMenu button i {
+  margin-right: 8px;
+  width: 12px;
+}
 
 #addTaskBtn {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  bottom: 30px; 
+  right: 30px;
   background: #00fff7;
   color: #000;
-  border: 3px solid #00fff7;
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  border-radius: 4px;
+  border: none;
+  width: 60px; 
+  height: 60px;
+  font-size: 24px;
+  border-radius: 50%;
   cursor: pointer;
   z-index: 100;
+  box-shadow: 0 0 20px #00fff7;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+#addTaskBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px #00fff7, 0 0 50px #00e5ff;
 }
 
 #addTaskPanel {
   position: fixed;
-  top: 20px;
-  right: 70px;
-  background: rgba(0,0,0,0.9);
-  padding: 15px;
-  border-radius: 6px;
+  bottom: 100px; 
+  right: 30px;
+  background: rgba(0,0,0,0.95);
+  padding: 20px;
+  border-radius: 16px;
   display: none;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   z-index: 99;
+  width: 300px;
+  box-shadow: 0 0 30px rgba(0,255,255,0.3);
+  border: 1px solid rgba(0,255,255,0.2);
+  backdrop-filter: blur(10px);
 }
+
+#addTaskPanel h3 {
+  margin: 0 0 10px 0;
+  color: #00e5ff;
+  font-size: 14px;
+  text-align: center;
+}
+
 #addTaskPanel input, #addTaskPanel select, #addTaskPanel textarea, #addTaskPanel button {
   font-family: 'Press Start 2P', cursive;
   font-size: 10px;
 }
+
 #addTaskPanel input, #addTaskPanel select, #addTaskPanel textarea {
-  padding: 5px;
-  border-radius: 4px;
-  border: none;
-  background: #121212;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,255,255,0.3);
+  background: rgba(18, 18, 18, 0.8);
   color: #00fff7;
+  transition: border 0.3s;
 }
+
+#addTaskPanel input:focus, #addTaskPanel select:focus, #addTaskPanel textarea:focus {
+  outline: none;
+  border: 1px solid #00fff7;
+  box-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
 #addTaskPanel button {
-  background: #00fff7;
+  background: linear-gradient(90deg, #00e5ff, #00ffcc);
   color: #000;
-  border: 2px solid #00fff7;
+  border: none;
   cursor: pointer;
-  padding: 5px;
-  border-radius: 4px;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+#addTaskPanel button:hover {
+  background: linear-gradient(90deg, #00ffcc, #00e5ff);
+  box-shadow: 0 0 15px rgba(0,255,255,0.7);
 }
 
 #takeModal {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  display: none; justify-content: center; align-items: center;
+  background: rgba(0,0,0,0.9);
+  display: none; 
+  justify-content: center; 
+  align-items: center;
   z-index: 200;
+  backdrop-filter: blur(5px);
 }
+
 #modalContent {
-  background: #212121;
-  padding: 20px;
+  background: rgba(33, 33, 33, 0.95);
+  padding: 30px;
+  border-radius: 16px;
+  min-width: 300px;
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px;
+  box-shadow: 0 0 40px rgba(0,255,255,0.3);
+  border: 1px solid rgba(0,255,255,0.2);
+  backdrop-filter: blur(10px);
+}
+
+#modalTitle {
+  font-size: 16px;
+  color: #00e5ff;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#playerName {
+  padding: 10px;
   border-radius: 8px;
-  min-width: 250px;
-  display: flex; flex-direction: column; gap: 10px;
+  border: 1px solid rgba(0,255,255,0.3);
+  background: rgba(18, 18, 18, 0.8);
+  color: #00fff7;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
 }
 
-.countdown { font-size: 10px; margin-top: 5px; color: #00fff7; text-shadow: 0 0 3px #00fff7; }
-
-.moreBtn { position: absolute; top: 5px; right: 5px; cursor: pointer; font-size: 16px; }
-.moreMenu {
-  position: absolute;
-  top: 20px; right: 5px;
-  background: #424242;
-  display: none; flex-direction: column;
-  border-radius: 4px; overflow: hidden;
-  z-index: 10;
+#playerName:focus {
+  outline: none;
+  border: 1px solid #00fff7;
+  box-shadow: 0 0 10px rgba(0,255,255,0.5);
 }
-.moreMenu button { font-size: 10px; padding: 5px; background: #616161; color: #fff; border: none; cursor: pointer; }
-.moreMenu button:hover { background: #757575; }
 
+#takeConfirm, #takeCancel {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  transition: all 0.3s;
+}
+
+#takeConfirm {
+  background: linear-gradient(90deg, #00e5ff, #00ffcc);
+  color: #000;
+  font-weight: bold;
+}
+
+#takeConfirm:hover {
+  background: linear-gradient(90deg, #00ffcc, #00e5ff);
+  box-shadow: 0 0 15px rgba(0,255,255,0.7);
+}
+
+#takeCancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#takeCancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: rgba(27, 27, 27, 0.7);
+  color: #a0fff0;
+  border: 1px solid rgba(0,255,255,0.3);
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 9px;
+  transition: all 0.3s;
+}
+
+.filter-btn.active {
+  background: rgba(0,255,255,0.2);
+  color: #00e5ff;
+  box-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
+.filter-btn:hover {
+  background: rgba(0,255,255,0.1);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #a0fff0;
+  grid-column: 1 / -1;
+}
+
+.empty-state i {
+  font-size: 40px;
+  margin-bottom: 20px;
+  color: rgba(0,255,255,0.3);
+}
+
+.empty-state p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+  
+  h1 {
+    font-size: 18px;
+  }
+  
+  .subtitle {
+    font-size: 10px;
+  }
+  
+  #addTaskPanel {
+    width: calc(100% - 40px);
+    right: 20px;
+    left: 20px;
+    bottom: 100px;
+  }
+}
 </style>
 </head>
 <body>
-<h1>Доска заданий Клана Minecraft</h1>
+<header>
+  <h1>Доска заданий Клана Minecraft</h1>
+  <div class="subtitle">Выполняйте задания и повышайте уровень клана!</div>
+</header>
 
-<button id="addTaskBtn">+</button>
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">Все задания</button>
+  <button class="filter-btn" data-filter="urgent">Срочные</button>
+  <button class="filter-btn" data-filter="daily">Ежедневные</button>
+  <button class="filter-btn" data-filter="normal">Обычные</button>
+  <button class="filter-btn" data-filter="inprogress">В процессе</button>
+</div>
+
+<div class="container" id="tasksBoard">
+  <!-- Задания будут добавлены с помощью JavaScript -->
+</div>
+
+<button id="addTaskBtn">
+  <i class="fas fa-plus"></i>
+</button>
 
 <div id="addTaskPanel">
+  <h3>Добавить новое задание</h3>
   <input type="text" id="taskTitle" placeholder="Название задания">
   <textarea id="taskDesc" placeholder="Описание (необязательно)" rows="3"></textarea>
   <input type="datetime-local" id="taskDeadline">
@@ -220,10 +550,8 @@ h1 {
     <option value="daily">Ежедневные</option>
     <option value="normal">Не срочные</option>
   </select>
-  <button id="submitTask">Добавить</button>
+  <button id="submitTask">Добавить задание</button>
 </div>
-
-<div class="container" id="tasksBoard"></div>
 
 <div id="takeModal">
   <div id="modalContent">
@@ -258,14 +586,26 @@ const taskDesc = document.getElementById('taskDesc');
 const taskCategory = document.getElementById('taskCategory');
 const taskDeadline = document.getElementById('taskDeadline');
 const tasksBoard = document.getElementById('tasksBoard');
+const filterBtns = document.querySelectorAll('.filter-btn');
+
 const takeModal = document.getElementById('takeModal');
 const modalTitle = document.getElementById('modalTitle');
 const playerNameInput = document.getElementById('playerName');
 const takeConfirm = document.getElementById('takeConfirm');
 const takeCancel = document.getElementById('takeCancel');
 let currentTaskId = null;
+let currentFilter = 'all';
 
 addBtn.onclick = () => addPanel.style.display = addPanel.style.display === 'flex' ? 'none' : 'flex';
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderTasksFromSnapshot(lastSnapshot);
+  });
+});
 
 submitTask.onclick = () => {
   const title = taskTitle.value.trim();
@@ -275,109 +615,179 @@ submitTask.onclick = () => {
   const deadline = taskDeadline.value ? new Date(taskDeadline.value).getTime() : null;
   push(ref(db, 'tasks'), { title, desc, category, deadline, status: 'new' });
   taskTitle.value = ''; taskDesc.value = ''; taskDeadline.value = '';
+  addPanel.style.display = 'none';
 };
 
 function createTaskCard(id, data) {
   const card = document.createElement('div');
   card.className = `taskCard ${data.status === 'inprogress' ? 'inprogress' : data.category}`;
+  card.dataset.category = data.status === 'inprogress' ? 'inprogress' : data.category;
+
   const header = document.createElement('div');
-  header.className = 'taskHeader';
+  header.className='taskHeader';
   const titleEl = document.createElement('div');
-  titleEl.className = 'taskTitle';
+  titleEl.className='taskTitle';
   titleEl.textContent = data.title;
 
   const moreBtn = document.createElement('div');
-  moreBtn.className = 'moreBtn';
-  moreBtn.textContent = '⋮';
+  moreBtn.className='moreBtn';
+  moreBtn.innerHTML='<i class="fas fa-ellipsis-v"></i>';
+
   const moreMenu = document.createElement('div');
-  moreMenu.className = 'moreMenu';
+  moreMenu.className='moreMenu';
+
   const editBtn = document.createElement('button');
-  editBtn.textContent = 'Редактировать';
+  editBtn.innerHTML='<i class="fas fa-edit"></i> Редактировать';
   const delBtn = document.createElement('button');
-  delBtn.textContent = 'Удалить';
+  delBtn.innerHTML='<i class="fas fa-trash"></i> Удалить';
   moreMenu.append(editBtn, delBtn);
-  moreBtn.onclick = () => moreMenu.style.display = moreMenu.style.display === 'flex' ? 'none' : 'flex';
-  editBtn.onclick = () => {
-    const newTitle = prompt('Новое название', data.title);
-    if (newTitle) update(ref(db, 'tasks/' + id), { title: newTitle });
+  
+  moreBtn.onclick = (e) => {
+    e.stopPropagation();
+    moreMenu.style.display = moreMenu.style.display==='flex'?'none':'flex';
   };
-  delBtn.onclick = () => remove(ref(db, 'tasks/' + id));
+  
+  editBtn.onclick = ()=> {
+    const newTitle = prompt('Новое название', data.title);
+    if(newTitle) update(ref(db,'tasks/'+id),{title:newTitle});
+    moreMenu.style.display = 'none';
+  };
+  
+  delBtn.onclick = ()=> {
+    if(confirm('Вы уверены, что хотите удалить это задание?')) {
+      remove(ref(db,'tasks/'+id));
+    }
+    moreMenu.style.display = 'none';
+  };
+  
+  // Закрытие меню при клике вне его
+  document.addEventListener('click', (e) => {
+    if (!moreMenu.contains(e.target) && !moreBtn.contains(e.target)) {
+      moreMenu.style.display = 'none';
+    }
+  });
+  
   header.append(titleEl, moreBtn, moreMenu);
 
   const descEl = document.createElement('div');
-  descEl.className = 'taskDesc';
-  descEl.textContent = data.desc || '';
-
-  const priorityLabel = document.createElement('div');
-  priorityLabel.className = 'priorityLabel';
-  priorityLabel.textContent = data.category === 'urgent' ? 'Срочное' : data.category === 'daily' ? 'Ежедневное' : 'Не срочное';
+  descEl.className='taskDesc';
+  descEl.textContent=data.desc || '';
 
   const footer = document.createElement('div');
-  footer.className = 'taskFooter';
-  footer.append(priorityLabel);
-
+  footer.className='taskFooter';
+  const priorityLabel = document.createElement('div');
+  priorityLabel.className='priorityLabel';
+  
   if (data.status === 'inprogress') {
-    const player = document.createElement('div');
-    player.textContent = `В процессе: ${data.player}`;
-    player.style.color = '#00bfff';
-    player.style.textShadow = '0 0 6px #00bfff';
-    footer.append(player);
+    priorityLabel.textContent = 'В процессе';
+    const playerTag = document.createElement('div');
+    playerTag.className='playerNameTag';
+    playerTag.textContent = data.player || '???';
+    footer.append(priorityLabel, playerTag);
   } else {
+    priorityLabel.textContent = data.category==='urgent'?'Срочное':data.category==='daily'?'Ежедневное':'Обычное';
+    footer.append(priorityLabel);
+  }
+
+  card.append(header, descEl);
+
+  if(data.deadline){
+    const countdown = document.createElement('div');
+    countdown.className='countdown';
+    card.append(countdown);
+    
+    const updateCountdown = () => {
+      const now=Date.now();
+      const diff=Math.max(0, data.deadline-now);
+      const d=Math.floor(diff/86400000);
+      const h=Math.floor((diff%86400000)/3600000);
+      const m=Math.floor((diff%3600000)/60000);
+      const s=Math.floor((diff%60000)/1000);
+      countdown.textContent=`⏱️ ${d}д ${h}ч ${m}м ${s}с`;
+    };
+    
+    updateCountdown();
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    
+    // Очистка интервала при удалении карточки
+    card.dataset.countdownInterval = countdownInterval;
+  }
+
+  if (data.status === 'new') {
     const takeBtn = document.createElement('button');
-    takeBtn.className = 'takeBtn';
-    takeBtn.textContent = 'Взять задание';
-    takeBtn.onclick = () => {
+    takeBtn.className='takeBtn';
+    takeBtn.innerHTML='<i class="fas fa-hand-paper"></i> Взять задание';
+    takeBtn.onclick = ()=> {
       currentTaskId = id;
       modalTitle.textContent = data.title;
-      playerNameInput.value = '';
-      takeModal.style.display = 'flex';
+      playerNameInput.value='';
+      takeModal.style.display='flex';
     };
-    footer.append(takeBtn);
+    card.append(takeBtn);
   }
 
-  if (data.deadline) {
-    const countdown = document.createElement('div');
-    countdown.className = 'countdown';
-    card.append(countdown);
-    setInterval(() => {
-      const diff = data.deadline - Date.now();
-      if (diff <= 0) {
-        countdown.textContent = 'Время вышло!';
-        countdown.style.color = '#ff1744';
-      } else {
-        const d = Math.floor(diff / 86400000);
-        const h = Math.floor((diff % 86400000) / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        const s = Math.floor((diff % 60000) / 1000);
-        countdown.textContent = `Осталось: ${d}д ${h}ч ${m}м ${s}с`;
-      }
-    }, 1000);
-  }
-
-  card.append(header, descEl, footer);
+  card.append(footer);
   return card;
 }
 
-function renderTasks(snapshot) {
-  tasksBoard.innerHTML = '';
+let lastSnapshot = null;
+
+function renderTasksFromSnapshot(snapshot){
+  if (!snapshot) return;
+  
+  tasksBoard.innerHTML='';
   const tasks = [];
-  snapshot.forEach(s => tasks.push({ id: s.key, data: s.val() }));
-  tasks.sort((a, b) => {
-    const prio = { urgent: 3, daily: 2, normal: 1 };
-    return (prio[b.data.category] || 0) - (prio[a.data.category] || 0);
+  snapshot.forEach(s=>{
+    tasks.push({id:s.key, data:s.val()});
   });
-  tasks.forEach(t => tasksBoard.append(createTaskCard(t.id, t.data)));
+  
+  // Фильтрация задач
+  const filteredTasks = tasks.filter(task => {
+    if (currentFilter === 'all') return true;
+    if (currentFilter === 'inprogress') return task.data.status === 'inprogress';
+    return task.data.category === currentFilter && task.data.status !== 'inprogress';
+  });
+  
+  if (filteredTasks.length === 0) {
+    const emptyState = document.createElement('div');
+    emptyState.className = 'empty-state';
+    emptyState.innerHTML = `
+      <i class="fas fa-tasks"></i>
+      <p>Нет заданий для отображения</p>
+      <p>Создайте новое задание, нажав на кнопку "+"</p>
+    `;
+    tasksBoard.append(emptyState);
+    return;
+  }
+  
+  // Сортировка задач
+  const prio={'urgent':4,'daily':3,'normal':2,'inprogress':1};
+  filteredTasks.sort((a,b)=> (prio[b.data.category]||0)-(prio[a.data.category]||0));
+  filteredTasks.forEach(t=>tasksBoard.append(createTaskCard(t.id,t.data)));
 }
 
-onValue(ref(db, 'tasks'), renderTasks);
+function renderTasks(snapshot){
+  lastSnapshot = snapshot;
+  renderTasksFromSnapshot(snapshot);
+}
 
-takeConfirm.onclick = () => {
+onValue(ref(db,'tasks'), renderTasks);
+
+takeConfirm.onclick = ()=>{
   const name = playerNameInput.value.trim();
-  if (!name) return alert('Введите ник!');
-  update(ref(db, 'tasks/' + currentTaskId), { status: 'inprogress', player: name });
-  takeModal.style.display = 'none';
+  if(!name) return alert('Введите ник!');
+  update(ref(db,'tasks/'+currentTaskId),{status:'inprogress',player:name});
+  takeModal.style.display='none';
 };
-takeCancel.onclick = () => takeModal.style.display = 'none';
+
+takeCancel.onclick = ()=>takeModal.style.display='none';
+
+// Закрытие модального окна при клике вне его
+takeModal.addEventListener('click', (e) => {
+  if (e.target === takeModal) {
+    takeModal.style.display = 'none';
+  }
+});
 </script>
 </body>
 </html>
