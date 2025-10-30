@@ -27,6 +27,12 @@
   50% { transform: scale(1.05); }
 }
 
+@keyframes flyAway {
+  0% { transform: translateX(0) scale(1); opacity: 1; }
+  50% { transform: translateX(100px) scale(0.8); opacity: 0.7; }
+  100% { transform: translateX(1000px) scale(0.5); opacity: 0; }
+}
+
 body {
   margin: 0;
   font-family: 'Press Start 2P', cursive;
@@ -55,18 +61,71 @@ header {
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 28px;
   color: #00e5ff;
   text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff;
   margin-bottom: 10px;
   animation: float 5s ease-in-out infinite;
 }
 
-.subtitle {
-  font-size: 12px;
-  color: #a0fff0;
-  text-shadow: 0 0 5px #a0fff0;
+.tabs {
+  display: flex;
+  justify-content: center;
   margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background: rgba(27, 27, 27, 0.7);
+  color: #a0fff0;
+  border: 1px solid rgba(0,255,255,0.3);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  background: rgba(0,255,255,0.2);
+  color: #00e5ff;
+  box-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
+.tab-btn:hover {
+  background: rgba(0,255,255,0.1);
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: rgba(27, 27, 27, 0.7);
+  color: #a0fff0;
+  border: 1px solid rgba(0,255,255,0.3);
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 9px;
+  transition: all 0.3s;
+}
+
+.filter-btn.active {
+  background: rgba(0,255,255,0.2);
+  color: #00e5ff;
+  box-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
+.filter-btn:hover {
+  background: rgba(0,255,255,0.1);
 }
 
 .container {
@@ -164,6 +223,7 @@ h1 {
 .daily { border-left: 5px solid #ff9100; }
 .normal { border-left: 5px solid #00e676; }
 .inprogress { border-left: 5px solid #2979ff; background: rgba(13, 71, 161, 0.7); }
+.completed { border-left: 5px solid #00e676; background: rgba(0, 230, 118, 0.2); }
 
 .urgent .priorityLabel { 
   color: #ff5252; 
@@ -184,6 +244,11 @@ h1 {
   color: #82b1ff; 
   text-shadow: 0 0 6px #2979ff;
   background: rgba(41, 121, 255, 0.2);
+}
+.completed .priorityLabel { 
+  color: #00e676; 
+  text-shadow: 0 0 6px #00e676;
+  background: rgba(0, 230, 118, 0.3);
 }
 
 .playerNameTag {
@@ -208,7 +273,7 @@ h1 {
   width: fit-content;
 }
 
-.takeBtn {
+.takeBtn, .completeBtn {
   background: linear-gradient(90deg, #00e5ff, #00ffcc);
   color: #000;
   font-size: 10px;
@@ -223,7 +288,7 @@ h1 {
   align-self: flex-start;
 }
 
-.takeBtn:hover {
+.takeBtn:hover, .completeBtn:hover {
   background: linear-gradient(90deg, #00ffcc, #00e5ff);
   box-shadow: 0 0 25px #00fff7, 0 0 50px #00e5ff;
   animation: pulse 0.5s ease-in-out;
@@ -447,36 +512,6 @@ h1 {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.filter-bar {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  background: rgba(27, 27, 27, 0.7);
-  color: #a0fff0;
-  border: 1px solid rgba(0,255,255,0.3);
-  padding: 8px 15px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 9px;
-  transition: all 0.3s;
-}
-
-.filter-btn.active {
-  background: rgba(0,255,255,0.2);
-  color: #00e5ff;
-  box-shadow: 0 0 10px rgba(0,255,255,0.5);
-}
-
-.filter-btn:hover {
-  background: rgba(0,255,255,0.1);
-}
-
 .empty-state {
   text-align: center;
   padding: 40px 20px;
@@ -495,6 +530,28 @@ h1 {
   line-height: 1.6;
 }
 
+.completed-section {
+  display: none;
+}
+
+.player-filter {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.player-filter select {
+  background: rgba(27, 27, 27, 0.7);
+  color: #a0fff0;
+  border: 1px solid rgba(0,255,255,0.3);
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 9px;
+}
+
 @media (max-width: 768px) {
   .container {
     grid-template-columns: 1fr;
@@ -502,11 +559,7 @@ h1 {
   }
   
   h1 {
-    font-size: 18px;
-  }
-  
-  .subtitle {
-    font-size: 10px;
+    font-size: 20px;
   }
   
   #addTaskPanel {
@@ -515,25 +568,53 @@ h1 {
     left: 20px;
     bottom: 100px;
   }
+  
+  .tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .tab-btn {
+    width: 80%;
+  }
 }
 </style>
 </head>
 <body>
 <header>
   <h1>Доска заданий</h1>
-  <div class="subtitle"></div>
 </header>
 
-<div class="filter-bar">
-  <button class="filter-btn active" data-filter="all">Все задания</button>
-  <button class="filter-btn" data-filter="urgent">Срочные</button>
-  <button class="filter-btn" data-filter="daily">Ежедневные</button>
-  <button class="filter-btn" data-filter="normal">Обычные</button>
-  <button class="filter-btn" data-filter="inprogress">В процессе</button>
+<div class="tabs">
+  <button class="tab-btn active" data-tab="active">Активные задания</button>
+  <button class="tab-btn" data-tab="completed">Выполненные задания</button>
 </div>
 
-<div class="container" id="tasksBoard">
-  <!-- Задания будут добавлены с помощью JavaScript -->
+<div class="active-section">
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">Все задания</button>
+    <button class="filter-btn" data-filter="urgent">Срочные</button>
+    <button class="filter-btn" data-filter="daily">Ежедневные</button>
+    <button class="filter-btn" data-filter="normal">Обычные</button>
+    <button class="filter-btn" data-filter="inprogress">В процессе</button>
+  </div>
+
+  <div class="container" id="tasksBoard">
+    <!-- Активные задания будут добавлены с помощью JavaScript -->
+  </div>
+</div>
+
+<div class="completed-section">
+  <div class="player-filter">
+    <select id="playerFilter">
+      <option value="all">Все игроки</option>
+      <!-- Список игроков будет заполнен динамически -->
+    </select>
+  </div>
+
+  <div class="container" id="completedTasksBoard">
+    <!-- Выполненные задания будут добавлены с помощью JavaScript -->
+  </div>
 </div>
 
 <button id="addTaskBtn">
@@ -586,7 +667,12 @@ const taskDesc = document.getElementById('taskDesc');
 const taskCategory = document.getElementById('taskCategory');
 const taskDeadline = document.getElementById('taskDeadline');
 const tasksBoard = document.getElementById('tasksBoard');
+const completedTasksBoard = document.getElementById('completedTasksBoard');
 const filterBtns = document.querySelectorAll('.filter-btn');
+const tabBtns = document.querySelectorAll('.tab-btn');
+const playerFilter = document.getElementById('playerFilter');
+const activeSection = document.querySelector('.active-section');
+const completedSection = document.querySelector('.completed-section');
 
 const takeModal = document.getElementById('takeModal');
 const modalTitle = document.getElementById('modalTitle');
@@ -595,6 +681,25 @@ const takeConfirm = document.getElementById('takeConfirm');
 const takeCancel = document.getElementById('takeCancel');
 let currentTaskId = null;
 let currentFilter = 'all';
+let currentTab = 'active';
+
+// Переключение между вкладками
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentTab = btn.dataset.tab;
+    
+    if (currentTab === 'active') {
+      activeSection.style.display = 'block';
+      completedSection.style.display = 'none';
+    } else {
+      activeSection.style.display = 'none';
+      completedSection.style.display = 'block';
+      renderCompletedTasksFromSnapshot(lastSnapshot);
+    }
+  });
+});
 
 addBtn.onclick = () => addPanel.style.display = addPanel.style.display === 'flex' ? 'none' : 'flex';
 
@@ -620,8 +725,8 @@ submitTask.onclick = () => {
 
 function createTaskCard(id, data) {
   const card = document.createElement('div');
-  card.className = `taskCard ${data.status === 'inprogress' ? 'inprogress' : data.category}`;
-  card.dataset.category = data.status === 'inprogress' ? 'inprogress' : data.category;
+  card.className = `taskCard ${data.status === 'inprogress' ? 'inprogress' : data.status === 'completed' ? 'completed' : data.category}`;
+  card.dataset.category = data.status === 'inprogress' ? 'inprogress' : data.status === 'completed' ? 'completed' : data.category;
 
   const header = document.createElement('div');
   header.className='taskHeader';
@@ -684,6 +789,16 @@ function createTaskCard(id, data) {
     playerTag.className='playerNameTag';
     playerTag.textContent = data.player || '???';
     footer.append(priorityLabel, playerTag);
+  } else if (data.status === 'completed') {
+    priorityLabel.textContent = 'Выполнено';
+    const playerTag = document.createElement('div');
+    playerTag.className='playerNameTag';
+    playerTag.textContent = data.player || '???';
+    const completedDate = document.createElement('div');
+    completedDate.className='countdown';
+    completedDate.textContent = `Выполнено: ${new Date(data.completedAt).toLocaleDateString()}`;
+    footer.append(priorityLabel, playerTag);
+    card.append(completedDate);
   } else {
     priorityLabel.textContent = data.category==='urgent'?'Срочное':data.category==='daily'?'Ежедневное':'Обычное';
     footer.append(priorityLabel);
@@ -691,7 +806,7 @@ function createTaskCard(id, data) {
 
   card.append(header, descEl);
 
-  if(data.deadline){
+  if(data.deadline && data.status !== 'completed'){
     const countdown = document.createElement('div');
     countdown.className='countdown';
     card.append(countdown);
@@ -724,6 +839,23 @@ function createTaskCard(id, data) {
       takeModal.style.display='flex';
     };
     card.append(takeBtn);
+  } else if (data.status === 'inprogress') {
+    const completeBtn = document.createElement('button');
+    completeBtn.className='completeBtn';
+    completeBtn.innerHTML='<i class="fas fa-check"></i> Задание выполнено';
+    completeBtn.onclick = () => {
+      // Анимация "улетания" карточки
+      card.style.animation = 'flyAway 1s forwards';
+      
+      // После завершения анимации обновляем статус задания
+      setTimeout(() => {
+        update(ref(db, 'tasks/' + id), {
+          status: 'completed',
+          completedAt: Date.now()
+        });
+      }, 1000);
+    };
+    card.append(completeBtn);
   }
 
   card.append(footer);
@@ -738,7 +870,11 @@ function renderTasksFromSnapshot(snapshot){
   tasksBoard.innerHTML='';
   const tasks = [];
   snapshot.forEach(s=>{
-    tasks.push({id:s.key, data:s.val()});
+    const taskData = s.val();
+    // Показываем только активные задания (не выполненные)
+    if (taskData.status !== 'completed') {
+      tasks.push({id:s.key, data:taskData});
+    }
   });
   
   // Фильтрация задач
@@ -766,12 +902,88 @@ function renderTasksFromSnapshot(snapshot){
   filteredTasks.forEach(t=>tasksBoard.append(createTaskCard(t.id,t.data)));
 }
 
+function renderCompletedTasksFromSnapshot(snapshot) {
+  if (!snapshot) return;
+  
+  completedTasksBoard.innerHTML='';
+  const tasks = [];
+  const players = new Set();
+  
+  snapshot.forEach(s=>{
+    const taskData = s.val();
+    // Показываем только выполненные задания
+    if (taskData.status === 'completed') {
+      tasks.push({id:s.key, data:taskData});
+      if (taskData.player) {
+        players.add(taskData.player);
+      }
+    }
+  });
+  
+  // Обновляем фильтр игроков
+  updatePlayerFilter(players);
+  
+  // Фильтрация по игроку
+  const selectedPlayer = playerFilter.value;
+  const filteredTasks = selectedPlayer === 'all' 
+    ? tasks 
+    : tasks.filter(task => task.data.player === selectedPlayer);
+  
+  if (filteredTasks.length === 0) {
+    const emptyState = document.createElement('div');
+    emptyState.className = 'empty-state';
+    emptyState.innerHTML = `
+      <i class="fas fa-check-circle"></i>
+      <p>Нет выполненных заданий</p>
+      <p>Выполненные задания появятся здесь</p>
+    `;
+    completedTasksBoard.append(emptyState);
+    return;
+  }
+  
+  // Сортировка по дате выполнения (новые сверху)
+  filteredTasks.sort((a, b) => (b.data.completedAt || 0) - (a.data.completedAt || 0));
+  filteredTasks.forEach(t => completedTasksBoard.append(createTaskCard(t.id, t.data)));
+}
+
+function updatePlayerFilter(players) {
+  // Сохраняем текущее значение
+  const currentValue = playerFilter.value;
+  
+  // Очищаем список, оставляя только "Все игроки"
+  playerFilter.innerHTML = '<option value="all">Все игроки</option>';
+  
+  // Добавляем игроков в алфавитном порядке
+  const sortedPlayers = Array.from(players).sort();
+  sortedPlayers.forEach(player => {
+    const option = document.createElement('option');
+    option.value = player;
+    option.textContent = player;
+    playerFilter.appendChild(option);
+  });
+  
+  // Восстанавливаем предыдущее значение, если оно все еще существует
+  if (sortedPlayers.includes(currentValue)) {
+    playerFilter.value = currentValue;
+  }
+}
+
 function renderTasks(snapshot){
   lastSnapshot = snapshot;
-  renderTasksFromSnapshot(snapshot);
+  
+  if (currentTab === 'active') {
+    renderTasksFromSnapshot(snapshot);
+  } else {
+    renderCompletedTasksFromSnapshot(snapshot);
+  }
 }
 
 onValue(ref(db,'tasks'), renderTasks);
+
+// Обработчик изменения фильтра игроков
+playerFilter.addEventListener('change', () => {
+  renderCompletedTasksFromSnapshot(lastSnapshot);
+});
 
 takeConfirm.onclick = ()=>{
   const name = playerNameInput.value.trim();
@@ -786,6 +998,13 @@ takeCancel.onclick = ()=>takeModal.style.display='none';
 takeModal.addEventListener('click', (e) => {
   if (e.target === takeModal) {
     takeModal.style.display = 'none';
+  }
+});
+
+// Закрытие панели добавления задания при клике вне ее
+document.addEventListener('click', (e) => {
+  if (!addPanel.contains(e.target) && e.target !== addBtn) {
+    addPanel.style.display = 'none';
   }
 });
 </script>
