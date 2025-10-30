@@ -107,6 +107,8 @@
   .normal { border-left: 5px solid #00e676; }
   .inprogress { border-left: 5px solid #2979ff; background: #0d47a1; }
 
+  .priorityLabel { font-size: 10px; font-weight: bold; margin-top: 3px; color: #fff; }
+
   #addTaskBtn {
     position: fixed;
     top: 20px;
@@ -273,11 +275,12 @@ function getTimeRemaining(deadline){
   return `${d}д ${h}ч ${m}м ${s}с`;
 }
 
-const tasksRef = ref(db, 'tasks');
+const tasksRef = ref(db,'tasks');
 onValue(tasksRef, snapshot => {
   const data = snapshot.val() || {};
   tasksBoard.innerHTML = '';
 
+  // Правильная сортировка: срочные -> ежедневные -> не срочные
   const sorted = Object.entries(data).sort(([id1,t1],[id2,t2])=>{
     const order = {"urgent":0,"daily":1,"normal":2};
     return (order[t1.category]||3) - (order[t2.category]||3);
@@ -299,6 +302,12 @@ onValue(tasksRef, snapshot => {
 
     header.appendChild(titleDiv); header.appendChild(moreBtn); header.appendChild(moreMenu);
     card.appendChild(header);
+
+    // Подпись приоритета
+    const priorityLabel = document.createElement('div'); priorityLabel.className="priorityLabel";
+    let labelText = task.category==="urgent"?"Срочное":task.category==="daily"?"Ежедневное":"Не срочное";
+    priorityLabel.textContent = labelText;
+    card.appendChild(priorityLabel);
 
     if(task.desc) {
       const descDiv = document.createElement('div'); descDiv.className="taskDesc"; descDiv.textContent=task.desc;
