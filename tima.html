@@ -600,7 +600,6 @@ h1 {
   </div>
 
   <div class="container" id="tasksBoard">
-    <!-- Активные задания будут добавлены с помощью JavaScript -->
   </div>
 </div>
 
@@ -608,12 +607,10 @@ h1 {
   <div class="player-filter">
     <select id="playerFilter">
       <option value="all">Все игроки</option>
-      <!-- Список игроков будет заполнен динамически -->
     </select>
   </div>
 
   <div class="container" id="completedTasksBoard">
-    <!-- Выполненные задания будут добавлены с помощью JavaScript -->
   </div>
 </div>
 
@@ -683,7 +680,6 @@ let currentTaskId = null;
 let currentFilter = 'all';
 let currentTab = 'active';
 
-// Переключение между вкладками
 tabBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     tabBtns.forEach(b => b.classList.remove('active'));
@@ -765,7 +761,6 @@ function createTaskCard(id, data) {
     moreMenu.style.display = 'none';
   };
   
-  // Закрытие меню при клике вне его
   document.addEventListener('click', (e) => {
     if (!moreMenu.contains(e.target) && !moreBtn.contains(e.target)) {
       moreMenu.style.display = 'none';
@@ -824,7 +819,6 @@ function createTaskCard(id, data) {
     updateCountdown();
     const countdownInterval = setInterval(updateCountdown, 1000);
     
-    // Очистка интервала при удалении карточки
     card.dataset.countdownInterval = countdownInterval;
   }
 
@@ -844,10 +838,8 @@ function createTaskCard(id, data) {
     completeBtn.className='completeBtn';
     completeBtn.innerHTML='<i class="fas fa-check"></i> Задание выполнено';
     completeBtn.onclick = () => {
-      // Анимация "улетания" карточки
       card.style.animation = 'flyAway 1s forwards';
       
-      // После завершения анимации обновляем статус задания
       setTimeout(() => {
         update(ref(db, 'tasks/' + id), {
           status: 'completed',
@@ -871,13 +863,11 @@ function renderTasksFromSnapshot(snapshot){
   const tasks = [];
   snapshot.forEach(s=>{
     const taskData = s.val();
-    // Показываем только активные задания (не выполненные)
     if (taskData.status !== 'completed') {
       tasks.push({id:s.key, data:taskData});
     }
   });
   
-  // Фильтрация задач
   const filteredTasks = tasks.filter(task => {
     if (currentFilter === 'all') return true;
     if (currentFilter === 'inprogress') return task.data.status === 'inprogress';
@@ -896,7 +886,6 @@ function renderTasksFromSnapshot(snapshot){
     return;
   }
   
-  // Сортировка задач
   const prio={'urgent':4,'daily':3,'normal':2,'inprogress':1};
   filteredTasks.sort((a,b)=> (prio[b.data.category]||0)-(prio[a.data.category]||0));
   filteredTasks.forEach(t=>tasksBoard.append(createTaskCard(t.id,t.data)));
@@ -911,7 +900,6 @@ function renderCompletedTasksFromSnapshot(snapshot) {
   
   snapshot.forEach(s=>{
     const taskData = s.val();
-    // Показываем только выполненные задания
     if (taskData.status === 'completed') {
       tasks.push({id:s.key, data:taskData});
       if (taskData.player) {
@@ -920,10 +908,8 @@ function renderCompletedTasksFromSnapshot(snapshot) {
     }
   });
   
-  // Обновляем фильтр игроков
   updatePlayerFilter(players);
   
-  // Фильтрация по игроку
   const selectedPlayer = playerFilter.value;
   const filteredTasks = selectedPlayer === 'all' 
     ? tasks 
@@ -941,19 +927,15 @@ function renderCompletedTasksFromSnapshot(snapshot) {
     return;
   }
   
-  // Сортировка по дате выполнения (новые сверху)
   filteredTasks.sort((a, b) => (b.data.completedAt || 0) - (a.data.completedAt || 0));
   filteredTasks.forEach(t => completedTasksBoard.append(createTaskCard(t.id, t.data)));
 }
 
 function updatePlayerFilter(players) {
-  // Сохраняем текущее значение
   const currentValue = playerFilter.value;
   
-  // Очищаем список, оставляя только "Все игроки"
   playerFilter.innerHTML = '<option value="all">Все игроки</option>';
   
-  // Добавляем игроков в алфавитном порядке
   const sortedPlayers = Array.from(players).sort();
   sortedPlayers.forEach(player => {
     const option = document.createElement('option');
@@ -962,7 +944,6 @@ function updatePlayerFilter(players) {
     playerFilter.appendChild(option);
   });
   
-  // Восстанавливаем предыдущее значение, если оно все еще существует
   if (sortedPlayers.includes(currentValue)) {
     playerFilter.value = currentValue;
   }
@@ -980,7 +961,6 @@ function renderTasks(snapshot){
 
 onValue(ref(db,'tasks'), renderTasks);
 
-// Обработчик изменения фильтра игроков
 playerFilter.addEventListener('change', () => {
   renderCompletedTasksFromSnapshot(lastSnapshot);
 });
@@ -994,14 +974,12 @@ takeConfirm.onclick = ()=>{
 
 takeCancel.onclick = ()=>takeModal.style.display='none';
 
-// Закрытие модального окна при клике вне его
 takeModal.addEventListener('click', (e) => {
   if (e.target === takeModal) {
     takeModal.style.display = 'none';
   }
 });
 
-// Закрытие панели добавления задания при клике вне ее
 document.addEventListener('click', (e) => {
   if (!addPanel.contains(e.target) && e.target !== addBtn) {
     addPanel.style.display = 'none';
