@@ -739,7 +739,6 @@ h1 {
   </div>
 
   <div class="container" id="tasksBoard">
-    <!-- Активные задания будут добавлены с помощью JavaScript -->
   </div>
 </div>
 
@@ -747,12 +746,10 @@ h1 {
   <div class="player-filter">
     <select id="playerFilter">
       <option value="all">Все игроки</option>
-      <!-- Список игроков будет заполнен динамически -->
     </select>
   </div>
 
   <div class="container" id="completedTasksBoard">
-    <!-- Выполненные задания будут добавлены с помощью JavaScript -->
   </div>
 </div>
 
@@ -882,12 +879,10 @@ let currentFilter = 'all';
 let currentTab = 'active';
 let editingTaskId = null;
 
-// Устанавливаем минимальную дату как сегодня
 const today = new Date().toISOString().split('T')[0];
 taskDate.min = today;
 editTaskDate.min = today;
 
-// Переключение между вкладками
 tabBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     tabBtns.forEach(b => b.classList.remove('active'));
@@ -905,7 +900,6 @@ tabBtns.forEach(btn => {
   });
 });
 
-// Исправление кнопки "+" - добавляем обработчик для всей кнопки
 addBtn.addEventListener('click', (e) => {
   e.stopPropagation();
   addPanel.style.display = addPanel.style.display === 'flex' ? 'none' : 'flex';
@@ -926,7 +920,6 @@ submitTask.onclick = () => {
   const desc = taskDesc.value.trim();
   const category = taskCategory.value;
   
-  // Собираем дату и время
   let deadline = null;
   if (taskDate.value && taskTime.value) {
     const dateTimeString = `${taskDate.value}T${taskTime.value}`;
@@ -934,6 +927,7 @@ submitTask.onclick = () => {
   }
   
   const resetAtMidnight = autoReset.checked;
+  const nextResetTime = resetAtMidnight ? getNextMidnight() : null;
   
   push(ref(db, 'tasks'), { 
     title, 
@@ -942,10 +936,9 @@ submitTask.onclick = () => {
     deadline, 
     status: 'new',
     resetAtMidnight,
-    lastResetDate: resetAtMidnight ? getTodayDate() : null
+    nextResetTime
   });
   
-  // Сброс формы
   taskTitle.value = ''; 
   taskDesc.value = ''; 
   taskDate.value = '';
@@ -954,26 +947,31 @@ submitTask.onclick = () => {
   addPanel.style.display = 'none';
 };
 
-// Функция для получения сегодняшней даты в формате YYYY-MM-DD
-function getTodayDate() {
-  const today = new Date();
-  return today.toISOString().split('T')[0];
+function getNextMidnight() {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0);
+  return midnight.getTime();
 }
 
-// Функция для проверки и сброса ежедневных заданий
-function checkAndResetDailyTasks(tasks) {
-  const today = getTodayDate();
+function checkMidnightReset(tasks) {
+  const now = Date.now();
   
   tasks.forEach(task => {
     const taskData = task.data;
-    if (taskData.resetAtMidnight && taskData.status === 'completed' && taskData.lastResetDate !== today) {
-      // Сбрасываем задание
-      update(ref(db, 'tasks/' + task.id), {
-        status: 'new',
-        player: null,
-        completedAt: null,
-        lastResetDate: today
-      });
+    if (taskData.resetAtMidnight && taskData.nextResetTime && now >= taskData.nextResetTime) {
+      if (taskData.status === 'completed') {
+        update(ref(db, 'tasks/' + task.id), {
+          status: 'new',
+          player: null,
+          completedAt: null,
+          nextResetTime: getNextMidnight()
+        });
+      } else {
+        update(ref(db, 'tasks/' + task.id), {
+          nextResetTime: getNextMidnight()
+        });
+      }
     }
   });
 }
@@ -1014,7 +1012,6 @@ function createTaskCard(id, data) {
     editTaskCategory.value = data.category;
     editAutoReset.checked = data.resetAtMidnight || false;
     
-    // Заполняем дату и время
     if (data.deadline) {
       const deadlineDate = new Date(data.deadline);
       editTaskDate.value = deadlineDate.toISOString().split('T')[0];
@@ -1035,7 +1032,6 @@ function createTaskCard(id, data) {
     moreMenu.style.display = 'none';
   };
   
-  // Закрытие меню при клике вне его
   document.addEventListener('click', (e) => {
     if (!moreMenu.contains(e.target) && !moreBtn.contains(e.target)) {
       moreMenu.style.display = 'none';
@@ -1074,7 +1070,6 @@ function createTaskCard(id, data) {
     footer.append(priorityLabel);
   }
 
-  // Добавляем иконку автосброса если задание имеет автосброс
   if (data.resetAtMidnight) {
     const autoResetIcon = document.createElement('div');
     autoResetIcon.innerHTML = '<i class="fas fa-sync-alt" title="Автосброс в 0:00"></i>';
@@ -1103,7 +1098,6 @@ function createTaskCard(id, data) {
     updateCountdown();
     const countdownInterval = setInterval(updateCountdown, 1000);
     
-    // Очистка интервала при удалении карточки
     card.dataset.countdownInterval = countdownInterval;
   }
 
@@ -1123,10 +1117,8 @@ function createTaskCard(id, data) {
     completeBtn.className='completeBtn';
     completeBtn.innerHTML='<i class="fas fa-check"></i> Задание выполнено';
     completeBtn.onclick = () => {
-      // Анимация "улетания" карточки
       card.style.animation = 'flyAway 1s forwards';
       
-      // После завершения анимации обновляем статус задания
       setTimeout(() => {
         update(ref(db, 'tasks/' + id), {
           status: 'completed',
@@ -1150,16 +1142,13 @@ function renderTasksFromSnapshot(snapshot){
   const tasks = [];
   snapshot.forEach(s=>{
     const taskData = s.val();
-    // Показываем только активные задания (не выполненные)
     if (taskData.status !== 'completed') {
       tasks.push({id:s.key, data:taskData});
     }
   });
   
-  // Проверяем и сбрасываем ежедневные задания
-  checkAndResetDailyTasks(tasks);
+  checkMidnightReset(tasks);
   
-  // Фильтрация задач
   const filteredTasks = tasks.filter(task => {
     if (currentFilter === 'all') return true;
     if (currentFilter === 'inprogress') return task.data.status === 'inprogress';
@@ -1178,7 +1167,6 @@ function renderTasksFromSnapshot(snapshot){
     return;
   }
   
-  // Сортировка задач
   const prio={'urgent':4,'daily':3,'normal':2,'inprogress':1};
   filteredTasks.sort((a,b)=> (prio[b.data.category]||0)-(prio[a.data.category]||0));
   filteredTasks.forEach(t=>tasksBoard.append(createTaskCard(t.id,t.data)));
@@ -1193,7 +1181,6 @@ function renderCompletedTasksFromSnapshot(snapshot) {
   
   snapshot.forEach(s=>{
     const taskData = s.val();
-    // Показываем только выполненные задания
     if (taskData.status === 'completed') {
       tasks.push({id:s.key, data:taskData});
       if (taskData.player) {
@@ -1202,10 +1189,8 @@ function renderCompletedTasksFromSnapshot(snapshot) {
     }
   });
   
-  // Обновляем фильтр игроков
   updatePlayerFilter(players);
   
-  // Фильтрация по игроку
   const selectedPlayer = playerFilter.value;
   const filteredTasks = selectedPlayer === 'all' 
     ? tasks 
@@ -1223,19 +1208,15 @@ function renderCompletedTasksFromSnapshot(snapshot) {
     return;
   }
   
-  // Сортировка по дате выполнения (новые сверху)
   filteredTasks.sort((a, b) => (b.data.completedAt || 0) - (a.data.completedAt || 0));
   filteredTasks.forEach(t => completedTasksBoard.append(createTaskCard(t.id, t.data)));
 }
 
 function updatePlayerFilter(players) {
-  // Сохраняем текущее значение
   const currentValue = playerFilter.value;
   
-  // Очищаем список, оставляя только "Все игроки"
   playerFilter.innerHTML = '<option value="all">Все игроки</option>';
   
-  // Добавляем игроков в алфавитном порядке
   const sortedPlayers = Array.from(players).sort();
   sortedPlayers.forEach(player => {
     const option = document.createElement('option');
@@ -1244,7 +1225,6 @@ function updatePlayerFilter(players) {
     playerFilter.appendChild(option);
   });
   
-  // Восстанавливаем предыдущее значение, если оно все еще существует
   if (sortedPlayers.includes(currentValue)) {
     playerFilter.value = currentValue;
   }
@@ -1262,19 +1242,16 @@ function renderTasks(snapshot){
 
 onValue(ref(db,'tasks'), renderTasks);
 
-// Обработчик изменения фильтра игроков
 playerFilter.addEventListener('change', () => {
   renderCompletedTasksFromSnapshot(lastSnapshot);
 });
 
-// Обработчики для модального окна редактирования
 saveEditTask.onclick = () => {
   const title = editTaskTitle.value.trim();
   if (!title) return alert('Название задания обязательно!');
   const desc = editTaskDesc.value.trim();
   const category = editTaskCategory.value;
   
-  // Собираем дату и время
   let deadline = null;
   if (editTaskDate.value && editTaskTime.value) {
     const dateTimeString = `${editTaskDate.value}T${editTaskTime.value}`;
@@ -1282,6 +1259,7 @@ saveEditTask.onclick = () => {
   }
   
   const resetAtMidnight = editAutoReset.checked;
+  const nextResetTime = resetAtMidnight ? getNextMidnight() : null;
   
   update(ref(db, 'tasks/' + editingTaskId), { 
     title, 
@@ -1289,7 +1267,7 @@ saveEditTask.onclick = () => {
     category, 
     deadline,
     resetAtMidnight,
-    lastResetDate: resetAtMidnight ? getTodayDate() : null
+    nextResetTime
   });
   
   editModal.style.display = 'none';
@@ -1310,7 +1288,6 @@ takeConfirm.onclick = ()=>{
 
 takeCancel.onclick = ()=>takeModal.style.display='none';
 
-// Закрытие модальных окон при клике вне их
 takeModal.addEventListener('click', (e) => {
   if (e.target === takeModal) {
     takeModal.style.display = 'none';
@@ -1324,7 +1301,6 @@ editModal.addEventListener('click', (e) => {
   }
 });
 
-// Закрытие панели добавления задания при клике вне ее
 document.addEventListener('click', (e) => {
   if (!addPanel.contains(e.target) && e.target !== addBtn) {
     addPanel.style.display = 'none';
