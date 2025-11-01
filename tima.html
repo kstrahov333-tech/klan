@@ -512,7 +512,7 @@ h1::after {
   animation: glowPulse 2s ease-in-out infinite;
 }
 
-.takeBtn, .completeBtn {
+.takeBtn, .completeBtn, .useTemplateBtn, .usePackBtn {
   background: linear-gradient(135deg, #ffeb3b, #ffd54f);
   color: #000;
   font-size: 10px;
@@ -531,7 +531,7 @@ h1::after {
   overflow: hidden;
 }
 
-.takeBtn::before, .completeBtn::before {
+.takeBtn::before, .completeBtn::before, .useTemplateBtn::before, .usePackBtn::before {
   content: "";
   position: absolute;
   top: 0;
@@ -542,11 +542,11 @@ h1::after {
   transition: left 0.5s;
 }
 
-.takeBtn:hover::before, .completeBtn:hover::before {
+.takeBtn:hover::before, .completeBtn:hover::before, .useTemplateBtn:hover::before, .usePackBtn:hover::before {
   left: 100%;
 }
 
-.takeBtn:hover, .completeBtn:hover {
+.takeBtn:hover, .completeBtn:hover, .useTemplateBtn:hover, .usePackBtn:hover {
   background: linear-gradient(135deg, #ffd54f, #ffeb3b);
   box-shadow: 
     0 6px 20px rgba(255,235,59,0.5),
@@ -668,13 +668,56 @@ h1::after {
   flex-direction: column;
   gap: 18px;
   z-index: 99;
-  width: 320px;
+  width: 400px;
   box-shadow: 
     0 15px 40px rgba(255,235,59,0.25),
     0 0 40px rgba(255,152,0,0.2);
   border: 1px solid rgba(255,235,59,0.25);
   backdrop-filter: blur(15px);
   animation: lightOn 0.4s ease-out;
+}
+
+.panel-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.panel-tab {
+  flex: 1;
+  padding: 8px 12px;
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(255,235,59,0.3);
+  border-radius: 8px;
+  color: #ffd54f;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  transition: all 0.3s ease;
+  text-align: center;
+  min-width: 120px;
+}
+
+.panel-tab.active {
+  background: rgba(255,235,59,0.2);
+  color: #ffeb3b;
+  border-color: #ffeb3b;
+  box-shadow: 0 0 10px rgba(255,235,59,0.3);
+}
+
+.panel-tab:hover {
+  background: rgba(255,235,59,0.15);
+}
+
+.panel-content {
+  display: none;
+}
+
+.panel-content.active {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 #addTaskPanel h3 {
@@ -728,19 +771,69 @@ h1::after {
   transform: translateY(-2px);
 }
 
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 10px;
-  color: #ffd54f;
+.templates-list, .packs-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid rgba(255,235,59,0.3);
+  border-radius: 10px;
+  padding: 10px;
+  background: rgba(30, 30, 30, 0.8);
 }
 
-.checkbox-container input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+.template-item, .pack-item {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,235,59,0.2);
   cursor: pointer;
-  accent-color: #ffeb3b;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.template-item:last-child, .pack-item:last-child {
+  border-bottom: none;
+}
+
+.template-item:hover, .pack-item:hover {
+  background: rgba(255,235,59,0.1);
+  transform: translateX(5px);
+}
+
+.template-info, .pack-info {
+  flex: 1;
+}
+
+.template-title, .pack-title {
+  font-size: 10px;
+  color: #ffeb3b;
+  margin-bottom: 5px;
+}
+
+.template-desc, .pack-desc {
+  font-size: 8px;
+  color: #ffd54f;
+  opacity: 0.8;
+}
+
+.template-actions, .pack-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.template-action-btn, .pack-action-btn {
+  background: none;
+  border: none;
+  color: #ffd54f;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  font-size: 9px;
+}
+
+.template-action-btn:hover, .pack-action-btn:hover {
+  background: rgba(255,235,59,0.2);
+  color: #ffeb3b;
 }
 
 .datetime-inputs {
@@ -763,6 +856,34 @@ h1::after {
   font-size: 10px;
   color: #ffd54f;
   white-space: nowrap;
+}
+
+.template-deadline, .pack-templates {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(255,235,59,0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255,235,59,0.2);
+}
+
+.template-list {
+  max-height: 100px;
+  overflow-y: auto;
+  margin-top: 8px;
+  padding: 5px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 5px;
+}
+
+.template-list-item {
+  font-size: 8px;
+  padding: 3px 5px;
+  border-bottom: 1px solid rgba(255,235,59,0.1);
+  color: #ffd54f;
+}
+
+.template-list-item:last-child {
+  border-bottom: none;
 }
 
 #takeModal {
@@ -1056,26 +1177,16 @@ h1::after {
     bottom: 30px;
     right: 30px;
   }
-}
-
-/* Создание искр */
-function createSparkles() {
-  const sparklesContainer = document.querySelector('.sparkles');
-  const sparkleCount = 20;
   
-  for (let i = 0; i < sparkleCount; i++) {
-    const sparkle = document.createElement('div');
-    sparkle.className = 'sparkle';
-    sparkle.style.left = Math.random() * 100 + '%';
-    sparkle.style.top = Math.random() * 100 + '%';
-    sparkle.style.animationDelay = Math.random() * 3 + 's';
-    sparkle.style.animationDuration = (2 + Math.random() * 2) + 's';
-    sparklesContainer.appendChild(sparkle);
+  .panel-tabs {
+    flex-direction: column;
+  }
+  
+  .panel-tab {
+    min-width: auto;
   }
 }
 
-// Запуск создания искр после загрузки страницы
-document.addEventListener('DOMContentLoaded', createSparkles);
 </style>
 </head>
 <body>
@@ -1124,30 +1235,83 @@ document.addEventListener('DOMContentLoaded', createSparkles);
 </button>
 
 <div id="addTaskPanel">
-  <h3>Добавить новое задание</h3>
-  <input type="text" id="taskTitle" placeholder="Название задания">
-  <textarea id="taskDesc" placeholder="Описание (необязательно)" rows="3"></textarea>
-  
-  <div class="datetime-inputs">
-    <div class="datetime-row">
-      <input type="date" id="taskDate">
-      <span>в</span>
-      <input type="time" id="taskTime">
+  <div class="panel-tabs">
+    <button class="panel-tab active" data-panel="newTask">Новое задание</button>
+    <button class="panel-tab" data-panel="templates">Шаблоны</button>
+    <button class="panel-tab" data-panel="packs">Пакеты заданий</button>
+  </div>
+
+  <div class="panel-content active" id="newTaskPanel">
+    <h3>Добавить новое задание</h3>
+    <input type="text" id="taskTitle" placeholder="Название задания">
+    <textarea id="taskDesc" placeholder="Описание (необязательно)" rows="3"></textarea>
+    
+    <div class="datetime-inputs">
+      <div class="datetime-row">
+        <input type="date" id="taskDate">
+        <span>в</span>
+        <input type="time" id="taskTime">
+      </div>
+    </div>
+    
+    <select id="taskCategory">
+      <option value="urgent">Срочные</option>
+      <option value="daily">Ежедневные</option>
+      <option value="normal">Не срочные</option>
+    </select>
+    
+    <button id="submitTask">Добавить задание</button>
+  </div>
+
+  <div class="panel-content" id="templatesPanel">
+    <h3>Управление шаблонами</h3>
+    
+    <div class="templates-list" id="templatesList">
+    </div>
+    
+    <div style="margin-top: 15px;">
+      <h4 style="color: #ffd54f; font-size: 10px; margin-bottom: 10px;">Создать новый шаблон</h4>
+      <input type="text" id="templateTitle" placeholder="Название шаблона">
+      <textarea id="templateDesc" placeholder="Описание шаблона" rows="2"></textarea>
+      <select id="templateCategory">
+        <option value="urgent">Срочные</option>
+        <option value="daily">Ежедневные</option>
+        <option value="normal">Не срочные</option>
+      </select>
+      
+      <div class="template-deadline">
+        <div style="font-size: 9px; color: #ffd54f; margin-bottom: 8px;">Срок выполнения (опционально):</div>
+        <div class="datetime-row">
+          <input type="date" id="templateDate">
+          <span>в</span>
+          <input type="time" id="templateTime">
+        </div>
+      </div>
+      
+      <button id="createTemplate">Создать шаблон</button>
     </div>
   </div>
-  
-  <select id="taskCategory">
-    <option value="urgent">Срочные</option>
-    <option value="daily">Ежедневные</option>
-    <option value="normal">Не срочные</option>
-  </select>
-  
-  <div class="checkbox-container">
-    <input type="checkbox" id="autoReset">
-    <label for="autoReset">Обновлять автоматически в 0:00</label>
+
+  <div class="panel-content" id="packsPanel">
+    <h3>Пакеты заданий</h3>
+    
+    <div class="packs-list" id="packsList">
+    </div>
+    
+    <div style="margin-top: 15px;">
+      <h4 style="color: #ffd54f; font-size: 10px; margin-bottom: 10px;">Создать новый пакет</h4>
+      <input type="text" id="packTitle" placeholder="Название пакета">
+      <textarea id="packDesc" placeholder="Описание пакета" rows="2"></textarea>
+      
+      <div class="pack-templates">
+        <div style="font-size: 9px; color: #ffd54f; margin-bottom: 8px;">Выберите шаблоны для пакета:</div>
+        <div id="availableTemplates" class="template-list">
+        </div>
+      </div>
+      
+      <button id="createPack">Создать пакет</button>
+    </div>
   </div>
-  
-  <button id="submitTask">Добавить задание</button>
 </div>
 
 <div id="takeModal">
@@ -1178,11 +1342,6 @@ document.addEventListener('DOMContentLoaded', createSparkles);
       <option value="daily">Ежедневные</option>
       <option value="normal">Не срочные</option>
     </select>
-    
-    <div class="checkbox-container">
-      <input type="checkbox" id="editAutoReset">
-      <label for="editAutoReset">Обновлять автоматически в 0:00</label>
-    </div>
     
     <div class="edit-modal-buttons">
       <button class="edit-modal-save" id="saveEditTask">Сохранить</button>
@@ -1215,7 +1374,6 @@ const taskDesc = document.getElementById('taskDesc');
 const taskCategory = document.getElementById('taskCategory');
 const taskDate = document.getElementById('taskDate');
 const taskTime = document.getElementById('taskTime');
-const autoReset = document.getElementById('autoReset');
 const tasksBoard = document.getElementById('tasksBoard');
 const completedTasksBoard = document.getElementById('completedTasksBoard');
 const filterBtns = document.querySelectorAll('.filter-btn');
@@ -1236,20 +1394,57 @@ const editTaskDesc = document.getElementById('editTaskDesc');
 const editTaskCategory = document.getElementById('editTaskCategory');
 const editTaskDate = document.getElementById('editTaskDate');
 const editTaskTime = document.getElementById('editTaskTime');
-const editAutoReset = document.getElementById('editAutoReset');
 const saveEditTask = document.getElementById('saveEditTask');
 const cancelEditTask = document.getElementById('cancelEditTask');
+
+const panelTabs = document.querySelectorAll('.panel-tab');
+const panelContents = document.querySelectorAll('.panel-content');
+const templatesList = document.getElementById('templatesList');
+const templateTitle = document.getElementById('templateTitle');
+const templateDesc = document.getElementById('templateDesc');
+const templateCategory = document.getElementById('templateCategory');
+const templateDate = document.getElementById('templateDate');
+const templateTime = document.getElementById('templateTime');
+const createTemplateBtn = document.getElementById('createTemplate');
+
+const packsList = document.getElementById('packsList');
+const packTitle = document.getElementById('packTitle');
+const packDesc = document.getElementById('packDesc');
+const availableTemplates = document.getElementById('availableTemplates');
+const createPackBtn = document.getElementById('createPack');
 
 let currentTaskId = null;
 let currentFilter = 'all';
 let currentTab = 'active';
 let editingTaskId = null;
+let editingTemplateId = null;
+let editingPackId = null;
+let selectedTemplates = new Set();
 
 const today = new Date().toISOString().split('T')[0];
 taskDate.min = today;
 editTaskDate.min = today;
+templateDate.min = today;
 
-// Создание искр
+panelTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const panel = tab.dataset.panel;
+    
+    panelTabs.forEach(t => t.classList.remove('active'));
+    panelContents.forEach(c => c.classList.remove('active'));
+    
+    tab.classList.add('active');
+    document.getElementById(panel + 'Panel').classList.add('active');
+    
+    if (panel === 'templates') {
+      loadTemplates();
+    } else if (panel === 'packs') {
+      loadPacks();
+      loadAvailableTemplates();
+    }
+  });
+});
+
 function createSparkles() {
   const sparklesContainer = document.querySelector('.sparkles');
   const sparkleCount = 25;
@@ -1267,7 +1462,6 @@ function createSparkles() {
   }
 }
 
-// Запуск создания искр
 createSparkles();
 
 tabBtns.forEach(btn => {
@@ -1313,33 +1507,331 @@ submitTask.onclick = () => {
     deadline = new Date(dateTimeString).getTime();
   }
   
-  const resetAtMidnight = autoReset.checked;
-  const nextResetTime = resetAtMidnight ? getNextMidnight() : null;
-  
   push(ref(db, 'tasks'), { 
     title, 
     desc, 
     category, 
     deadline, 
-    status: 'new',
-    resetAtMidnight,
-    nextResetTime
+    status: 'new'
   });
   
   taskTitle.value = ''; 
   taskDesc.value = ''; 
   taskDate.value = '';
   taskTime.value = '';
-  autoReset.checked = false;
   addPanel.style.display = 'none';
 };
 
-function getNextMidnight() {
-  const now = new Date();
-  const midnight = new Date(now);
-  midnight.setHours(24, 0, 0, 0);
-  return midnight.getTime();
+function loadTemplates() {
+  onValue(ref(db, 'templates'), (snapshot) => {
+    templatesList.innerHTML = '';
+    
+    if (!snapshot.exists()) {
+      templatesList.innerHTML = '<div class="empty-state" style="padding: 20px; color: #ffd54f; text-align: center;">Нет созданных шаблонов</div>';
+      return;
+    }
+    
+    snapshot.forEach(templateSnap => {
+      const template = templateSnap.val();
+      const templateItem = createTemplateElement(templateSnap.key, template);
+      templatesList.appendChild(templateItem);
+    });
+  });
 }
+
+function createTemplateElement(id, template) {
+  const item = document.createElement('div');
+  item.className = 'template-item';
+  
+  let deadlineInfo = '';
+  if (template.deadline) {
+    const deadlineDate = new Date(template.deadline);
+    deadlineInfo = `<div class="template-desc">Срок: ${deadlineDate.toLocaleDateString()} ${deadlineDate.toLocaleTimeString().slice(0,5)}</div>`;
+  }
+  
+  item.innerHTML = `
+    <div class="template-info">
+      <div class="template-title">${template.title}</div>
+      <div class="template-desc">${template.desc || 'Без описания'}</div>
+      <div class="template-desc">Категория: ${getCategoryName(template.category)}</div>
+      ${deadlineInfo}
+    </div>
+    <div class="template-actions">
+      <button class="template-action-btn use-template" title="Использовать шаблон">
+        <i class="fas fa-plus"></i>
+      </button>
+      <button class="template-action-btn edit-template" title="Редактировать">
+        <i class="fas fa-edit"></i>
+      </button>
+      <button class="template-action-btn delete-template" title="Удалить">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  `;
+  
+  item.querySelector('.use-template').addEventListener('click', (e) => {
+    e.stopPropagation();
+    useTemplate(template);
+  });
+  
+  item.querySelector('.edit-template').addEventListener('click', (e) => {
+    e.stopPropagation();
+    editTemplate(id, template);
+  });
+  
+  item.querySelector('.delete-template').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (confirm('Удалить этот шаблон?')) {
+      remove(ref(db, 'templates/' + id));
+    }
+  });
+  
+  return item;
+}
+
+function getCategoryName(category) {
+  const names = {
+    'urgent': 'Срочные',
+    'daily': 'Ежедневные',
+    'normal': 'Не срочные'
+  };
+  return names[category] || category;
+}
+
+function useTemplate(template) {
+  let deadline = template.deadline || null;
+  
+  push(ref(db, 'tasks'), {
+    title: template.title,
+    desc: template.desc || '',
+    category: template.category,
+    deadline: deadline,
+    status: 'new'
+  });
+  
+  addPanel.style.display = 'none';
+}
+
+function editTemplate(id, template) {
+  editingTemplateId = id;
+  templateTitle.value = template.title;
+  templateDesc.value = template.desc || '';
+  templateCategory.value = template.category;
+  
+  if (template.deadline) {
+    const deadlineDate = new Date(template.deadline);
+    templateDate.value = deadlineDate.toISOString().split('T')[0];
+    templateTime.value = deadlineDate.toTimeString().slice(0, 5);
+  } else {
+    templateDate.value = '';
+    templateTime.value = '';
+  }
+  
+  createTemplateBtn.textContent = 'Сохранить шаблон';
+}
+
+createTemplateBtn.addEventListener('click', () => {
+  const title = templateTitle.value.trim();
+  if (!title) return alert('Название шаблона обязательно!');
+  
+  let deadline = null;
+  if (templateDate.value && templateTime.value) {
+    const dateTimeString = `${templateDate.value}T${templateTime.value}`;
+    deadline = new Date(dateTimeString).getTime();
+  }
+  
+  const templateData = {
+    title: title,
+    desc: templateDesc.value.trim(),
+    category: templateCategory.value,
+    deadline: deadline
+  };
+  
+  if (editingTemplateId) {
+    update(ref(db, 'templates/' + editingTemplateId), templateData);
+    editingTemplateId = null;
+    createTemplateBtn.textContent = 'Создать шаблон';
+  } else {
+    push(ref(db, 'templates'), templateData);
+  }
+  
+  templateTitle.value = '';
+  templateDesc.value = '';
+  templateCategory.value = 'normal';
+  templateDate.value = '';
+  templateTime.value = '';
+});
+
+function loadPacks() {
+  onValue(ref(db, 'packs'), (snapshot) => {
+    packsList.innerHTML = '';
+    
+    if (!snapshot.exists()) {
+      packsList.innerHTML = '<div class="empty-state" style="padding: 20px; color: #ffd54f; text-align: center;">Нет созданных пакетов</div>';
+      return;
+    }
+    
+    snapshot.forEach(packSnap => {
+      const pack = packSnap.val();
+      const packItem = createPackElement(packSnap.key, pack);
+      packsList.appendChild(packItem);
+    });
+  });
+}
+
+function loadAvailableTemplates() {
+  onValue(ref(db, 'templates'), (snapshot) => {
+    availableTemplates.innerHTML = '';
+    selectedTemplates.clear();
+    
+    if (!snapshot.exists()) {
+      availableTemplates.innerHTML = '<div style="color: #ffd54f; text-align: center; padding: 10px;">Нет доступных шаблонов</div>';
+      return;
+    }
+    
+    snapshot.forEach(templateSnap => {
+      const template = templateSnap.val();
+      const templateItem = document.createElement('div');
+      templateItem.className = 'template-list-item';
+      templateItem.innerHTML = `
+        <input type="checkbox" id="template_${templateSnap.key}" value="${templateSnap.key}">
+        <label for="template_${templateSnap.key}" style="margin-left: 5px;">${template.title}</label>
+      `;
+      
+      templateItem.querySelector('input').addEventListener('change', (e) => {
+        if (e.target.checked) {
+          selectedTemplates.add(templateSnap.key);
+        } else {
+          selectedTemplates.delete(templateSnap.key);
+        }
+      });
+      
+      availableTemplates.appendChild(templateItem);
+    });
+  });
+}
+
+function createPackElement(id, pack) {
+  const item = document.createElement('div');
+  item.className = 'pack-item';
+  
+  let templatesInfo = '';
+  if (pack.templates && Object.keys(pack.templates).length > 0) {
+    templatesInfo = `<div class="pack-desc">Заданий: ${Object.keys(pack.templates).length}</div>`;
+  }
+  
+  item.innerHTML = `
+    <div class="pack-info">
+      <div class="pack-title">${pack.title}</div>
+      <div class="pack-desc">${pack.desc || 'Без описания'}</div>
+      ${templatesInfo}
+    </div>
+    <div class="pack-actions">
+      <button class="pack-action-btn use-pack" title="Использовать пакет">
+        <i class="fas fa-layer-group"></i>
+      </button>
+      <button class="pack-action-btn edit-pack" title="Редактировать">
+        <i class="fas fa-edit"></i>
+      </button>
+      <button class="pack-action-btn delete-pack" title="Удалить">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  `;
+  
+  item.querySelector('.use-pack').addEventListener('click', (e) => {
+    e.stopPropagation();
+    usePack(pack);
+  });
+  
+  item.querySelector('.edit-pack').addEventListener('click', (e) => {
+    e.stopPropagation();
+    editPack(id, pack);
+  });
+  
+  item.querySelector('.delete-pack').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (confirm('Удалить этот пакет?')) {
+      remove(ref(db, 'packs/' + id));
+    }
+  });
+  
+  return item;
+}
+
+function usePack(pack) {
+  if (!pack.templates) return;
+  
+  Object.values(pack.templates).forEach(templateId => {
+    getTemplateById(templateId).then(template => {
+      if (template) {
+        let deadline = template.deadline || null;
+        
+        push(ref(db, 'tasks'), {
+          title: template.title,
+          desc: template.desc || '',
+          category: template.category,
+          deadline: deadline,
+          status: 'new'
+        });
+      }
+    });
+  });
+  
+  addPanel.style.display = 'none';
+}
+
+function getTemplateById(templateId) {
+  return new Promise((resolve) => {
+    onValue(ref(db, 'templates/' + templateId), (snapshot) => {
+      resolve(snapshot.val());
+    }, { onlyOnce: true });
+  });
+}
+
+function editPack(id, pack) {
+  editingPackId = id;
+  packTitle.value = pack.title;
+  packDesc.value = pack.desc || '';
+  
+  selectedTemplates.clear();
+  if (pack.templates) {
+    Object.values(pack.templates).forEach(templateId => {
+      selectedTemplates.add(templateId);
+    });
+  }
+  
+  createPackBtn.textContent = 'Сохранить пакет';
+}
+
+createPackBtn.addEventListener('click', () => {
+  const title = packTitle.value.trim();
+  if (!title) return alert('Название пакета обязательно!');
+  if (selectedTemplates.size === 0) return alert('Выберите хотя бы один шаблон для пакета!');
+  
+  const packData = {
+    title: title,
+    desc: packDesc.value.trim(),
+    templates: Object.fromEntries(Array.from(selectedTemplates).map((id, index) => [index, id]))
+  };
+  
+  if (editingPackId) {
+    update(ref(db, 'packs/' + editingPackId), packData);
+    editingPackId = null;
+    createPackBtn.textContent = 'Создать пакет';
+  } else {
+    push(ref(db, 'packs'), packData);
+  }
+  
+  packTitle.value = '';
+  packDesc.value = '';
+  selectedTemplates.clear();
+  
+  const checkboxes = availableTemplates.querySelectorAll('input[type="checkbox"]');
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = false;
+  });
+});
 
 function checkMidnightReset(tasks) {
   const now = Date.now();
@@ -1397,7 +1889,6 @@ function createTaskCard(id, data) {
     editTaskTitle.value = data.title;
     editTaskDesc.value = data.desc || '';
     editTaskCategory.value = data.category;
-    editAutoReset.checked = data.resetAtMidnight || false;
     
     if (data.deadline) {
       const deadlineDate = new Date(data.deadline);
@@ -1455,15 +1946,6 @@ function createTaskCard(id, data) {
   } else {
     priorityLabel.textContent = data.category==='urgent'?'Срочное':data.category==='daily'?'Ежедневное':'Обычное';
     footer.append(priorityLabel);
-  }
-
-  if (data.resetAtMidnight) {
-    const autoResetIcon = document.createElement('div');
-    autoResetIcon.innerHTML = '<i class="fas fa-sync-alt" title="Автосброс в 0:00"></i>';
-    autoResetIcon.style.color = '#ffeb3b';
-    autoResetIcon.style.marginLeft = '8px';
-    autoResetIcon.style.animation = 'pulse 2s infinite';
-    footer.appendChild(autoResetIcon);
   }
 
   card.append(header, descEl);
@@ -1646,16 +2128,11 @@ saveEditTask.onclick = () => {
     deadline = new Date(dateTimeString).getTime();
   }
   
-  const resetAtMidnight = editAutoReset.checked;
-  const nextResetTime = resetAtMidnight ? getNextMidnight() : null;
-  
   update(ref(db, 'tasks/' + editingTaskId), { 
     title, 
     desc, 
     category, 
-    deadline,
-    resetAtMidnight,
-    nextResetTime
+    deadline
   });
   
   editModal.style.display = 'none';
@@ -1694,6 +2171,9 @@ document.addEventListener('click', (e) => {
     addPanel.style.display = 'none';
   }
 });
+
+loadTemplates();
+loadPacks();
 </script>
 </body>
 </html>
