@@ -980,26 +980,6 @@ h1::after {
   text-shadow: 0 0 10px rgba(255,152,0,0.5);
 }
 
-#playerName {
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,235,59,0.4);
-  background: rgba(30, 30, 30, 0.9);
-  color: #ffeb3b;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 10px;
-  transition: all 0.3s ease;
-}
-
-#playerName:focus {
-  outline: none;
-  border: 1px solid #ffeb3b;
-  box-shadow: 
-    0 0 15px rgba(255,235,59,0.4),
-    inset 0 0 10px rgba(255,235,59,0.1);
-  transform: translateY(-1px);
-}
-
 #takeConfirm, #takeCancel {
   padding: 12px;
   border-radius: 10px;
@@ -1196,6 +1176,139 @@ h1::after {
   flex: 1;
 }
 
+/* Стили для экрана регистрации */
+#registrationScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.registration-modal {
+  background: rgba(25, 25, 25, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 
+    0 20px 50px rgba(255,235,59,0.25),
+    0 0 60px rgba(255,152,0,0.2);
+  border: 1px solid rgba(255, 235, 59, 0.3);
+  backdrop-filter: blur(20px);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.registration-modal h2 {
+  color: #ffeb3b;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(255,152,0,0.5);
+}
+
+.registration-modal input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,235,59,0.4);
+  background: rgba(30, 30, 30, 0.9);
+  color: #ffeb3b;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  transition: all 0.3s ease;
+}
+
+.registration-modal input:focus {
+  outline: none;
+  border: 1px solid #ffeb3b;
+  box-shadow: 
+    0 0 15px rgba(255,235,59,0.4),
+    inset 0 0 10px rgba(255,235,59,0.1);
+  transform: translateY(-1px);
+}
+
+.registration-modal button {
+  background: linear-gradient(135deg, #ffeb3b, #ffd54f);
+  color: #000;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.registration-modal button:hover {
+  background: linear-gradient(135deg, #ffd54f, #ffeb3b);
+  box-shadow: 
+    0 5px 20px rgba(255,235,59,0.5),
+    0 0 25px rgba(255,235,59,0.3);
+  transform: translateY(-2px);
+}
+
+.registration-status {
+  font-size: 9px;
+  padding: 8px;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.registration-success {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.5);
+}
+
+.registration-error {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.5);
+}
+
+.user-info {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 235, 59, 0.1);
+  color: #ffeb3b;
+  border: 1px solid rgba(255, 235, 59, 0.3);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  z-index: 101;
+}
+
+.logout-btn {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 7px;
+  margin-left: 8px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: rgba(244, 67, 54, 0.3);
+  transform: translateY(-1px);
+}
+
 @media (max-width: 768px) {
   .container {
     grid-template-columns: 1fr;
@@ -1255,6 +1368,17 @@ h1::after {
   .template-actions, .pack-actions {
     align-self: flex-end;
   }
+  
+  .registration-modal {
+    padding: 25px;
+    width: 95%;
+  }
+  
+  .user-info {
+    top: 10px;
+    right: 10px;
+    font-size: 7px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1280,11 +1404,28 @@ h1::after {
 </style>
 </head>
 <body>
+<!-- Экран регистрации -->
+<div id="registrationScreen">
+  <div class="registration-modal">
+    <h2>Регистрация</h2>
+    <input type="text" id="nicknameInput" placeholder="Введите ваш никнейм">
+    <input type="text" id="adminIdInput" placeholder="Введите ID администратора">
+    <button id="registerBtn">Зарегистрироваться</button>
+    <div id="registrationStatus" class="registration-status" style="display: none;"></div>
+  </div>
+</div>
+
 <div class="mc-background"></div>
 <div class="light-overlay"></div>
 <div class="sparkles"></div>
 <div class="bulb-container">
   <div class="bulb">💡</div>
+</div>
+
+<!-- Информация о пользователе -->
+<div class="user-info" id="userInfo" style="display: none;">
+  <span id="userNickname"></span>
+  <button class="logout-btn" id="logoutBtn">Выйти</button>
 </div>
 
 <header>
@@ -1414,7 +1555,9 @@ h1::after {
 <div id="takeModal">
   <div id="modalContent">
     <div id="modalTitle"></div>
-    <input type="text" id="playerName" placeholder="Введите ваш ник">
+    <div style="text-align: center; color: #ffd54f; font-size: 10px; margin-bottom: 15px;">
+      Вы берете задание как: <strong id="currentUserNickname"></strong>
+    </div>
     <button id="takeConfirm">Взять задание</button>
     <button id="takeCancel">Отмена</button>
   </div>
@@ -1449,7 +1592,7 @@ h1::after {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove, update, set, get, child } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAb1xT6mIHlxcZNt1TBS7jrrDp5re3qMOU",
@@ -1466,6 +1609,17 @@ const db = getDatabase(app);
 // Telegram Bot Token
 const TELEGRAM_BOT_TOKEN = '8335749049:AAH7Z7uJMoMxSgtqK3-4Paui0ZOO8bf2Cwo';
 
+// Элементы регистрации
+const registrationScreen = document.getElementById('registrationScreen');
+const nicknameInput = document.getElementById('nicknameInput');
+const adminIdInput = document.getElementById('adminIdInput');
+const registerBtn = document.getElementById('registerBtn');
+const registrationStatus = document.getElementById('registrationStatus');
+const userInfo = document.getElementById('userInfo');
+const userNickname = document.getElementById('userNickname');
+const logoutBtn = document.getElementById('logoutBtn');
+
+// Остальные элементы
 const addBtn = document.getElementById('addTaskBtn');
 const addPanel = document.getElementById('addTaskPanel');
 const submitTask = document.getElementById('submitTask');
@@ -1486,7 +1640,7 @@ const completedSection = document.querySelector('.completed-section');
 
 const takeModal = document.getElementById('takeModal');
 const modalTitle = document.getElementById('modalTitle');
-const playerNameInput = document.getElementById('playerName');
+const currentUserNickname = document.getElementById('currentUserNickname');
 const takeConfirm = document.getElementById('takeConfirm');
 const takeCancel = document.getElementById('takeCancel');
 
@@ -1522,11 +1676,267 @@ let editingTaskId = null;
 let editingTemplateId = null;
 let editingPackId = null;
 let selectedTemplates = new Set();
+let currentUser = null;
 
 const today = new Date().toISOString().split('T')[0];
 taskDate.min = today;
 editTaskDate.min = today;
 templateDate.min = today;
+
+// Функция для получения информации об устройстве и IP
+async function getSessionInfo() {
+  const sessionInfo = {
+    timestamp: Date.now(),
+    userAgent: navigator.userAgent,
+    language: navigator.language,
+    platform: navigator.platform,
+    screen: `${screen.width}x${screen.height}`,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    cookiesEnabled: navigator.cookieEnabled,
+    javaEnabled: navigator.javaEnabled ? navigator.javaEnabled() : false,
+    online: navigator.onLine,
+    deviceMemory: navigator.deviceMemory || 'unknown',
+    hardwareConcurrency: navigator.hardwareConcurrency || 'unknown',
+    maxTouchPoints: navigator.maxTouchPoints || 0
+  };
+  
+  try {
+    // Получаем IP адрес
+    const ipResponse = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipResponse.json();
+    sessionInfo.ip = ipData.ip;
+    
+    // Получаем подробную информацию о местоположении
+    try {
+      const locationResponse = await fetch(`http://ip-api.com/json/${ipData.ip}?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query`);
+      const locationData = await locationResponse.json();
+      if (locationData.status === 'success') {
+        sessionInfo.country = locationData.country;
+        sessionInfo.countryCode = locationData.countryCode;
+        sessionInfo.region = locationData.regionName;
+        sessionInfo.city = locationData.city;
+        sessionInfo.zip = locationData.zip;
+        sessionInfo.lat = locationData.lat;
+        sessionInfo.lon = locationData.lon;
+        sessionInfo.timezone = locationData.timezone;
+        sessionInfo.isp = locationData.isp;
+        sessionInfo.org = locationData.org;
+        sessionInfo.as = locationData.as;
+      }
+    } catch (e) {
+      console.log('Не удалось получить информацию о местоположении');
+    }
+  } catch (e) {
+    console.log('Не удалось получить IP адрес');
+    sessionInfo.ip = 'unknown';
+  }
+  
+  // Дополнительная информация о браузере
+  sessionInfo.browserInfo = {
+    name: navigator.appName,
+    version: navigator.appVersion,
+    vendor: navigator.vendor,
+    product: navigator.product,
+    userAgent: navigator.userAgent
+  };
+  
+  return sessionInfo;
+}
+
+// Функция для сохранения сессии (только при первом входе)
+async function saveSession(userId, nickname, isNewLogin = false) {
+  if (!isNewLogin) return null;
+  
+  const sessionInfo = await getSessionInfo();
+  sessionInfo.userId = userId;
+  sessionInfo.nickname = nickname;
+  sessionInfo.loginType = 'new';
+  
+  const sessionRef = push(ref(db, 'sessions'));
+  set(sessionRef, sessionInfo);
+  
+  return sessionRef.key;
+}
+
+// Функция для проверки валидности пользователя
+async function validateUser(user) {
+  try {
+    const adminsRef = ref(db, 'admins');
+    const snapshot = await get(adminsRef);
+    
+    if (!snapshot.exists()) {
+      return false;
+    }
+    
+    const admins = snapshot.val();
+    
+    // Проверяем, есть ли такой администратор в базе
+    for (let adminKey in admins) {
+      const admin = admins[adminKey];
+      if (admin.nickname === user.nickname && admin.adminId === user.adminId) {
+        return true;
+      }
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('Ошибка при проверке пользователя:', error);
+    return false;
+  }
+}
+
+// Функция для выхода из системы
+function logout() {
+  localStorage.removeItem('taskBoardUser');
+  localStorage.removeItem('taskBoardLastLogin');
+  currentUser = null;
+  userInfo.style.display = 'none';
+  registrationScreen.style.display = 'flex';
+  
+  // Показываем сообщение о выходе
+  showRegistrationStatus('Ваш аккаунт был удален администратором', false);
+}
+
+// Функция для проверки регистрации
+async function checkRegistration() {
+  const savedUser = localStorage.getItem('taskBoardUser');
+  const lastLogin = localStorage.getItem('taskBoardLastLogin');
+  
+  if (savedUser) {
+    const user = JSON.parse(savedUser);
+    
+    // Проверяем валидность пользователя
+    const isValid = await validateUser(user);
+    
+    if (!isValid) {
+      // Пользователь невалиден - выходим
+      logout();
+      return false;
+    }
+    
+    currentUser = user;
+    registrationScreen.style.display = 'none';
+    userInfo.style.display = 'block';
+    userNickname.textContent = user.nickname;
+    
+    // Проверяем, был ли это новый вход
+    const currentTime = Date.now();
+    const isNewLogin = !lastLogin || (currentTime - parseInt(lastLogin)) > 300000; // 5 минут
+    
+    // Сохраняем информацию о сессии только при новом входе
+    if (isNewLogin) {
+      saveSession(user.id, user.nickname, true);
+      localStorage.setItem('taskBoardLastLogin', currentTime.toString());
+    }
+    
+    return true;
+  }
+  return false;
+}
+
+// Функция для проверки валидности администратора при регистрации
+async function validateAdmin(nickname, adminId) {
+  try {
+    const adminsRef = ref(db, 'admins');
+    const snapshot = await get(adminsRef);
+    
+    if (snapshot.exists()) {
+      const admins = snapshot.val();
+      
+      // Проверяем, есть ли такой администратор
+      for (let adminKey in admins) {
+        const admin = admins[adminKey];
+        if (admin.nickname === nickname && admin.adminId === adminId) {
+          return { valid: true, adminData: admin };
+        }
+      }
+    }
+    
+    return { valid: false };
+  } catch (error) {
+    console.error('Ошибка при проверке администратора:', error);
+    return { valid: false };
+  }
+}
+
+// Обработчик регистрации
+registerBtn.addEventListener('click', async () => {
+  const nickname = nicknameInput.value.trim();
+  const adminId = adminIdInput.value.trim();
+  
+  if (!nickname || !adminId) {
+    showRegistrationStatus('Заполните все поля!', false);
+    return;
+  }
+  
+  const validation = await validateAdmin(nickname, adminId);
+  
+  if (validation.valid) {
+    // Сохраняем пользователя
+    const user = {
+      id: Date.now().toString(),
+      nickname: nickname,
+      adminId: adminId,
+      registeredAt: Date.now()
+    };
+    
+    localStorage.setItem('taskBoardUser', JSON.stringify(user));
+    localStorage.setItem('taskBoardLastLogin', Date.now().toString());
+    currentUser = user;
+    
+    // Сохраняем сессию (новый вход)
+    await saveSession(user.id, user.nickname, true);
+    
+    showRegistrationStatus('Регистрация успешна!', true);
+    
+    setTimeout(() => {
+      registrationScreen.style.display = 'none';
+      userInfo.style.display = 'block';
+      userNickname.textContent = user.nickname;
+    }, 1500);
+  } else {
+    showRegistrationStatus('Неверный никнейм или ID администратора!', false);
+  }
+});
+
+// Функция для выхода
+logoutBtn.addEventListener('click', () => {
+  if (confirm('Вы уверены, что хотите выйти?')) {
+    logout();
+  }
+});
+
+// Функция для показа статуса регистрации
+function showRegistrationStatus(message, isSuccess) {
+  registrationStatus.textContent = message;
+  registrationStatus.className = `registration-status ${isSuccess ? 'registration-success' : 'registration-error'}`;
+  registrationStatus.style.display = 'block';
+  
+  setTimeout(() => {
+    registrationStatus.style.display = 'none';
+  }, 3000);
+}
+
+// Проверяем регистрацию при загрузке
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!await checkRegistration()) {
+    registrationScreen.style.display = 'flex';
+  }
+});
+
+// Отслеживаем изменения в списке администраторов
+function monitorAdmins() {
+  onValue(ref(db, 'admins'), async (snapshot) => {
+    if (currentUser) {
+      // Проверяем, существует ли еще наш пользователь в списке администраторов
+      const isValid = await validateUser(currentUser);
+      if (!isValid) {
+        // Пользователь больше не валиден - выходим
+        logout();
+      }
+    }
+  });
+}
 
 // Функция для отправки сообщения в Telegram
 async function sendTelegramNotification(taskData) {
@@ -2197,9 +2607,13 @@ function createTaskCard(id, data) {
     takeBtn.className='takeBtn';
     takeBtn.innerHTML='<i class="fas fa-hand-paper"></i> Взять задание';
     takeBtn.onclick = ()=> {
+      if (!currentUser) {
+        alert('Сначала необходимо зарегистрироваться!');
+        return;
+      }
       currentTaskId = id;
       modalTitle.textContent = data.title;
-      playerNameInput.value='';
+      currentUserNickname.textContent = currentUser.nickname;
       takeModal.style.display='flex';
     };
     card.append(takeBtn);
@@ -2366,9 +2780,16 @@ cancelEditTask.onclick = () => {
 };
 
 takeConfirm.onclick = ()=>{
-  const name = playerNameInput.value.trim();
-  if(!name) return alert('Введите ник!');
-  update(ref(db,'tasks/'+currentTaskId),{status:'inprogress',player:name});
+  if (!currentUser) {
+    alert('Ошибка: пользователь не авторизован!');
+    takeModal.style.display='none';
+    return;
+  }
+  
+  update(ref(db,'tasks/'+currentTaskId),{
+    status:'inprogress',
+    player: currentUser.nickname
+  });
   takeModal.style.display='none';
 };
 
@@ -2395,6 +2816,7 @@ document.addEventListener('click', (e) => {
 
 loadTemplates();
 loadPacks();
+monitorAdmins();
 </script>
 </body>
 </html>

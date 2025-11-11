@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Панель администратора</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* Стили остаются без изменений */
+:root {
+  --primary-color: #4285f4;
+  --primary-dark: #3367d6;
+  --secondary-color: #9aa0a6;
+  --background-color: #202124;
+  --card-color: #292a2d;
+  --border-color: #3c4043;
+  --text-color: #e8eaed;
+  --text-secondary: #9aa0a6;
+  --danger-color: #ea4335;
+  --success-color: #34a853;
+  --warning-color: #fbbc04;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.admin-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: var(--card-color);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
+  border-left: 4px solid var(--primary-color);
+}
+
+.admin-header h1 {
+  color: var(--primary-color);
+  margin: 0;
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.admin-section {
+  background: var(--card-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
+  border-top: 1px solid var(--border-color);
+}
+
+.admin-section h2 {
+  color: var(--text-color);
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 500;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: end;
+}
+
+.admin-form input {
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  transition: border 0.2s;
+}
+
+.admin-form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.admin-form button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.admin-form button:hover {
+  background: var(--primary-dark);
+}
+
+.admin-list {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 10px;
+  background: var(--background-color);
+}
+
+.admin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--card-color);
+  margin-bottom: 10px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.admin-item:hover {
+  background: #323639;
+}
+
+.admin-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.admin-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-item-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.delete-btn {
+  background: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background: #c5221f;
+}
+
+.session-info {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 5px;
+}
+
+.session-details {
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--background-color);
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.session-section {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.session-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.session-section h4 {
+  color: var(--text-color);
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.session-section div {
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.session-badge {
+  display: inline-block;
+  background: rgba(66, 133, 244, 0.2);
+  color: var(--primary-color);
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-right: 5px;
+  margin-bottom: 3px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.empty-state i {
+  font-size: 40px;
+  margin-bottom: 15px;
+  color: var(--border-color);
+}
+
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: var(--card-color);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.filter-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.filter-btn:hover {
+  background: #323639;
+}
+
+.filter-btn.active:hover {
+  background: var(--primary-dark);
+}
+
+.hash-generator {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hash-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.hash-input-group input {
+  flex: 1;
+}
+
+.hash-output {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--background-color);
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.hash-output span {
+  flex: 1;
+  word-break: break-all;
+}
+
+.copy-btn {
+  background: transparent;
+  color: var(--secondary-color);
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+  .admin-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .admin-item-actions {
+    align-self: flex-end;
+  }
+  
+  .hash-input-group {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+<body>
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>Панель администратора</h1>
+  </div>
+
+  <div class="admin-section">
+    <h2>Управление аккаунтами</h2>
+    <div class="admin-form">
+      <input type="text" id="adminNickname" placeholder="Никнейм ">
+      <div class="hash-generator">
+        <div class="hash-input-group">
+          <input type="text" id="seedInput" placeholder="Зерно для генерации ID">
+          <button id="generateHashBtn">Сгенерировать</button>
+        </div>
+        <div class="hash-output">
+          <span id="hashOutput">ID будет сгенерирован здесь</span>
+          <button class="copy-btn" id="copyHashBtn">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+      </div>
+      <button id="addAdminBtn">Добавить аккаунт</button>
+    </div>
+    <div class="admin-list" id="adminsList"></div>
+  </div>
+
+  <div class="admin-section">
+    <h2>Сессии пользователей</h2>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">Все сессии</button>
+      <button class="filter-btn" data-filter="today">Сегодня</button>
+      <button class="filter-btn" data-filter="week">За неделю</button>
+    </div>
+    <div class="admin-list" id="sessionsList"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove, set, get } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAb1xT6mIHlxcZNt1TBS7jrrDp5re3qMOU",
+  authDomain: "klan-d9201.firebaseapp.com",
+  databaseURL: "https://klan-d9201-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "klan-d9201",
+  storageBucket: "klan-d9201.appspot.com",
+  messagingSenderId: "252485302766",
+  appId: "1:252485302766:web:7f60cca53e9c9b2d38f6ff"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const adminNickname = document.getElementById('adminNickname');
+const seedInput = document.getElementById('seedInput');
+const generateHashBtn = document.getElementById('generateHashBtn');
+const hashOutput = document.getElementById('hashOutput');
+const copyHashBtn = document.getElementById('copyHashBtn');
+const addAdminBtn = document.getElementById('addAdminBtn');
+const adminsList = document.getElementById('adminsList');
+const sessionsList = document.getElementById('sessionsList');
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+let currentFilter = 'all';
+let sessionsData = [];
+let currentHash = '';
+
+// Исправленный генератор хешей - теперь детерминированный
+function generateHash(seed) {
+  // Добавляем фиксированную соль для увеличения энтропии
+  const salt = "x7f9!k2p#m5q&r8t$";
+  const data = seed + salt;
+  
+  let hash = 0;
+  for (let i = 0; i < data.length; i++) {
+    const char = data.charCodeAt(i);
+    hash = ((hash << 7) - hash) + char;
+    hash = hash & hash; // Преобразование в 32-битное целое число
+  }
+  
+  // Создаем более длинный хеш комбинируя несколько преобразований
+  const hex1 = Math.abs(hash).toString(16);
+  const hash2 = hash * 16777619;
+  const hex2 = Math.abs(hash2).toString(16);
+  const hash3 = hash ^ 0xFFFFFFFF;
+  const hex3 = Math.abs(hash3).toString(16);
+  
+  // Комбинируем и обрезаем до 24 символов
+  const combined = hex1 + hex2 + hex3;
+  return combined.substring(0, 24).toUpperCase();
+}
+
+// Обработчик генерации хеша
+generateHashBtn.addEventListener('click', () => {
+  const seed = seedInput.value.trim();
+  if (!seed) {
+    alert('Введите зерно для генерации хеша!');
+    return;
+  }
+  
+  currentHash = generateHash(seed);
+  hashOutput.textContent = currentHash;
+});
+
+// Обработчик копирования хеша
+copyHashBtn.addEventListener('click', () => {
+  if (!currentHash) {
+    alert('Сначала сгенерируйте хеш!');
+    return;
+  }
+  
+  navigator.clipboard.writeText(currentHash)
+    .then(() => {
+      // Визуальная обратная связь
+      const originalIcon = copyHashBtn.innerHTML;
+      copyHashBtn.innerHTML = '<i class="fas fa-check"></i>';
+      setTimeout(() => {
+        copyHashBtn.innerHTML = originalIcon;
+      }, 2000);
+    })
+    .catch(err => {
+      console.error('Ошибка копирования: ', err);
+      alert('Не удалось скопировать хеш');
+    });
+});
+
+// Загрузка администраторов
+function loadAdmins() {
+  onValue(ref(db, 'admins'), (snapshot) => {
+    adminsList.innerHTML = '';
+    
+    if (!snapshot.exists()) {
+      adminsList.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-users"></i>
+          <p>Нет зарегистрированных администраторов</p>
+        </div>
+      `;
+      return;
+    }
+    
+    const admins = [];
+    snapshot.forEach(adminSnap => {
+      admins.push({ id: adminSnap.key, ...adminSnap.val() });
+    });
+    
+    admins.forEach(admin => {
+      const adminItem = document.createElement('div');
+      adminItem.className = 'admin-item';
+      adminItem.innerHTML = `
+        <div class="admin-item-info">
+          <div><strong>Никнейм:</strong> ${admin.nickname}</div>
+          <div><strong>ID:</strong> ${admin.adminId}</div>
+          <div class="session-info">
+            Создан: ${new Date(admin.createdAt || Date.now()).toLocaleString()}
+          </div>
+        </div>
+        <div class="admin-item-actions">
+          <button class="delete-btn" data-id="${admin.id}">
+            <i class="fas fa-trash"></i> Удалить
+          </button>
+        </div>
+      `;
+      
+      adminItem.querySelector('.delete-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm('Удалить этого администратора?')) {
+          remove(ref(db, 'admins/' + admin.id));
+        }
+      });
+      
+      adminsList.appendChild(adminItem);
+    });
+  });
+}
+
+// Загрузка сессий
+function loadSessions() {
+  onValue(ref(db, 'sessions'), (snapshot) => {
+    sessionsList.innerHTML = '';
+    sessionsData = [];
+    
+    if (!snapshot.exists()) {
+      sessionsList.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-history"></i>
+          <p>Нет данных о сессиях</p>
+        </div>
+      `;
+      return;
+    }
+    
+    snapshot.forEach(sessionSnap => {
+      sessionsData.push({ id: sessionSnap.key, ...sessionSnap.val() });
+    });
+    
+    // Сортируем по времени (новые сверху)
+    sessionsData.sort((a, b) => b.timestamp - a.timestamp);
+    
+    renderSessions();
+  });
+}
+
+// Фильтрация сессий
+function filterSessions() {
+  const now = Date.now();
+  let filteredSessions = sessionsData;
+  
+  switch (currentFilter) {
+    case 'today':
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      filteredSessions = sessionsData.filter(s => new Date(s.timestamp) >= today);
+      break;
+    case 'week':
+      const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+      filteredSessions = sessionsData.filter(s => new Date(s.timestamp) >= weekAgo);
+      break;
+  }
+  
+  return filteredSessions;
+}
+
+// Отображение сессий
+function renderSessions() {
+  sessionsList.innerHTML = '';
+  const filteredSessions = filterSessions();
+  
+  if (filteredSessions.length === 0) {
+    sessionsList.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-history"></i>
+        <p>Нет сессий для отображения</p>
+      </div>
+    `;
+    return;
+  }
+  
+  filteredSessions.forEach(session => {
+    const sessionItem = document.createElement('div');
+    sessionItem.className = 'admin-item';
+    
+    const sessionDate = new Date(session.timestamp);
+    const userAgent = session.userAgent || 'Неизвестно';
+    const ip = session.ip || 'Неизвестно';
+    const location = session.country ? 
+      `${session.country}${session.city ? ', ' + session.city : session.region ? ', ' + session.region : ''}` : 
+      'Неизвестно';
+    
+    sessionItem.innerHTML = `
+      <div class="admin-item-info">
+        <div><strong>Пользователь:</strong> ${session.nickname || 'Неизвестно'} (ID: ${session.userId || 'Неизвестно'})</div>
+        <div><strong>Время входа:</strong> ${sessionDate.toLocaleString()}</div>
+        <div><strong>Тип входа:</strong> <span class="session-badge">${session.loginType || 'повторный'}</span></div>
+        
+        <div class="session-details">
+          <div class="session-section">
+            <h4>📍 Местоположение</h4>
+            <div><strong>IP:</strong> ${ip}</div>
+            <div><strong>Страна:</strong> ${session.country || 'Неизвестно'} ${session.countryCode ? `(${session.countryCode})` : ''}</div>
+            <div><strong>Город:</strong> ${session.city || 'Неизвестно'}</div>
+            <div><strong>Регион:</strong> ${session.region || 'Неизвестно'}</div>
+            <div><strong>Координаты:</strong> ${session.lat && session.lon ? `${session.lat}, ${session.lon}` : 'Неизвестно'}</div>
+            <div><strong>Провайдер:</strong> ${session.isp || 'Неизвестно'}</div>
+            <div><strong>Организация:</strong> ${session.org || 'Неизвестно'}</div>
+          </div>
+          
+          <div class="session-section">
+            <h4>💻 Устройство и браузер</h4>
+            <div><strong>Платформа:</strong> ${session.platform || 'Неизвестно'}</div>
+            <div><strong>Экран:</strong> ${session.screen || 'Неизвестно'}</div>
+            <div><strong>Язык:</strong> ${session.language || 'Неизвестно'}</div>
+            <div><strong>Часовой пояс:</strong> ${session.timezone || 'Неизвестно'}</div>
+            <div><strong>Память устройства:</strong> ${session.deviceMemory || 'Неизвестно'} GB</div>
+            <div><strong>Ядер CPU:</strong> ${session.hardwareConcurrency || 'Неизвестно'}</div>
+            <div><strong>Точек касания:</strong> ${session.maxTouchPoints || 0}</div>
+          </div>
+          
+          <div class="session-section">
+            <h4>🌐 Сеть и соединение</h4>
+            <div><strong>Онлайн:</strong> ${session.online ? 'Да' : 'Нет'}</div>
+            <div><strong>Cookies:</strong> ${session.cookiesEnabled ? 'Включены' : 'Отключены'}</div>
+            <div><strong>Java:</strong> ${session.javaEnabled ? 'Включена' : 'Отключена'}</div>
+          </div>
+          
+          <div class="session-section">
+            <h4>🔍 User Agent</h4>
+            <div style="word-break: break-all; font-size: 11px;">${userAgent}</div>
+          </div>
+        </div>
+      </div>
+      <div class="admin-item-actions">
+        <button class="delete-btn" data-id="${session.id}">
+          <i class="fas fa-trash"></i> Удалить
+        </button>
+      </div>
+    `;
+    
+    sessionItem.querySelector('.delete-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (confirm('Удалить эту сессию?')) {
+        remove(ref(db, 'sessions/' + session.id));
+      }
+    });
+    
+    sessionsList.appendChild(sessionItem);
+  });
+}
+
+// Обработчики фильтров
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderSessions();
+  });
+});
+
+// Добавление администратора
+addAdminBtn.addEventListener('click', () => {
+  const nickname = adminNickname.value.trim();
+  
+  if (!nickname) {
+    alert('Введите никнейм');
+    return;
+  }
+  
+  if (!currentHash) {
+    alert('Сначала сгенерируйте ID!');
+    return;
+  }
+  
+  const adminData = {
+    nickname: nickname,
+    adminId: currentHash,
+    createdAt: Date.now()
+  };
+  
+  push(ref(db, 'admins'), adminData);
+  
+  adminNickname.value = '';
+  seedInput.value = '';
+  hashOutput.textContent = 'Хеш будет сгенерирован здесь';
+  currentHash = '';
+  
+  alert('Администратор успешно добавлен!');
+});
+
+// Инициализация
+loadAdmins();
+loadSessions();
+</script>
+</body>
+</html>
