@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ по проекту</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes lightOn {
+          0% { opacity: 0; transform: scale(0.8); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes bulbGlow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 5px #ffeb3b) drop-shadow(0 0 20px #ff9800);
+            transform: scale(1) rotate(0deg);
+          }
+          25% { 
+            filter: drop-shadow(0 0 15px #ffeb3b) drop-shadow(0 0 40px #ff9800) drop-shadow(0 0 60px #ff5722);
+            transform: scale(1.05) rotate(2deg);
+          }
+          50% { 
+            filter: drop-shadow(0 0 20px #ffeb3b) drop-shadow(0 0 50px #ff9800) drop-shadow(0 0 80px #ff5722);
+            transform: scale(1.08) rotate(0deg);
+          }
+          75% { 
+            filter: drop-shadow(0 0 15px #ffeb3b) drop-shadow(0 0 40px #ff9800) drop-shadow(0 0 60px #ff5722);
+            transform: scale(1.05) rotate(-2deg);
+          }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          33% { transform: translateY(-15px) rotate(1deg); }
+          66% { transform: translateY(-8px) rotate(-1deg); }
+        }
+
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.08); }
+        }
+
+        @keyframes glowPulse {
+          0%, 100% { box-shadow: 0 0 20px rgba(255,235,59,0.3); }
+          50% { box-shadow: 0 0 40px rgba(255,235,59,0.6), 0 0 80px rgba(255,152,0,0.3); }
+        }
+
+        @keyframes textShine {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+
+        @keyframes blockFloat {
+          0%, 100% { transform: translateY(0) rotateX(0deg); }
+          50% { transform: translateY(-5px) rotateX(5deg); }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .mc-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true');
+            background-size: 200px 200px;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            opacity: 0.4;
+            z-index: -2;
+            animation: blockFloat 8s ease-in-out infinite;
+        }
+
+        .mc-background::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+              repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 199px,
+                rgba(255,235,59,0.05) 200px,
+                rgba(255,235,59,0.05) 201px
+              ),
+              repeating-linear-gradient(
+                180deg,
+                transparent,
+                transparent 199px,
+                rgba(255,235,59,0.05) 200px,
+                rgba(255,235,59,0.05) 201px
+              );
+            pointer-events: none;
+        }
+
+        .light-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+              radial-gradient(
+                circle at 50% 10%,
+                rgba(255,235,59,0.25) 0%,
+                rgba(255,152,0,0.15) 20%,
+                rgba(255,87,34,0.08) 40%,
+                transparent 70%
+              ),
+              radial-gradient(
+                circle at 80% 90%,
+                rgba(255,193,7,0.1) 0%,
+                rgba(255,152,0,0.05) 30%,
+                transparent 60%
+              ),
+              radial-gradient(
+                circle at 20% 70%,
+                rgba(255,235,59,0.08) 0%,
+                rgba(255,152,0,0.03) 25%,
+                transparent 50%
+              );
+            pointer-events: none;
+            z-index: -1;
+            animation: lightOn 3s ease-out;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffeb3b;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #ffeb3b;
+            box-shadow: 0 0 30px rgba(255,235,59,0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(
+              90deg,
+              #ffeb3b,
+              #ffd54f,
+              #ffb300,
+              #ffd54f,
+              #ffeb3b
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s linear infinite;
+            text-shadow: 0 0 30px rgba(255,235,59,0.5);
+        }
+        
+        .subtitle {
+            font-size: 0.8rem;
+            color: #ffd54f;
+            text-shadow: 0 0 10px rgba(255,213,79,0.5);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .sidebar {
+            background: rgba(25, 25, 25, 0.92);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 
+              0 8px 32px rgba(0,0,0,0.3),
+              0 0 20px rgba(255,235,59,0.1);
+            border: 1px solid rgba(255, 235, 59, 0.15);
+            backdrop-filter: blur(10px);
+            animation: glowPulse 4s ease-in-out infinite;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .nav-list {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 0.8rem;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 1rem;
+            color: #ffd54f;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid rgba(255, 235, 59, 0.3);
+            background: rgba(20, 20, 20, 0.8);
+            font-size: 0.7rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,235,59,0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 235, 59, 0.15);
+            color: #ffeb3b;
+            box-shadow: 
+              0 0 20px rgba(255,235,59,0.4),
+              inset 0 0 20px rgba(255,235,59,0.1);
+            border-color: #ffeb3b;
+            transform: translateY(-2px);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section {
+            background: rgba(25, 25, 25, 0.92);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 
+              0 8px 32px rgba(0,0,0,0.3),
+              0 0 20px rgba(255,235,59,0.1);
+            border: 1px solid rgba(255, 235, 59, 0.15);
+            backdrop-filter: blur(10px);
+            animation: glowPulse 4s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffeb3b, #ff9800, #ff5722, #ff9800, #ffeb3b);
+            background-size: 200% 100%;
+            animation: textShine 3s linear infinite;
+        }
+        
+        h2 {
+            color: #ffeb3b;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid rgba(255,235,59,0.3);
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px rgba(255,152,0,0.5);
+        }
+        
+        h3 {
+            color: #ffd54f;
+            margin: 1.5rem 0 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .participants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.2rem;
+        }
+        
+        .participant-card {
+            background: rgba(30, 30, 30, 0.9);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-left: 4px solid #ffeb3b;
+            border: 1px solid rgba(255,235,59,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .participant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+              0 10px 25px rgba(255,235,59,0.3),
+              0 0 20px rgba(255,235,59,0.2);
+            border-color: #ffeb3b;
+        }
+        
+        .participant-name {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #ffeb3b;
+            font-size: 0.8rem;
+        }
+        
+        .participant-contact {
+            color: #ffd54f;
+            font-size: 0.7rem;
+        }
+        
+        .blacklist-section {
+            margin-top: 2rem;
+        }
+        
+        .blacklist-card {
+            background: rgba(40, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #ff5252;
+            border: 1px solid rgba(255,82,82,0.5);
+            box-shadow: 0 5px 20px rgba(255,82,82,0.2);
+        }
+        
+        .blacklist-title {
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #ff5252;
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            text-shadow: 0 0 8px rgba(255,23,68,0.5);
+        }
+        
+        .blacklist-users {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        
+        .blacklist-user {
+            background: rgba(255, 23, 68, 0.25);
+            color: #ff5252;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255,82,82,0.5);
+        }
+        
+        .rules-section {
+            margin-top: 2rem;
+        }
+        
+        .rules-content {
+            background: rgba(255, 193, 7, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #ffb74d;
+            border: 1px solid rgba(255,183,77,0.4);
+            color: #ffd54f;
+            font-size: 0.8rem;
+        }
+        
+        .help-container {
+            max-width: 800px;
+        }
+        
+        .help-item {
+            margin-bottom: 1.2rem;
+            border: 1px solid rgba(255,235,59,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(30, 30, 30, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .help-item:hover {
+            border-color: #ffeb3b;
+            box-shadow: 0 0 15px rgba(255,235,59,0.2);
+        }
+        
+        .help-question {
+            padding: 1.2rem 1.5rem;
+            background: rgba(40, 40, 40, 0.9);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #ffd54f;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .help-question:hover {
+            background: rgba(255, 235, 59, 0.1);
+            color: #ffeb3b;
+        }
+        
+        .help-answer {
+            padding: 1.5rem;
+            background: rgba(25, 25, 25, 0.9);
+            display: none;
+            color: #ffd54f;
+            font-size: 0.7rem;
+            line-height: 1.6;
+        }
+        
+        .help-item.active .help-answer {
+            display: block;
+            animation: lightOn 0.5s ease-out;
+        }
+        
+        .contact-info {
+            background: rgba(67, 97, 238, 0.1);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid rgba(255,235,59,0.2);
+            color: #ffd54f;
+        }
+        
+        .mods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .mod-card {
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,235,59,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mod-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+              0 10px 25px rgba(255,235,59,0.3),
+              0 0 20px rgba(255,235,59,0.2);
+            border-color: #ffeb3b;
+        }
+        
+        .mod-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: #ffeb3b;
+            font-size: 0.8rem;
+        }
+        
+        .mod-description {
+            color: #ffd54f;
+            margin-bottom: 1.2rem;
+            font-size: 0.7rem;
+            line-height: 1.5;
+        }
+        
+        .mod-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffeb3b, #ffd54f);
+            color: #000;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .mod-link:hover {
+            background: linear-gradient(135deg, #ffd54f, #ffeb3b);
+            box-shadow: 
+              0 5px 20px rgba(255,235,59,0.5),
+              0 0 25px rgba(255,235,59,0.3);
+            transform: translateY(-2px);
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .guide-card {
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid rgba(255,235,59,0.3);
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .guide-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+              0 10px 25px rgba(255,235,59,0.3),
+              0 0 20px rgba(255,235,59,0.2);
+            border-color: #ffeb3b;
+        }
+        
+        .guide-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: #ffeb3b;
+            font-size: 0.8rem;
+        }
+        
+        .guide-description {
+            color: #ffd54f;
+            font-size: 0.7rem;
+        }
+        
+        .loading {
+            color: #ffd54f;
+            font-style: italic;
+            font-size: 0.8rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow: auto;
+            backdrop-filter: blur(10px);
+            animation: lightOn 0.3s ease-out;
+        }
+        
+        .modal-content {
+            background: rgba(25, 25, 25, 0.95);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 
+              0 20px 50px rgba(255,235,59,0.25),
+              0 0 60px rgba(255,152,0,0.2);
+            border: 1px solid rgba(255,235,59,0.3);
+            backdrop-filter: blur(20px);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,235,59,0.3);
+        }
+        
+        .modal-title {
+            color: #ffeb3b;
+            margin: 0;
+            font-size: 1rem;
+            text-shadow: 0 0 10px rgba(255,152,0,0.5);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #ffd54f;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #ffeb3b;
+            transform: scale(1.1);
+        }
+        
+        .modal-body {
+            line-height: 1.6;
+            color: #ffd54f;
+            font-size: 0.8rem;
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffd54f;
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 2px solid rgba(255,235,59,0.3);
+            font-size: 0.7rem;
+        }
+        
+        .bulb-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1;
+            animation: bulbGlow 4s ease-in-out infinite, float 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px #ffeb3b);
+        }
+
+        .bulb {
+            font-size: 36px;
+            color: #ffeb3b;
+            text-shadow: 
+              0 0 20px #ff9800, 
+              0 0 40px #ff5722,
+              0 0 80px #ff5722;
+            transition: all 0.3s ease;
+        }
+
+        .bulb:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                margin-bottom: 1rem;
+            }
+            
+            .participants-grid, .guides-grid, .mods-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .bulb-container {
+                position: relative;
+                top: auto;
+                right: auto;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mc-background"></div>
+    <div class="light-overlay"></div>
+    
+    <div class="bulb-container">
+        <div class="bulb">💡</div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>FAQ ПО ПРОЕКТУ</h1>
+                    <p class="subtitle">ОТВЕТЫ НА ВСЕ ВАШИ ВОПРОСЫ</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="main-content">
+            <aside class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#participants" class="nav-link active" data-target="participants">УЧАСТНИКИ ПРОЕКТА</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#help" class="nav-link" data-target="help">ПОМОЩЬ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#mods" class="nav-link" data-target="mods">ПОЛЕЗНЫЕ МОДЫ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#guides" class="nav-link" data-target="guides">ГАЙДЫ</a>
+                    </li>
+                </ul>
+            </aside>
+            
+            <main class="content">
+                <section id="participants" class="content-section active">
+                    <div class="section">
+                        <h2>УЧАСТНИКИ ПРОЕКТА</h2>
+                        <div class="participants-grid">
+                            <div class="participant-card">
+                                <div class="participant-name">@KAGYNE993</div>
+                                <div class="participant-contact">SPEEX993</div>
+                            </div>
+                            <div class="participant-card">
+                                <div class="participant-name">@MIRNI13_2</div>
+                                <div class="participant-contact">KYCT_13</div>
+                            </div>
+                            <div class="participant-card">
+                                <div class="participant-name">@POLINACHKY</div>
+                                <div class="participant-contact">BONDRYUD</div>
+                            </div>
+                            <div class="participant-card">
+                                <div class="participant-name">@SETCHAL95</div>
+                                <div class="participant-contact">SETCH</div>
+                            </div>
+                            <div class="participant-card">
+                                <div class="participant-name">@GOVNACXAVAL</div>
+                                <div class="participant-contact">SQ1SER</div>
+                            </div>
+                        </div>
+                        
+                        <div class="blacklist-section">
+                            <div class="blacklist-card">
+                                <div class="blacklist-title">
+                                    ⚠️ ЧЕРНЫЙ СПИСОК ТИМЫ
+                                </div>
+                                <div class="blacklist-users">
+                                    <div class="blacklist-user">ТЕСТ</div>
+                                    <div class="blacklist-user">ТЕСТ</div>
+                                    <div class="blacklist-user">ТЕСТ</div>
+                                </div>
+                            </div>
+                            
+                            <div class="blacklist-card">
+                                <div class="blacklist-title">
+                                    ⚠️ ЧЕРНЫЙ СПИСОК МАГАЗИНА
+                                </div>
+                                <div class="blacklist-users">
+                                    <div class="blacklist-user">ТЕСТ</div>
+                                    <div class="blacklist-user">ТЕСТ</div>
+                                    <div class="blacklist-user">ТЕСТ</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="rules-section">
+                            <h3>ПРАВИЛА</h3>
+                            <div class="rules-content">
+                                <p>ТЕСТ ТЕСТ ТЕСТ ТЕСТ ТЕСТ</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="help" class="content-section">
+                    <div class="section">
+                        <h2>ПОМОЩЬ</h2>
+                        <div class="help-container">
+                            <div class="help-item active">
+                                <div class="help-question">
+                                    КУДА ОБРАТИТЬСЯ ЗА ТЕХНИЧЕСКОЙ ПОМОЩЬЮ ИЛИ ИДЕЯМИ?
+                                    <span>-</span>
+                                </div>
+                                <div class="help-answer">
+                                    <p>МОЖНО НАПИСАТЬ В ОБЩИЙ ЧАТ ТИМЫ ЛИБО НАПИСАВ МНЕ В ТЕЛЕГРАММ ИЛИ НА ПОЧТУ:</p>
+                                    <div class="contact-info">
+                                        <p><strong>ПОЧТА:</strong> HENTAI_PH@PROTON.ME</p>
+                                        <p><strong>ТЕЛЕГРАММ:</strong> @POLINACHKY</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="mods" class="content-section">
+                    <div class="section">
+                        <h2>ПОЛЕЗНЫЕ МОДЫ</h2>
+                        <p style="color: #ffd54f; font-size: 0.7rem; margin-bottom: 1.5rem;">ДАННЫЕ МОДИФИКАЦИИ ПРЕДОСТАВЛЕНЫ ДЛЯ ВЕРСИИ МАЙНКРАФТА 1.21.10 FABRIC</p>
+                        
+                        <div class="mods-grid">
+                            <div class="mod-card">
+                                <div class="mod-title">INVENTORY SEARCHER</div>
+                                <div class="mod-description">
+                                    ПОЛЕЗНЫЙ КЛИЕНТСКИЙ МОД КОТОРЫЙ ДОБАВЛЯЕТ ПАНЕЛЬ ВВОДА В НИЖНИЙ ПРАВЫЙ УГОЛ. 
+                                    ДАННЫЙ МОД ПОДСВЕЧИВАЕТ ПРЕДМЕТЫ В ИНТЕРФЕЙСЕ ХРАНИЛИЩА ЛИШЬ ПРЕДМЕТ КОТОРЫЙ ВЫ ВВЕЛИ В ПОИСК.
+                                </div>
+                                <a href="https://modrinth.com/mod/inventory-search" class="mod-link" target="_blank">СКАЧАТЬ МОД</a>
+                            </div>
+                            <div class="mod-card">
+                                <div class="mod-title">RECONNECT MOD: RELOADED</div>
+                                <div class="mod-description">
+                                    МОД ДОБАВЛЯЕТ КНОПКУ БЫСТРОГО ПЕРЕПОДКЛЮЧЕНИЯ К СЕРВЕРУ.
+                                </div>
+                                <a href="https://modrinth.com/mod/reconnect-mod-reloaded" class="mod-link" target="_blank">СКАЧАТЬ МОД</a>
+                            </div>
+                            <div class="mod-card">
+                                <div class="mod-title">XAERO'S MINIMAP</div>
+                                <div class="mod-description">
+                                    МОД ДОБАВЛЯЕТ РАДАР В ВЕРХНИЙ ЛЕВЫЙ УГОЛ ЭКРАНА ТАКЖЕ ПОЗВОЛЯЕТ ДОБАВЛЯТЬ МЕТКИ 
+                                    В ВИДЕ 2-Д ГОЛОГРАММ НА ЗАДАННЫХ КООРДИНАТАХ.
+                                </div>
+                                <a href="https://modrinth.com/mod/xaeros-minimap" class="mod-link" target="_blank">СКАЧАТЬ МОД</a>
+                            </div>
+                            <div class="mod-card">
+                                <div class="mod-title">LITEMATICA</div>
+                                <div class="mod-description">
+                                    МОД ПОЗВОЛЯЕТ ДОБАВЛЯТЬ ГОЛОГРАММЫ ПОСТРОЕК ТЕМ САМЫМ УПРОЩАЯ СОВМЕСТНОЕ СТРОИТЕЛЬСТВО 
+                                    ИЛИ ПЕРЕНОС ПОСТРОЙКИ НА СЕРВЕР. ПОДРОБНЫЙ ГАЙД ПО ИСПОЛЬЗОВАНИЮ НАХОДИТСЯ ВО ВКЛАДКЕ "ГАЙДЫ".
+                                </div>
+                                <a href="https://modrinth.com/mod/litematica" class="mod-link" target="_blank">СКАЧАТЬ МОД</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="guides" class="content-section">
+                    <div class="section">
+                        <h2>ГАЙДЫ И ПОЛЕЗНАЯ ИНФОРМАЦИЯ</h2>
+                        <div class="guides-grid" id="guidesContainer">
+                            <div class="loading">ЗАГРУЗКА ГАЙДОВ...</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для гайдов -->
+    <div id="guideModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalGuideTitle">ЗАГОЛОВОК ГАЙДА</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalGuideContent">
+                ЗАГРУЗКА СОДЕРЖИМОГО ГАЙДА...
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 FAQ ПО ПРОЕКТУ. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Навигация между разделами
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Убираем активный класс у всех ссылок
+                document.querySelectorAll('.nav-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Добавляем активный класс к текущей ссылке
+                this.classList.add('active');
+                
+                // Скрываем все разделы
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Показываем выбранный раздел
+                const targetId = this.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+        
+        // Раскрывающиеся вопросы помощи
+        document.querySelectorAll('.help-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const item = this.parentElement;
+                item.classList.toggle('active');
+                
+                // Меняем значок +/-
+                const icon = this.querySelector('span');
+                icon.textContent = item.classList.contains('active') ? '-' : '+';
+            });
+        });
+        
+        // Модальное окно для гайдов
+        const modal = document.getElementById('guideModal');
+        const modalTitle = document.getElementById('modalGuideTitle');
+        const modalContent = document.getElementById('modalGuideContent');
+        const closeModal = document.querySelector('.close-modal');
+        
+        // Закрытие модального окна
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Загрузка списка гайдов из GitHub
+        async function loadGuidesList() {
+            try {
+                const response = await fetch('https://api.github.com/repos/kstrahov333-tech/klan/contents/gaidi');
+                
+                if (!response.ok) {
+                    throw new Error('Не удалось загрузить список гайдов');
+                }
+                
+                const files = await response.json();
+                const guidesContainer = document.getElementById('guidesContainer');
+                guidesContainer.innerHTML = '';
+                
+                // Фильтруем только HTML файлы
+                const htmlFiles = files.filter(file => 
+                    file.name.endsWith('.html') && file.type === 'file'
+                );
+                
+                if (htmlFiles.length === 0) {
+                    guidesContainer.innerHTML = '<div class="loading">ГАЙДЫ НЕ НАЙДЕНЫ</div>';
+                    return;
+                }
+                
+                // Создаем карточки для каждого гайда
+                htmlFiles.forEach(file => {
+                    const guideName = file.name.replace('.html', '');
+                    const guideCard = document.createElement('div');
+                    guideCard.className = 'guide-card';
+                    guideCard.setAttribute('data-guide', guideName);
+                    
+                    guideCard.innerHTML = `
+                        <div class="guide-title">${formatGuideName(guideName)}</div>
+                        <div class="guide-description">ГАЙД ПО ${formatGuideName(guideName).toLowerCase()}</div>
+                    `;
+                    
+                    guideCard.addEventListener('click', function() {
+                        loadGuideContent(guideName, file.download_url);
+                    });
+                    
+                    guidesContainer.appendChild(guideCard);
+                });
+                
+            } catch (error) {
+                console.error('Ошибка загрузки списка гайдов:', error);
+                document.getElementById('guidesContainer').innerHTML = 
+                    '<div class="loading">ОШИБКА ЗАГРУЗКИ ГАЙДОВ</div>';
+            }
+        }
+        
+        // Загрузка содержимого конкретного гайда
+        async function loadGuideContent(guideName, downloadUrl) {
+            try {
+                modalTitle.textContent = formatGuideName(guideName);
+                modalContent.innerHTML = '<div class="loading">ЗАГРУЗКА ГАЙДА...</div>';
+                modal.style.display = 'block';
+                
+                const response = await fetch(downloadUrl);
+                
+                if (!response.ok) {
+                    throw new Error('Не удалось загрузить гайд');
+                }
+                
+                const content = await response.text();
+                
+                // Создаем временный элемент для парсинга HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = content;
+                
+                // Извлекаем содержимое body или используем весь HTML
+                const bodyContent = tempDiv.querySelector('body') || tempDiv;
+                
+                modalContent.innerHTML = bodyContent.innerHTML;
+                
+            } catch (error) {
+                console.error('Ошибка загрузки гайда:', error);
+                modalContent.innerHTML = '<p>НЕ УДАЛОСЬ ЗАГРУЗИТЬ ГАЙД. ПОПРОБУЙТЕ ПОЗЖЕ.</p>';
+            }
+        }
+        
+        // Форматирование имени гайда для отображения
+        function formatGuideName(name) {
+            return name
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, l => l.toUpperCase());
+        }
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGuidesList();
+        });
+    </script>
+</body>
+</html>
