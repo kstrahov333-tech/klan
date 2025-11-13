@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>тест — тест</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Playfair+Display:wght@700&family=Montserrat:wght@500&family=Open+Sans&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --accent: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(120deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        main {
+            padding: 50px 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 2px dashed #ddd;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-title {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        /* Шрифты */
+        .fonts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .font-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .font-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .font-name {
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .font-demo {
+            font-size: 1.4rem;
+            margin: 15px 0;
+        }
+
+        .font-roboto { font-family: 'Roboto', sans-serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+        .font-opensans { font-family: 'Open Sans', sans-serif; }
+        .font-pacifico { font-family: 'Pacifico', cursive; }
+
+        /* Заголовки */
+        .headings {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .heading-item {
+            padding: 15px 0;
+            border-left: 4px solid var(--accent);
+            padding-left: 20px;
+        }
+
+        .h1-demo {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .h2-demo {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .h3-demo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .h4-demo {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.5rem;
+            color: var(--dark);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Кнопки */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #357abd;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(74, 144, 226, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #d68910;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(243, 156, 18, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--dark);
+            border: 2px solid #ddd;
+        }
+
+        .btn-ghost:hover {
+            background: var(--light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-large {
+            padding: 20px 40px;
+            font-size: 1.1rem;
+            grid-column: span 2;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            .buttons-grid { grid-template-columns: 1fr; }
+            .btn-large { grid-column: span 1; }
+            .fonts-grid { grid-template-columns: 1fr; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: var(--dark);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .test-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>тест</h1>
+            <p class="subtitle">тест тест тест тест</p>
+            <div class="test-badge">тест</div>
+        </header>
+
+        <main>
+            <!-- Шрифты -->
+            <div class="section">
+                <h2 class="section-title">тест</h2>
+                <div class="fonts-grid">
+                    <div class="font-card">
+                        <div class="font-name">тест</div>
+                        <div class="font-demo font-roboto">тест</div>
+                        <p>тест тест тест</p>
+                    </div>
+                    <div class="font-card">
+                        <div class="font-name">тест</div>
+                        <div class="font-demo font-playfair">тест</div>
+                        <p>тест тест тест</p>
+                    </div>
+                    <div class="font-card">
+                        <div class="font-name">тест</div>
+                        <div class="font-demo font-montserrat">тест</div>
+                        <p>тест тест тест</p>
+                    </div>
+                    <div class="font-card">
+                        <div class="font-name">тест</div>
+                        <div class="font-demo font-opensans">тест</div>
+                        <p>тест тест тест</p>
+                    </div>
+                    <div class="font-card">
+                        <div class="font-name">тест</div>
+                        <div class="font-demo font-pacifico">тест</div>
+                        <p>тест тест тест</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Заголовки -->
+            <div class="section">
+                <h2 class="section-title">тест</h2>
+                <div class="headings">
+                    <div class="heading-item">
+                        <div class="h1-demo">тест</div>
+                    </div>
+                    <div class="heading-item">
+                        <div class="h2-demo">тест</div>
+                    </div>
+                    <div class="heading-item">
+                        <div class="h3-demo">тест</div>
+                    </div>
+                    <div class="heading-item">
+                        <div class="h4-demo">тест</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопки -->
+            <div class="section">
+                <h2 class="section-title">тест</h2>
+                <div class="buttons-grid">
+                    <button class="btn btn-primary">тест</button>
+                    <button class="btn btn-secondary">тест</button>
+                    <button class="btn btn-outline">тест</button>
+                    <button class="btn btn-ghost">тест</button>
+                    <button class="btn btn-primary btn-large">тест</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>тест — тест тест</p>
+            <p>тест тест тест</p>
+        </footer>
+    </div>
+</body>
+</html>
