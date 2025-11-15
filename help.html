@@ -57,6 +57,11 @@
           50% { transform: translateY(-5px) rotateX(5deg); }
         }
 
+        @keyframes veteranGlow {
+          0%, 100% { box-shadow: 0 0 15px rgba(192, 192, 192, 0.4); }
+          50% { box-shadow: 0 0 25px rgba(192, 192, 192, 0.7), 0 0 40px rgba(255, 215, 0, 0.3); }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -351,6 +356,54 @@
             font-size: 0.7rem;
         }
         
+        .veterans-section {
+            margin-top: 2rem;
+        }
+        
+        .veterans-card {
+            background: rgba(30, 25, 15, 0.9);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #c0c0c0;
+            border: 1px solid rgba(192, 192, 192, 0.5);
+            box-shadow: 0 5px 20px rgba(192, 192, 192, 0.2);
+            animation: veteranGlow 3s ease-in-out infinite;
+        }
+        
+        .veterans-title {
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #c0c0c0;
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            text-shadow: 0 0 8px rgba(192, 192, 192, 0.5);
+        }
+        
+        .veterans-users {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        
+        .veteran-user {
+            background: rgba(192, 192, 192, 0.25);
+            color: #c0c0c0;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            border: 1px solid rgba(192, 192, 192, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .veteran-user::before {
+            content: "★";
+            margin-right: 5px;
+            color: #ffd700;
+        }
+        
         .blacklist-section {
             margin-top: 2rem;
         }
@@ -402,6 +455,22 @@
             border: 1px solid rgba(255,183,77,0.4);
             color: #ffd54f;
             font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .about-section {
+            margin-top: 2rem;
+        }
+        
+        .about-content {
+            background: rgba(30, 30, 60, 0.8);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #7986cb;
+            border: 1px solid rgba(121, 134, 203, 0.4);
+            color: #c5cae9;
+            font-size: 0.7rem;
+            line-height: 1.6;
         }
         
         .help-container {
@@ -748,6 +817,15 @@
                 <section id="participants" class="content-section active">
                     <div class="section">
                         <h2>УЧАСТНИКИ ПРОЕКТА</h2>
+                        
+                        <div class="about-section">
+                            <h3>О НАШЕЙ ТИМЕ</h3>
+                            <div class="about-content">
+                                <p>Наша тима занимается обслуживанием магазина, в котором продаются самые разные ресурсы.</p>
+                                <p>Добыча этих ресурсов есть повод для участников тимы узнать как их добывать в большом количестве. Это должно быть интересно для тех кто любит исследовать новое, вникать в суть вещей и выполнять конкретные задания.</p>
+                            </div>
+                        </div>
+                        
                         <div class="participants-grid">
                             <div class="participant-card">
                                 <div class="participant-name">@KAGYNE993</div>
@@ -771,15 +849,29 @@
                             </div>
                         </div>
                         
+                        <div class="veterans-section">
+                            <div class="veterans-card">
+                                <div class="veterans-title">
+                                    🎖️ ПЕНСИОНЕРЫ
+                                </div>
+                                <div class="veterans-users">
+                                    <div class="veteran-user">Покачто нет</div>
+                                    <div class="veteran-user">Покачто нет</div>
+                                    <div class="veteran-user">Покачто нет</div>
+                                    <div class="veteran-user">Покачто нет</div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="blacklist-section">
                             <div class="blacklist-card">
                                 <div class="blacklist-title">
                                     ⚠️ ЧЕРНЫЙ СПИСОК ТИМЫ
                                 </div>
                                 <div class="blacklist-users">
-                                    <div class="blacklist-user">ТЕСТ</div>
-                                    <div class="blacklist-user">ТЕСТ</div>
-                                    <div class="blacklist-user">ТЕСТ</div>
+                                    <div class="blacklist-user">пока что нет</div>
+                                    <div class="blacklist-user">пока что нет</div>
+                                    <div class="blacklist-user">пока что нет</div>
                                 </div>
                             </div>
                             
@@ -788,17 +880,21 @@
                                     ⚠️ ЧЕРНЫЙ СПИСОК МАГАЗИНА
                                 </div>
                                 <div class="blacklist-users">
-                                    <div class="blacklist-user">ТЕСТ</div>
-                                    <div class="blacklist-user">ТЕСТ</div>
-                                    <div class="blacklist-user">ТЕСТ</div>
+                                    <div class="blacklist-user">пока что нет</div>
+                                    <div class="blacklist-user">пока что нет</div>
+                                    <div class="blacklist-user">пока что нет</div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="rules-section">
-                            <h3>ПРАВИЛА</h3>
+                            <h3>ТРЕБОВАНИЯ К НОВЫМ УЧАСТНИКАМ</h3>
                             <div class="rules-content">
-                                <p>ТЕСТ ТЕСТ ТЕСТ ТЕСТ ТЕСТ</p>
+                                <p>• пройти проверочные этапы</p>
+                                <p>• достаточное время онлайн (4-7 дней в неделю по часа 2 минимум)</p>
+                                <p>• умение строить по лайтматике</p>
+                                <p>• донат на хоумы (можно не сразу, а с небольшой отсрочкой)</p>
+                                <p>• личностные качества: самостоятельный, не конфликтный, адекватный</p>
                             </div>
                         </div>
                     </div>
