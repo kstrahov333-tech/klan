@@ -1,0 +1,21 @@
+            {
+                id: 1,
+                title: "ТЕСТОВЫЙ ГАЙД 1",
+                description: "Гайд для теста",
+                icon: "https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true",
+                link: "https://www.youtube.com/"
+            },
+            {
+                id: 2,
+                title: "ТЕСТОВЫЙ ГАЙД 2",
+                description: "Это тестовый гайд",
+                icon: "https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true",
+                link: "https://www.youtube.com/"
+            },
+            {
+                id: 3,
+                title: "ТЕСТОВЫЙ ГАЙД 3",
+                description: "Это гайд",
+                icon: "https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true",
+                link: "https://www.youtube.com/"
+            }
