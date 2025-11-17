@@ -18,4 +18,11 @@
                 description: "Это гайд",
                 icon: "https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true",
                 link: "https://www.youtube.com/"
+            },
+            {
+                id: 4,
+                title: "ТЕСТОВЫЙ ГАЙД 4",
+                description: "Это гайд для для для для для ок окококококококококококококкокококококококококкококококококкокококококококкокококококококококкококококококококококококкокококококококококкокококококококкококококококококококококококококок",
+                icon: "https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true",
+                link: "https://www.youtube.com/"
             }
