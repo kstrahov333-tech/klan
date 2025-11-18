@@ -1,9 +1,9 @@
             {
                 id: 1,
-                title: "ТЕСТОВЫЙ ГАЙД 1",
-                description: "Гайд для теста",
-                icon: "https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true",
-                link: "https://www.youtube.com/"
+                title: "Гайд Litematica",
+                description: "Гайд по моду Litematica",
+                icon: "https://cdn.modrinth.com/data/bEpr0Arc/25b5529d7a3b030ac136a6ce879d8ed2a1aa4a8d.png",
+                link: "https://kstrahov333-tech.github.io/klan/gaidi/Litematica.html"
             },
             {
                 id: 2,
