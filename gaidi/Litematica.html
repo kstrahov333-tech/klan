@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гайд по лайтматике | Minecraft Гайды</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes lightOn {
+          0% { opacity: 0; transform: scale(0.8); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes blockFloat {
+          0%, 100% { transform: translateY(0) rotateX(0deg); }
+          50% { transform: translateY(-5px) rotateX(5deg); }
+        }
+
+        @keyframes glowPulse {
+          0%, 100% { box-shadow: 0 0 20px rgba(255,235,59,0.3); }
+          50% { box-shadow: 0 0 40px rgba(255,235,59,0.6), 0 0 80px rgba(255,152,0,0.3); }
+        }
+
+        @keyframes textShine {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          33% { transform: translateY(-15px) rotate(1deg); }
+          66% { transform: translateY(-8px) rotate(-1deg); }
+        }
+
+        @keyframes bulbGlow {
+          0%, 100% { 
+            filter: drop-shadow(0 0 5px #ffeb3b) drop-shadow(0 0 20px #ff9800);
+            transform: scale(1) rotate(0deg);
+          }
+          25% { 
+            filter: drop-shadow(0 0 15px #ffeb3b) drop-shadow(0 0 40px #ff9800) drop-shadow(0 0 60px #ff5722);
+            transform: scale(1.05) rotate(2deg);
+          }
+          50% { 
+            filter: drop-shadow(0 0 20px #ffeb3b) drop-shadow(0 0 50px #ff9800) drop-shadow(0 0 80px #ff5722);
+            transform: scale(1.08) rotate(0deg);
+          }
+          75% { 
+            filter: drop-shadow(0 0 15px #ffeb3b) drop-shadow(0 0 40px #ff9800) drop-shadow(0 0 60px #ff5722);
+            transform: scale(1.05) rotate(-2deg);
+          }
+        }
+
+        @keyframes buttonGlow {
+          0%, 100% { 
+            box-shadow: 0 0 20px rgba(255,193,7,0.4),
+                       0 0 40px rgba(255,152,0,0.2);
+          }
+          50% { 
+            box-shadow: 0 0 30px rgba(255,193,7,0.6),
+                       0 0 60px rgba(255,152,0,0.3),
+                       0 0 80px rgba(255,87,34,0.1);
+          }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        html {
+            font-size: 16px;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            font-size: 1rem;
+        }
+        
+        .mc-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true');
+            background-size: 200px 200px;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            opacity: 0.4;
+            z-index: -2;
+            animation: blockFloat 8s ease-in-out infinite;
+        }
+
+        .mc-background::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+              repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 199px,
+                rgba(255,235,59,0.05) 200px,
+                rgba(255,235,59,0.05) 201px
+              ),
+              repeating-linear-gradient(
+                180deg,
+                transparent,
+                transparent 199px,
+                rgba(255,235,59,0.05) 200px,
+                rgba(255,235,59,0.05) 201px
+              );
+            pointer-events: none;
+        }
+
+        .light-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+              radial-gradient(
+                circle at 50% 10%,
+                rgba(255,235,59,0.25) 0%,
+                rgba(255,152,0,0.15) 20%,
+                rgba(255,87,34,0.08) 40%,
+                transparent 70%
+              ),
+              radial-gradient(
+                circle at 80% 90%,
+                rgba(255,193,7,0.1) 0%,
+                rgba(255,152,0,0.05) 30%,
+                transparent 60%
+              ),
+              radial-gradient(
+                circle at 20% 70%,
+                rgba(255,235,59,0.08) 0%,
+                rgba(255,152,0,0.03) 25%,
+                transparent 50%
+              );
+            pointer-events: none;
+            z-index: -1;
+            animation: lightOn 3s ease-out;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffeb3b;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #ffeb3b;
+            box-shadow: 0 0 30px rgba(255,235,59,0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(
+              90deg,
+              #ffeb3b,
+              #ffd54f,
+              #ffb300,
+              #ffd54f,
+              #ffeb3b
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s linear infinite;
+            text-shadow: 0 0 30px rgba(255,235,59,0.5);
+        }
+        
+        .subtitle {
+            font-size: 0.8rem;
+            color: #ffd54f;
+            text-shadow: 0 0 10px rgba(255,213,79,0.5);
+        }
+        
+        .bulb-container {
+            position: relative;
+            animation: bulbGlow 4s ease-in-out infinite, float 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px #ffeb3b);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .bulb {
+            font-size: 48px;
+            color: #ffeb3b;
+            text-shadow: 
+              0 0 20px #ff9800, 
+              0 0 40px #ff5722,
+              0 0 80px #ff5722;
+            transition: all 0.3s ease;
+        }
+
+        .bulb:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .bulb.off {
+            color: #666;
+            text-shadow: 
+              0 0 5px #333, 
+              0 0 10px #222;
+            animation: none;
+            filter: none;
+        }
+
+        .bulb.off:hover {
+            color: #888;
+            text-shadow: 
+              0 0 8px #444, 
+              0 0 15px #333;
+        }
+
+        .bulb-status {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffd54f;
+            font-size: 0.5rem;
+            white-space: nowrap;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #ffeb3b, #ffb300);
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(255,193,7,0.3);
+            border: 2px solid rgba(255,235,59,0.3);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #ffd54f, #ff9800);
+            box-shadow: 0 6px 20px rgba(255,193,7,0.5);
+            transform: translateY(-2px);
+        }
+
+        .back-btn i {
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .section {
+            background: rgba(25, 25, 25, 0.92);
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 
+              0 8px 32px rgba(0,0,0,0.3),
+              0 0 20px rgba(255,235,59,0.1);
+            border: 1px solid rgba(255, 235, 59, 0.15);
+            backdrop-filter: blur(10px);
+            animation: glowPulse 4s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffeb3b, #ff9800, #ff5722, #ff9800, #ffeb3b);
+            background-size: 200% 100%;
+            animation: textShine 3s linear infinite;
+        }
+        
+        h2 {
+            color: #ffeb3b;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid rgba(255,235,59,0.3);
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px rgba(255,152,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        h2 i {
+            margin-right: 10px;
+            font-size: 1.4rem;
+        }
+
+        h3 {
+            color: #ffd54f;
+            margin: 2rem 0 1rem 0;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            padding-left: 1rem;
+            border-left: 3px solid #ffeb3b;
+        }
+
+        h3 i {
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+        
+        .guide-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 1rem;
+        }
+
+        .guide-icon-large {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            margin: 0 auto 2rem auto;
+            border-radius: 20px;
+            border: 4px solid rgba(255,235,59,0.5);
+            image-rendering: pixelated;
+            box-shadow: 0 0 30px rgba(255,235,59,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .guide-icon-large:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 0 40px rgba(255,235,59,0.6);
+        }
+
+        .download-btn-main {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: #fff;
+            border: none;
+            padding: 1.3rem 3rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: bold;
+            animation: buttonGlow 2s ease-in-out infinite;
+            border: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .download-btn-main:hover {
+            background: linear-gradient(135deg, #45a049, #4CAF50);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(76,175,80,0.5);
+        }
+
+        .download-btn-main:hover::before {
+            left: 100%;
+        }
+
+        .download-btn-main i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .steps-list {
+            list-style: none;
+            counter-reset: step-counter;
+            margin: 2rem 0;
+        }
+
+        .step-item {
+            counter-increment: step-counter;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255,235,59,0.05);
+            border-radius: 10px;
+            border-left: 4px solid #ffeb3b;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step-item:hover {
+            background: rgba(255,235,59,0.08);
+            transform: translateX(5px);
+        }
+
+        .step-item::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #ffeb3b, #ffb300);
+            color: #000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255,193,7,0.4);
+        }
+
+        .step-title {
+            color: #ffeb3b;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-title i {
+            margin-right: 10px;
+            color: #ffd54f;
+        }
+
+        .step-description {
+            color: #ffd54f;
+            font-size: 0.75rem;
+            line-height: 1.6;
+            padding-left: 0;
+        }
+
+        .guide-text {
+            color: #ffd54f;
+            font-size: 0.8rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            padding: 0 0.5rem;
+        }
+
+        .content-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffeb3b, transparent);
+            margin: 2rem 0;
+            opacity: 0.3;
+        }
+
+        .guide-image {
+            max-width: 100%;
+            border-radius: 10px;
+            border: 2px solid rgba(255,235,59,0.3);
+            margin: 1rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .guide-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(255,235,59,0.2);
+        }
+
+        .image-caption {
+            color: #ffd54f;
+            font-size: 0.6rem;
+            text-align: center;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .key-binding {
+            display: inline-block;
+            background: rgba(255,235,59,0.2);
+            color: #ffeb3b;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            border: 1px solid rgba(255,235,59,0.4);
+            font-size: 0.7rem;
+            margin: 0 0.2rem;
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffd54f;
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 2px solid rgba(255,235,59,0.3);
+            font-size: 0.7rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .bulb-container {
+                margin-top: 1rem;
+            }
+            
+            .bulb-status {
+                font-size: 0.4rem;
+                bottom: -20px;
+            }
+
+            .step-item {
+                padding-left: 2rem;
+                margin-left: 1rem;
+            }
+
+            .step-item::before {
+                left: -20px;
+                width: 35px;
+                height: 35px;
+                font-size: 0.8rem;
+            }
+
+            .download-btn-main {
+                padding: 1.1rem 2rem;
+                font-size: 0.8rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mc-background"></div>
+    <div class="light-overlay"></div>
+    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>ГАЙД ПО ЛАЙТМАТИКЕ</h1>
+                    <p class="subtitle">схемы и строительство в minecraft</p>
+                </div>
+                <div class="bulb-container" id="bulbToggle">
+                    <div class="bulb" id="bulb">💡</div>
+                    <div class="bulb-status" id="bulbStatus">ТЕКУЩАЯ ВКЛАДКА</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <a href="https://kstrahov333-tech.github.io/klan/gaidi.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> НАЗАД К ГАЙДАМ
+        </a>
+
+        <div class="main-content">
+            <section class="section">
+                <div class="guide-header">
+                    <img src="https://cdn.modrinth.com/data/bEpr0Arc/25b5529d7a3b030ac136a6ce879d8ed2a1aa4a8d.png" 
+                         alt="лайтматика" 
+                         class="guide-icon-large"
+                         onerror="this.src='https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true'">
+                    <h2><i class="fas fa-cube"></i> ЛАЙТМАТИКА - РАБОТА СО СХЕМАМИ</h2>
+                </div>
+
+                <div class="guide-content">
+                    <h3><i class="fas fa-cog"></i> НАСТРОЙКА УПРАВЛЕНИЯ</h3>
+                    
+                    <div class="step-item">
+                        <div class="step-title"><i class="fas fa-keyboard"></i> Откройте меню мода</div>
+                        <div class="step-description">
+                            После установки мода нажмите английскую букву <span class="key-binding">M</span> чтобы открыть меню мода
+                            <img src="https://github.com/kstrahov333-tech/klan/blob/main/gaidi/kartinki/Litematica/Litematica_setting_open.png?raw=true" alt="Меню настроек" class="guide-image">
+                            <div class="image-caption">Меню лайтматики - нажмите кнопку настроек</div>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title"><i class="fas fa-sliders-h"></i> Перейдите в раздел клавиш</div>
+                        <div class="step-description">
+                            В настройках выберите раздел "Клавиши"
+                            <img src="https://github.com/kstrahov333-tech/klan/blob/main/gaidi/kartinki/Litematica/Litematica_setting.png?raw=true" alt="Раздел клавиш" class="guide-image">
+                            <div class="image-caption">Раздел настроек - выберите "Клавиши"</div>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title"><i class="fas fa-search"></i> Настройте основные клавиши</div>
+                        <div class="step-description">
+                            Нажмите на кнопку поиска и настройте следующие клавиши:
+                            <img src="https://github.com/kstrahov333-tech/klan/blob/main/gaidi/kartinki/Litematica/Setting_poisk.png?raw=true" alt="Поиск настроек" class="guide-image">
+                            <div class="image-caption">Используйте поиск для быстрого нахождения настроек</div>
+                            <br>
+                            • <strong>easyplaceusekey</strong> - назначьте удобную клавишу для упрощенного строительства<br>
+                            • <strong>easyplacetoggle</strong> - клавиша включения/выключения режима упрощенного строительства<br>
+                            • <strong>layermodenext</strong> - переключение режима отображения голограммы<br>
+                            • <strong>layersethere</strong> - установка отображаемого слоя на уровне игрока
+                        </div>
+                    </div>
+
+                    <div class="content-divider"></div>
+
+                    <h3><i class="fas fa-download"></i> ЗАГРУЗКА СХЕМ</h3>
+                    
+                    <div class="step-item">
+                        <div class="step-title"><i class="fas fa-file-download"></i> Подготовка схемы</div>
+                        <div class="step-description">
+                            Скачайте схематику (файл с расширением <span class="key-binding">.schematic</span>) и переместите его в папку <span class="key-binding">schematics</span>, которая находится в папке вашей версии майнкрафт рядом с папкой <span class="key-binding">mods</span>.
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title"><i class="fas fa-upload"></i> Загрузка схемы в игре</div>
+                        <div class="step-description">
+                            Откройте меню лайтматики и нажмите на кнопку "Загрузить схему"
+                            <img src="https://github.com/kstrahov333-tech/klan/blob/main/gaidi/kartinki/Litematica/zagruzit_shemu.png?raw=true" alt="Загрузка схемы" class="guide-image">
+                            <div class="image-caption">Меню загрузки схем</div>
+                            <br>
+                            В открывшемся меню кликните 1 раз по схеме которую вы переместили в папку schematics, затем нажмите кнопку "Загрузить"
+                            <img src="https://github.com/kstrahov333-tech/klan/blob/main/gaidi/kartinki/Litematica/zagruzit.png?raw=true" alt="Выбор схемы" class="guide-image">
+                            <div class="image-caption">Выберите схему и нажмите "Загрузить"</div>
+                        </div>
+                    </div>
+
+                    <div class="content-divider"></div>
+
+                    <h3><i class="fas fa-magic"></i> РАБОТА С ГОЛОГРАММОЙ</h3>
+                    
+                    <div class="step-item">
+                        <div class="step-title"><i class="fas fa-stick"></i> Выбор режима размещения</div>
+                        <div class="step-description">
+                            Возьмите палку в руку и с зажатой кнопкой <span class="key-binding">Ctrl</span> прокрутите колесико мыши пока не выберете режим <span class="key-binding">2</span>
+                            <img src="https://github.com/kstrahov333-tech/klan/blob/main/gaidi/kartinki/Litematica/razmishenie.png?raw=true" alt="Режим размещения" class="guide-image">
+                            <div class="image-caption">Режим размещения голограммы</div>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title"><i class="fas fa-arrows-alt"></i> Перемещение голограммы</div>
+                        <div class="step-description">
+                            Нажимая правую кнопку мыши с палкой в руке вы можете перемещать голограмму по миру.
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title"><i class="fas fa-ruler-combined"></i> Точное размещение</div>
+                        <div class="step-description">
+                            Для точного размещения откройте меню мода и нажмите кнопку "Размещенные голограммы"
+                            <img src="https://github.com/kstrahov333-tech/klan/blob/main/gaidi/kartinki/Litematica/razmeshonie_galogrammi.png?raw=true" alt="Размещенные голограммы" class="guide-image">
+                            <div class="image-caption">Список размещенных голограмм</div>
+                            <br>
+                            Выберите интересующую схему и нажмите "Настройки"
+                            <img src="https://github.com/kstrahov333-tech/klan/blob/main/gaidi/kartinki/Litematica/razmeshonie_galogrammi_setting.png?raw=true" alt="Настройки голограммы" class="guide-image">
+                            <div class="image-caption">Настройки конкретной голограммы</div>
+                            <br>
+                            В открывшемся окне справа будет меню, при помощи которого вы сможете указать точные координаты или повернуть голограмму на 90 градусов
+                            <img src="https://github.com/kstrahov333-tech/klan/blob/main/gaidi/kartinki/Litematica/razmeshonie_galogrammi_menu.png?raw=true" alt="Меню настроек" class="guide-image">
+                            <div class="image-caption">Меню точной настройки позиции и поворота</div>
+                        </div>
+                    </div>
+
+                    <div class="content-divider"></div>
+
+                    <h3><i class="fas fa-hammer"></i> СТРОИТЕЛЬСТВО</h3>
+                    <p class="guide-text">
+                        После настройки всех клавиш и размещения голограммы вы можете начать строительство. Используйте назначенные клавиши для упрощенного размещения блоков согласно схеме.
+                    </p>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2024 MINECRAFT ГАЙДЫ. ГАЙД ПО ЛАЙТМАТИКЕ</p>
+        </div>
+    </footer>
+
+    <script>
+        // Состояние переключателя
+        let openInNewTab = false;
+
+        // Функция для обновления состояния лампочки
+        function updateBulbState() {
+            const bulb = document.getElementById('bulb');
+            const bulbStatus = document.getElementById('bulbStatus');
+            
+            if (openInNewTab) {
+                bulb.classList.remove('off');
+                bulbStatus.textContent = 'НОВАЯ ВКЛАДКА';
+            } else {
+                bulb.classList.add('off');
+                bulbStatus.textContent = 'ТЕКУЩАЯ ВКЛАДКА';
+            }
+        }
+
+        // Функция для обновления всех ссылок
+        function updateAllLinks() {
+            const links = document.querySelectorAll('a[href^="http"]');
+            links.forEach(link => {
+                if (openInNewTab) {
+                    link.setAttribute('target', '_blank');
+                } else {
+                    link.removeAttribute('target');
+                }
+            });
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация переключателя-лампочки
+            const bulbToggle = document.getElementById('bulbToggle');
+            
+            // Загружаем состояние из localStorage
+            const savedState = localStorage.getItem('openInNewTab');
+            if (savedState === 'true') {
+                openInNewTab = true;
+            }
+            
+            // Обновляем состояние лампочки
+            updateBulbState();
+            
+            // Обновляем все внешние ссылки
+            updateAllLinks();
+            
+            // Обработчик клика на лампочку
+            bulbToggle.addEventListener('click', function() {
+                openInNewTab = !openInNewTab;
+                
+                // Сохраняем состояние в localStorage
+                localStorage.setItem('openInNewTab', openInNewTab);
+                
+                // Обновляем состояние лампочки
+                updateBulbState();
+                
+                // Обновляем все ссылки
+                updateAllLinks();
+            });
+        });
+    </script>
+</body>
+</html>
