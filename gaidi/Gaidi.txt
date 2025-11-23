@@ -11,18 +11,4 @@
                 description: "Как эффективно чаровать предметы",
                 icon: "https://ru.minecraft.wiki/images/%D0%A7%D0%B0%D1%80%D0%BE%D0%B4%D0%B5%D0%B9%D1%81%D0%BA%D0%B0%D1%8F_%D0%BA%D0%BD%D0%B8%D0%B3%D0%B0.gif?80124",
                 link: "https://kstrahov333-tech.github.io/klan/gaidi/Enchant.html"
-            },
-            {
-                id: 3,
-                title: "ТЕСТОВЫЙ ГАЙД 3",
-                description: "Это гайд",
-                icon: "https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true",
-                link: "https://www.youtube.com/"
-            },
-            {
-                id: 4,
-                title: "ТЕСТОВЫЙ ГАЙД 4",
-                description: "Это гайд для для для для для ок окококококококококо",
-                icon: "https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true",
-                link: "https://www.youtube.com/"
             }
