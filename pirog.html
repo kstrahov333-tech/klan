@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Доска заданий — Выполненные</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+body {
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+.mc-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://github.com/kstrahov333-tech/klan/blob/main/blackstone.png?raw=true');
+  background-size: 200px 200px;
+  image-rendering: pixelated;
+  opacity: 0.4;
+  z-index: -2;
+  animation: blockFloat 8s ease-in-out infinite;
+}
+.light-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 10%, rgba(255,235,59,0.25) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  animation: lightOn 3s ease-out;
+}
+@keyframes lightOn {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes blockFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255,235,59,0.3); }
+  50% { box-shadow: 0 0 40px rgba(255,235,59,0.6); }
+}
+#blackScreen {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 9999;
+}
+#registrationScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+.registration-modal {
+  background: rgba(25, 25, 25, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 20px 50px rgba(255,235,59,0.25);
+  border: 1px solid rgba(255, 235, 59, 0.3);
+}
+.registration-modal h2 {
+  color: #ffeb3b;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(255,152,0,0.5);
+}
+.registration-modal input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,235,59,0.4);
+  background: rgba(30, 30, 30, 0.9);
+  color: #ffeb3b;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+}
+.registration-modal button {
+  background: linear-gradient(135deg, #ffeb3b, #ffd54f);
+  color: #000;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  font-weight: bold;
+}
+.user-info {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 235, 59, 0.1);
+  color: #ffeb3b;
+  border: 1px solid rgba(255, 235, 59, 0.3);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 8px;
+  z-index: 101;
+}
+.logout-btn {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 7px;
+  margin-left: 8px;
+}
+.controls-panel {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  z-index: 100;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(5px);
+  border-bottom: 2px solid rgba(255,235,59,0.2);
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.filter-label {
+  font-size: 8px;
+  color: #ffd54f;
+  text-align: center;
+}
+.filter-select, .search-box {
+  background: rgba(30,30,30,0.95);
+  border: 1px solid rgba(255,235,59,0.3);
+  color: #ffeb3b;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  min-width: 140px;
+}
+.filter-select option {
+  background: #1e1e1e;
+  color: #ffeb3b;
+}
+.date-input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.date-clear {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #ff9800;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 2px 5px;
+}
+.reset-btn {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px;
+  align-self: flex-end;
+  margin-bottom: 5px;
+}
+.container {
+  max-width: 1200px;
+  margin: 180px auto 30px;
+  padding: 25px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+.taskCard {
+  background: rgba(25, 25, 25, 0.92);
+  border-radius: 20px;
+  padding: 25px;
+  color: #ffd54f;
+  border: 1px solid rgba(255, 235, 59, 0.2);
+  animation: glowPulse 4s ease-in-out infinite;
+  position: relative;
+  transition: transform 0.3s;
+}
+.taskCard:hover {
+  transform: translateY(-5px);
+}
+.taskCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ffeb3b, #ff9800, #ff5722);
+  background-size: 200% 100%;
+  animation: gradient-shift 3s linear infinite;
+}
+@keyframes gradient-shift {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.taskTitle {
+  font-size: 15px;
+  color: #ffeb3b;
+  margin-bottom: 10px;
+}
+.taskDesc {
+  font-size: 10px;
+  margin: 10px 0;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+.countdown {
+  font-size: 10px;
+  color: #ffeb3b;
+  background: rgba(0,0,0,0.4);
+  padding: 6px 12px;
+  border-radius: 15px;
+  display: inline-block;
+  margin-top: 10px;
+}
+.playerNameTag {
+  font-size: 9px;
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 235, 59, 0.5);
+  margin-top: 10px;
+  display: inline-block;
+}
+.taskType {
+  font-size: 9px;
+  background: rgba(0,0,0,0.4);
+  color: #ff9800;
+  padding: 5px 10px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 152, 0, 0.5);
+  margin-top: 10px;
+  display: inline-block;
+  margin-left: 5px;
+}
+.empty-state {
+  text-align: center;
+  padding: 50px 25px;
+  color: #ffd54f;
+  grid-column: 1 / -1;
+}
+.empty-state i {
+  font-size: 50px;
+  margin-bottom: 20px;
+  color: rgba(255,235,59,0.4);
+}
+.empty-state p {
+  font-size: 12px;
+}
+.active-filter {
+  background: rgba(255, 235, 59, 0.2) !important;
+  border-color: #ffeb3b !important;
+}
+.flatpickr-calendar {
+  background: #1e1e1e !important;
+  border: 1px solid rgba(255,235,59,0.3) !important;
+  font-family: 'Press Start 2P', cursive !important;
+}
+.flatpickr-day {
+  color: #ffeb3b !important;
+}
+.flatpickr-day.selected {
+  background: #ffeb3b !important;
+  color: #000 !important;
+}
+.flatpickr-day.today {
+  border-color: #ff9800 !important;
+}
+.flatpickr-month {
+  background: #000 !important;
+  color: #ffeb3b !important;
+}
+.flatpickr-weekday {
+  color: #ffd54f !important;
+}
+</style>
+</head>
+<body>
+
+<div id="blackScreen"></div>
+
+<div id="registrationScreen">
+  <div class="registration-modal">
+    <h2>Регистрация</h2>
+    <input type="text" id="nicknameInput" placeholder="Введите ваш никнейм">
+    <input type="text" id="adminIdInput" placeholder="Введите ID администратора">
+    <button id="registerBtn">Зарегистрироваться</button>
+  </div>
+</div>
+
+<div class="mc-background"></div>
+<div class="light-overlay"></div>
+
+<div class="controls-panel" id="controlsPanel" style="display: none;">
+  <div class="filter-group">
+    <div class="filter-label">Поиск</div>
+    <input type="text" id="searchInput" class="search-box" placeholder="Поиск по словам...">
+  </div>
+  
+  <div class="filter-group">
+    <div class="filter-label">Ник игрока</div>
+    <select id="playerFilter" class="filter-select">
+      <option value="">Все игроки</option>
+    </select>
+  </div>
+  
+  <div class="filter-group">
+    <div class="filter-label">Тип задания</div>
+    <select id="typeFilter" class="filter-select">
+      <option value="">Все типы</option>
+      <option value="urgent">Срочные</option>
+      <option value="daily">Ежедневные</option>
+      <option value="normal">Обычные</option>
+    </select>
+  </div>
+  
+  <div class="filter-group">
+    <div class="filter-label">Дата выполнения</div>
+    <div class="date-input-wrapper">
+      <input type="text" id="dateFilter" class="filter-select" placeholder="Выберите дату" readonly>
+      <button class="date-clear" id="dateClearBtn">×</button>
+    </div>
+  </div>
+  
+  <button class="reset-btn" id="resetFilters">
+    <i class="fas fa-redo"></i> Сбросить
+  </button>
+</div>
+
+<div class="user-info" id="userInfo" style="display: none;">
+  <span id="userNickname"></span>
+  <button class="logout-btn" id="logoutBtn">Выйти</button>
+</div>
+
+<div class="container" id="completedTasksBoard"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAb1xT6mIHlxcZNt1TBS7jrrDp5re3qMOU",
+  authDomain: "klan-d9201.firebaseapp.com",
+  databaseURL: "https://klan-d9201-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "klan-d9201",
+  storageBucket: "klan-d9201.appspot.com",
+  messagingSenderId: "252485302766",
+  appId: "1:252485302766:web:7f60cca53e9c9b2d38f6ff"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const registrationScreen = document.getElementById('registrationScreen');
+const nicknameInput = document.getElementById('nicknameInput');
+const adminIdInput = document.getElementById('adminIdInput');
+const registerBtn = document.getElementById('registerBtn');
+const userInfo = document.getElementById('userInfo');
+const userNickname = document.getElementById('userNickname');
+const logoutBtn = document.getElementById('logoutBtn');
+const completedTasksBoard = document.getElementById('completedTasksBoard');
+const blackScreen = document.getElementById('blackScreen');
+const controlsPanel = document.getElementById('controlsPanel');
+const searchInput = document.getElementById('searchInput');
+const playerFilter = document.getElementById('playerFilter');
+const typeFilter = document.getElementById('typeFilter');
+const dateFilter = document.getElementById('dateFilter');
+const dateClearBtn = document.getElementById('dateClearBtn');
+const resetFilters = document.getElementById('resetFilters');
+
+let currentUser = null;
+let allTasks = [];
+let filters = {
+  search: '',
+  player: '',
+  type: '',
+  date: ''
+};
+
+let flatpickrInstance = null;
+
+function initializeDatePicker() {
+  flatpickrInstance = flatpickr(dateFilter, {
+    locale: "ru",
+    dateFormat: "d.m.Y",
+    maxDate: "today",
+    onChange: function(selectedDates, dateStr) {
+      updateFilters();
+    }
+  });
+}
+
+dateClearBtn.addEventListener('click', () => {
+  if (flatpickrInstance) {
+    flatpickrInstance.clear();
+    updateFilters();
+  }
+});
+
+function updateFilters() {
+  filters.search = searchInput.value.toLowerCase();
+  filters.player = playerFilter.value;
+  filters.type = typeFilter.value;
+  filters.date = dateFilter.value;
+  
+  document.querySelectorAll('.filter-select, .search-box').forEach(el => {
+    if ((el.id === 'playerFilter' && filters.player) ||
+        (el.id === 'typeFilter' && filters.type) ||
+        (el.id === 'dateFilter' && filters.date) ||
+        (el.id === 'searchInput' && filters.search)) {
+      el.classList.add('active-filter');
+    } else {
+      el.classList.remove('active-filter');
+    }
+  });
+  
+  renderTasks();
+}
+
+function populateFilters() {
+  const players = new Set();
+  
+  allTasks.forEach(task => {
+    if (task.data.player) players.add(task.data.player);
+  });
+  
+  populateSelect(playerFilter, Array.from(players).sort());
+}
+
+function populateSelect(selectElement, items) {
+  const currentValue = selectElement.value;
+  selectElement.innerHTML = '<option value="">Все игроки</option>';
+  
+  items.forEach(item => {
+    const option = document.createElement('option');
+    option.value = item;
+    option.textContent = item;
+    selectElement.appendChild(option);
+  });
+  
+  selectElement.value = currentValue;
+}
+
+function filterTasks(tasks) {
+  return tasks.filter(task => {
+    const matchesSearch = !filters.search || 
+      (task.data.title?.toLowerCase().includes(filters.search) ||
+       task.data.desc?.toLowerCase().includes(filters.search) ||
+       task.data.player?.toLowerCase().includes(filters.search) ||
+       task.data.type?.toLowerCase().includes(filters.search));
+    
+    const matchesPlayer = !filters.player || task.data.player === filters.player;
+    
+    const matchesType = !filters.type || task.data.category === filters.type;
+    
+    const matchesDate = !filters.date || 
+      new Date(task.data.completedAt).toLocaleDateString('ru-RU') === filters.date;
+    
+    return matchesSearch && matchesPlayer && matchesType && matchesDate;
+  });
+}
+
+function getCategoryName(category) {
+  const categoryMap = {
+    'urgent': 'Срочные',
+    'daily': 'Ежедневные',
+    'normal': 'Обычные'
+  };
+  return categoryMap[category] || category;
+}
+
+function renderTasks() {
+  completedTasksBoard.innerHTML = '';
+  
+  let filtered = filterTasks(allTasks);
+  
+  if (filtered.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.innerHTML = `<i class="fas fa-search"></i><p>${Object.values(filters).some(f => f) ? 'Ничего не найдено' : 'Нет выполненных заданий'}</p>`;
+    completedTasksBoard.appendChild(empty);
+    return;
+  }
+  
+  filtered.sort((a, b) => (b.data.completedAt || 0) - (a.data.completedAt || 0));
+  
+  filtered.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'taskCard completed';
+    card.innerHTML = `
+      <div class="taskTitle">${t.data.title}</div>
+      <div class="taskDesc">${t.data.desc || ''}</div>
+      <div class="countdown">Выполнено: ${new Date(t.data.completedAt).toLocaleDateString('ru-RU')}</div>
+      <div class="playerNameTag">${t.data.player || '???'}</div>
+      ${t.data.category ? `<div class="taskType">${getCategoryName(t.data.category)}</div>` : ''}
+    `;
+    completedTasksBoard.appendChild(card);
+  });
+}
+
+searchInput.addEventListener('input', updateFilters);
+playerFilter.addEventListener('change', updateFilters);
+typeFilter.addEventListener('change', updateFilters);
+
+resetFilters.addEventListener('click', () => {
+  searchInput.value = '';
+  playerFilter.value = '';
+  typeFilter.value = '';
+  if (flatpickrInstance) {
+    flatpickrInstance.clear();
+  }
+  updateFilters();
+});
+
+async function validateAdmin(nickname, adminId) {
+  try {
+    const adminsRef = ref(db, 'admins');
+    const snapshot = await get(adminsRef);
+    if (snapshot.exists()) {
+      const admins = snapshot.val();
+      for (let adminKey in admins) {
+        const admin = admins[adminKey];
+        if (admin.nickname === nickname && admin.adminId === adminId) {
+          return { valid: true };
+        }
+      }
+    }
+    return { valid: false };
+  } catch (error) {
+    console.error('Ошибка при проверке:', error);
+    return { valid: false };
+  }
+}
+
+function showBlackScreen() {
+  blackScreen.style.display = 'block';
+  registrationScreen.style.display = 'none';
+  userInfo.style.display = 'none';
+  controlsPanel.style.display = 'none';
+  completedTasksBoard.innerHTML = '';
+}
+
+registerBtn.addEventListener('click', async () => {
+  const nickname = nicknameInput.value.trim();
+  const adminId = adminIdInput.value.trim();
+  if (!nickname || !adminId) return alert('Заполните все поля!');
+
+  const validation = await validateAdmin(nickname, adminId);
+  if (validation.valid) {
+    currentUser = { nickname, adminId };
+    localStorage.setItem('taskBoardUser', JSON.stringify(currentUser));
+
+    if (nickname !== 'SeTcH' && nickname !== 'Bondryud') {
+      showBlackScreen();
+    } else {
+      registrationScreen.style.display = 'none';
+      userInfo.style.display = 'block';
+      controlsPanel.style.display = 'flex';
+      userNickname.textContent = nickname;
+      loadCompletedTasks();
+      if (!flatpickrInstance) {
+        initializeDatePicker();
+      }
+    }
+  } else {
+    alert('Неверный никнейм или ID администратора!');
+  }
+});
+
+logoutBtn.addEventListener('click', () => {
+  localStorage.removeItem('taskBoardUser');
+  currentUser = null;
+  registrationScreen.style.display = 'flex';
+  userInfo.style.display = 'none';
+  controlsPanel.style.display = 'none';
+  completedTasksBoard.innerHTML = '';
+});
+
+function loadCompletedTasks() {
+  onValue(ref(db, 'tasks'), (snapshot) => {
+    allTasks = [];
+    snapshot.forEach(s => {
+      const data = s.val();
+      if (data && data.status === 'completed') {
+        allTasks.push({ id: s.key, data });
+      }
+    });
+    
+    populateFilters();
+    updateFilters();
+    renderTasks();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('taskBoardUser');
+  if (saved) {
+    const user = JSON.parse(saved);
+    currentUser = user;
+    if (user.nickname !== 'SeTcH' && user.nickname !== 'Bondryud') {
+      showBlackScreen();
+    } else {
+      registrationScreen.style.display = 'none';
+      userInfo.style.display = 'block';
+      controlsPanel.style.display = 'flex';
+      userNickname.textContent = user.nickname;
+      loadCompletedTasks();
+      initializeDatePicker();
+    }
+  }
+});
+</script>
+</body>
+</html>
