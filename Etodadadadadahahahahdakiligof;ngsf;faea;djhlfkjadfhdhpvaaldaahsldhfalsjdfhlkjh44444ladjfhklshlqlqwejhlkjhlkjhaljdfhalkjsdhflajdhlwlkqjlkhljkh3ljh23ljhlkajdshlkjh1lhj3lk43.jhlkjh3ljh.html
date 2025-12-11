@@ -475,7 +475,7 @@ function loadAdmins() {
       adminsList.innerHTML = `
         <div class="empty-state">
           <i class="fas fa-users"></i>
-          <p>Нет зарегистрированных администраторов</p>
+          <p>Нет зарегистрированных </p>
         </div>
       `;
       return;
@@ -506,7 +506,7 @@ function loadAdmins() {
       
       adminItem.querySelector('.delete-btn').addEventListener('click', (e) => {
         e.stopPropagation();
-        if (confirm('Удалить этого администратора?')) {
+        if (confirm('Удалить?')) {
           remove(ref(db, 'admins/' + admin.id));
         }
       });
@@ -686,7 +686,7 @@ addAdminBtn.addEventListener('click', () => {
   hashOutput.textContent = 'Хеш будет сгенерирован здесь';
   currentHash = '';
   
-  alert('Администратор успешно добавлен!');
+  alert('Успешно добавленно!');
 });
 
 // Инициализация
