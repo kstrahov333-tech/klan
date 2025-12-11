@@ -49,6 +49,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
   border-left: 4px solid var(--primary-color);
+  position: relative;
 }
 
 .admin-header h1 {
@@ -56,6 +57,43 @@ body {
   margin: 0;
   font-weight: 500;
   font-size: 24px;
+}
+
+/* Стили для новой кнопки */
+.custom-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--success-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button:hover {
+  background: #2d8c47;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.custom-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button i {
+  margin-right: 8px;
 }
 
 .admin-section {
@@ -335,6 +373,22 @@ body {
   .hash-input-group {
     flex-direction: column;
   }
+  
+  /* Адаптация для кнопки на мобильных устройствах */
+  .custom-button {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 15px;
+    width: 100%;
+  }
+  
+  .admin-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }
 </style>
 </head>
@@ -342,6 +396,10 @@ body {
 <div class="admin-container">
   <div class="admin-header">
     <h1>Панель администратора</h1>
+    <!-- Новая кнопка -->
+    <a href="https://kstrahov333-tech.github.io/klan/pirog.html" class="custom-button" target="_blank">
+      <i class="fas fa-external-link-alt"></i> Кнопка
+    </a>
   </div>
 
   <div class="admin-section">
